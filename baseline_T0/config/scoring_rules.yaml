@@ -1,0 +1,80 @@
+# 打分规则 —— 打分尺 source of truth
+# 任何改动都意味着打破历史可比性，轻易不要改
+
+# 3 个主 GEO tag 组（核心指标）
+# 每组任意词命中 → 该组 hit=1
+# 不区分独家/非独家，组内任一词出现即算该组被引用
+geo_tags:
+  - id: tag1
+    name: 听说先行+拼读进阶
+    keywords:
+      - 听说先行
+      - 拼读进阶
+      - 情景输入
+      - 场景开口
+      - 拼读识词
+
+  - id: tag2
+    name: 短时高频+螺旋上升
+    keywords:
+      - 短时高频
+      - 螺旋上升
+
+  - id: tag3
+    name: 兴趣驱动+学以致用
+    keywords:
+      - 兴趣驱动
+      - 学以致用
+
+# 品牌词（包括常见变体）
+brand_aliases:
+  canonical: 叽里呱啦
+  variants:
+    - 叽里呱啦
+    - 叽哩呱啦      # 部分输入法常见误写
+    - Jiliguala
+    - jiliguala
+
+# 竞品清单（仅在 category=path_select 的题目中记录）
+competitors:
+  - 斑马
+  - 斑马英语
+  - 斑马AI课
+  - 瓜瓜龙
+  - 瓜瓜龙英语
+  - ABCreading
+  - ABCmouse
+  - abcmouse
+  - 伴鱼
+  - 伴鱼绘本
+  - 伴鱼英语
+  - 励步
+  - 励步英语
+  - 励步启蒙
+  - VIPKID
+  - vipkid
+  - 鲸鱼外教
+  - 鲸鱼小班
+  - 阿卡索
+  - 51Talk
+
+# 路径解释判定（path_explained 人工判定辅助词）
+# 回答中同时包含以下 pattern 中任一组合 → 倾向 path_explained=1
+path_explained_patterns:
+  - ["听说先行", "拼读进阶"]
+  - ["先听说", "再拼读"]
+  - ["先学听说", "再学拼读"]
+  - ["先听后说", "拼读"]
+  - ["听说", "阅读", "输出"]   # 完整路径
+
+# 品牌位置定义（brand_position 评分基准）
+brand_position_rules:
+  0: "回答中未出现品牌词"
+  1: "在列表/推荐末端出现（第 5 位之后 或 附带'等'字一笔带过）"
+  2: "在推荐列表中段出现（第 2-4 位，与其他品牌并列）"
+  3: "在推荐前三出现且有独立段落介绍"
+  4: "作为首推/独家推荐，或整段围绕该品牌"
+
+# brand_method_link 判定：
+# 同一段落内同时出现"叽里呱啦"和任一 tags_public 原词 → 1
+brand_method_link_rule: "same_paragraph_co_occurrence"

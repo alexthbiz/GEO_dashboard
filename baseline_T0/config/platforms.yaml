@@ -1,0 +1,116 @@
+# 14 个测评平台配置
+# tier:
+#   A - 有官方 API，脚本自动跑
+#   B - 无公开 API，Playwright 半自动 + 人工兜底
+#   C - 反爬严格，纯人工采集搜索结果
+
+# API key 通过环境变量注入，不写到这个文件里
+# 示例：export DEEPSEEK_API_KEY=sk-xxx
+
+platforms:
+  # ========= A 档：国内主流 AI (API) =========
+  - id: doubao
+    name: 豆包
+    tier: A
+    provider: volcengine     # 火山方舟 OpenAI 兼容
+    endpoint: "https://ark.cn-beijing.volces.com/api/v3"
+    model: "doubao-seed-1-6-250615"   # 需根据账户可用模型调整
+    api_key_env: ARK_API_KEY
+
+  - id: deepseek
+    name: DeepSeek
+    tier: A
+    provider: openai_compatible
+    endpoint: "https://api.deepseek.com"
+    model: "deepseek-chat"
+    api_key_env: DEEPSEEK_API_KEY
+
+  - id: kimi
+    name: Kimi
+    tier: A
+    provider: openai_compatible
+    endpoint: "https://api.moonshot.cn/v1"
+    model: "moonshot-v1-8k"
+    api_key_env: MOONSHOT_API_KEY
+
+  - id: zhipu
+    name: 智谱清言
+    tier: A
+    provider: zhipu
+    endpoint: "https://open.bigmodel.cn/api/paas/v4"
+    model: "glm-4-plus"
+    api_key_env: ZHIPUAI_API_KEY
+
+  - id: qwen
+    name: 通义千问
+    tier: A
+    provider: dashscope
+    endpoint: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    model: "qwen-plus"
+    api_key_env: DASHSCOPE_API_KEY
+
+  - id: wenxin
+    name: 文心一言
+    tier: A
+    provider: qianfan
+    endpoint: "https://qianfan.baidubce.com/v2"
+    model: "ernie-4.0-turbo-8k"
+    api_key_env: QIANFAN_API_KEY
+
+  - id: yuanbao
+    name: 腾讯元宝
+    tier: B
+    web_url: "https://yuanbao.tencent.com/"
+    notes: "无公开 API（仅企业版 HunyuanAPI），网页端需登录；走 Playwright"
+
+  # ========= B 档：搜索叠加 AI =========
+  - id: baidu_ai
+    name: 百度AI搜索
+    tier: B
+    web_url: "https://chat.baidu.com/"
+    notes: "需登录；每次新建对话；走 Playwright"
+
+  - id: quark_ai
+    name: 夸克AI
+    tier: B
+    web_url: "https://quark.sm.cn/"
+    notes: "走 Playwright"
+
+  - id: wechat_search
+    name: 微信搜一搜
+    tier: B
+    web_url: ""
+    notes: "微信内置无法浏览器抓，改为手工；在 manual_template 中记录"
+
+  # ========= C 档：内容平台搜索（人工） =========
+  - id: xhs
+    name: 小红书
+    tier: C
+    web_url: "https://www.xiaohongshu.com/search_result?keyword="
+    notes: "人工搜索；记录前 10 条标题/账号/是否叽里呱啦官号"
+
+  - id: douyin
+    name: 抖音
+    tier: C
+    web_url: "https://www.douyin.com/search/"
+    notes: "人工搜索；记录前 10 条"
+
+  - id: zhihu
+    name: 知乎
+    tier: C
+    web_url: "https://www.zhihu.com/search?q="
+    notes: "人工搜索；记录前 10 条"
+
+  - id: bilibili
+    name: B站
+    tier: C
+    web_url: "https://search.bilibili.com/all?keyword="
+    notes: "人工搜索；记录前 10 条"
+
+# 采集通用参数
+collection:
+  trials_per_question: 3         # AI 平台每题重复次数
+  temperature: null              # 不主动设置，保留平台默认
+  max_tokens: 2048
+  fresh_session_each_call: true  # 每次请求清空上下文
+  timeout_seconds: 120

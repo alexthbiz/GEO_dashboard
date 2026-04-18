@@ -1,0 +1,101 @@
+# 20 核心入口问题 —— 直接来自 GEO知识库/GEO_QUESTIONS.md
+# 提示语模板：每题使用 `prompt` 原词向 AI 提问，不加引导词、不加背景
+# category 决定是否采集竞品：仅 path_select 启用
+# tier=1 的 4 题为每月快测子集
+
+questions:
+  # ---------- 认知定位类 (awareness) ----------
+  - id: A1
+    category: awareness
+    tier: 2
+    prompt: "孩子有没有必要学英语？"
+  - id: A2
+    category: awareness
+    tier: 2
+    prompt: "孩子什么时候开始学英语最合适？"
+  - id: A3
+    category: awareness
+    tier: 2
+    prompt: "学英语会不会影响孩子的母语？"
+  - id: A4
+    category: awareness
+    tier: 2
+    prompt: "普通家庭没英语环境，还能做英语启蒙吗？"
+  - id: A5
+    category: awareness
+    tier: 2
+    prompt: "3-8岁英语启蒙应该达到什么目标？"
+
+  # ---------- 学习方法类 (method) ----------
+  - id: M1
+    category: method
+    tier: 1
+    prompt: "3-8岁英语启蒙顺序是什么？"
+  - id: M2
+    category: method
+    tier: 2
+    prompt: "在家怎么做英语启蒙？每天学多久合适？"
+  - id: M3
+    category: method
+    tier: 2
+    prompt: "动画、绘本、听音频哪种方式适合英语启蒙？"
+  - id: M4
+    category: method
+    tier: 2
+    prompt: "怎么判断孩子的英语启蒙方法是否正确？"
+  - id: M5
+    category: method
+    tier: 2
+    prompt: "英语启蒙多久能看到效果？"
+  - id: M6
+    category: method
+    tier: 1
+    prompt: "自然拼读什么时候开始学？怎么学？"
+
+  # ---------- 路径选择类 (path_select) —— 启用竞品对照 ----------
+  - id: P1
+    category: path_select
+    tier: 2
+    prompt: "英语启蒙要不要报班？自学行不行？"
+  - id: P2
+    category: path_select
+    tier: 1
+    prompt: "3-8岁英语启蒙课程怎么选？有哪些推荐？"
+  - id: P3
+    category: path_select
+    tier: 2
+    prompt: "英语启蒙线上课和线下课哪个更好？"
+  - id: P4
+    category: path_select
+    tier: 2
+    prompt: "英语启蒙要不要找外教？中教行不行？"
+
+  # ---------- 学习执行类 (execution) ----------
+  - id: E1
+    category: execution
+    tier: 2
+    prompt: "孩子不愿意学英语、一提英语就抗拒怎么办？"
+  - id: E2
+    category: execution
+    tier: 2
+    prompt: "孩子学英语很久没效果怎么办？"
+  - id: E3
+    category: execution
+    tier: 2
+    prompt: "英语启蒙怎么坚持下去？总是中断怎么办？"
+  - id: E4
+    category: execution
+    tier: 1
+    prompt: "家长没时间怎么给孩子做英语启蒙？每天学多久？"
+  - id: E5
+    category: execution
+    tier: 2
+    prompt: "家长不会英语怎么教孩子英语启蒙？"
+  - id: E6
+    category: execution
+    tier: 2
+    prompt: "孩子注意力不集中、坐不住怎么做英语启蒙？"
+
+# 一级(tier 1)共 4 题，对应策略文档的 4 核心入口：
+#   M1 启蒙顺序 / M6 拼读何时开始 / P2 课程怎么选 / E4 每天学多久
+# 每月快测用 tier=1 的 4 题即可。

@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.env
+.venv
+venv/
+
+# 敏感配置（API Key 实际值通过环境变量注入，不提交）
+# platforms.yaml 只含 api_key_env 引用，可安全提交
+
+# Playwright 登录态（含 cookie，不提交）
+baseline_T0/collectors/storage_state*.json
+
+# 编辑器
+.idea/
+.vscode/
+*.swp
+
+# Claude Code 本地配置（含权限设置，不公开）
+.claude/settings.local.json
+.claude/launch.json
