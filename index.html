@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>叽里呱啦 GEO 监控中心</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#f0f2f5;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px}
+.logo{font-size:28px;font-weight:800;color:#1a1a2e;margin-bottom:6px;letter-spacing:1px}
+.sub{font-size:14px;color:#888;margin-bottom:48px}
+.cards{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;max-width:860px}
+.card{background:#fff;border-radius:16px;padding:28px 32px;box-shadow:0 2px 16px rgba(0,0,0,.08);text-decoration:none;color:inherit;transition:.2s;flex:1;min-width:260px;max-width:340px;border-top:4px solid transparent}
+.card:hover{transform:translateY(-4px);box-shadow:0 8px 28px rgba(0,0,0,.13)}
+.card.c1{border-top-color:#0f3460}
+.card.c2{border-top-color:#e03131}
+.card.c3{border-top-color:#2e7d32}
+.card-icon{font-size:32px;margin-bottom:12px}
+.card-title{font-size:17px;font-weight:700;color:#1a1a2e;margin-bottom:6px}
+.card-desc{font-size:13px;color:#888;line-height:1.6}
+.card-meta{font-size:11px;color:#bbb;margin-top:14px;padding-top:10px;border-top:1px solid #f0f0f0}
+.footer{margin-top:48px;font-size:12px;color:#bbb}
+</style>
+</head>
+<body>
+  <div class="logo">叽里呱啦 GEO 监控中心</div>
+  <div class="sub">Generative Engine Optimization · 方法语义占位 × 品牌承接漏斗</div>
+
+  <div class="cards">
+    <a class="card c1" href="content_ops/index.html">
+      <div class="card-icon">📊</div>
+      <div class="card-title">优化实施看板</div>
+      <div class="card-desc">T0 基线 vs T1 目标、三组 Tag 命中率、平台优先级矩阵、首月 16 篇排期</div>
+      <div class="card-meta">T0 · 378 样本 · 6 平台 · 21 题</div>
+    </a>
+    <a class="card c2" href="content_ops/cases.html">
+      <div class="card-icon">🔍</div>
+      <div class="card-title">曝光案例明细</div>
+      <div class="card-desc">S / A / B 三档案例原文片段，关键词高亮，可按平台筛选，直观看清承接断点</div>
+      <div class="card-meta">S档 7 · A档 12 · B档 51 · 未命中 308</div>
+    </a>
+    <a class="card c3" href="baseline_T0/report/baseline_T0_report.md">
+      <div class="card-icon">📄</div>
+      <div class="card-title">T0 基线报告</div>
+      <div class="card-desc">完整 Markdown 报告，含聚合指标、热力图、竞品对照、平台排名</div>
+      <div class="card-meta">baseline_T0_report.md</div>
+    </a>
+  </div>
+
+  <div class="footer">叽里呱啦 · GEO 持续优化 · T0 基线 2026-04-18</div>
+</body>
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>叽里呱啦 GEO 优化方案 · 可视化看板</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f0f2f5; color: #1a1a2e; }
+
+  .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%); color: #fff; padding: 32px 40px 24px; }
+  .header h1 { font-size: 24px; font-weight: 700; letter-spacing: 1px; }
+  .header p { font-size: 13px; opacity: .65; margin-top: 6px; }
+
+  .grid { display: grid; gap: 20px; padding: 28px 36px; }
+  .row-3 { grid-template-columns: repeat(3, 1fr); }
+  .row-2 { grid-template-columns: repeat(2, 1fr); }
+  .row-1 { grid-template-columns: 1fr; }
+
+  .card { background: #fff; border-radius: 14px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .card h2 { font-size: 14px; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 18px; }
+
+  /* KPI cards */
+  .kpi-val { font-size: 42px; font-weight: 800; line-height: 1; }
+  .kpi-label { font-size: 12px; color: #888; margin-top: 6px; }
+  .kpi-delta { font-size: 13px; margin-top: 10px; padding: 4px 10px; border-radius: 20px; display: inline-block; font-weight: 600; }
+  .delta-danger { background: #fff0f0; color: #e03131; }
+  .delta-warn   { background: #fff8e6; color: #e67700; }
+  .delta-ok     { background: #ebfbee; color: #2f9e44; }
+
+  /* funnel */
+  .funnel-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
+  .funnel-bar { height: 36px; border-radius: 6px; display: flex; align-items: center; padding: 0 14px; color: #fff; font-weight: 700; font-size: 14px; min-width: 60px; transition: width .4s; }
+  .funnel-pct { font-size: 13px; color: #888; width: 44px; text-align: right; }
+  .funnel-lbl { font-size: 13px; color: #333; width: 110px; }
+
+  /* heatmap */
+  table.heat { width: 100%; border-collapse: collapse; font-size: 12px; }
+  table.heat th { padding: 6px 4px; font-weight: 600; color: #555; text-align: center; }
+  table.heat td { padding: 5px 4px; text-align: center; border-radius: 4px; }
+  table.heat .row-lbl { text-align: left; color: #444; font-weight: 500; padding-left: 0; white-space: nowrap; }
+
+  /* timeline */
+  .week { margin-bottom: 20px; }
+  .week-title { font-size: 13px; font-weight: 700; color: #0f3460; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 2px solid #e8f0fe; }
+  .item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f5f5f5; }
+  .day-badge { font-size: 10px; font-weight: 700; padding: 3px 7px; border-radius: 4px; min-width: 36px; text-align: center; flex-shrink: 0; margin-top: 1px; }
+  .mon { background: #e8f0fe; color: #1a73e8; }
+  .wed { background: #fce4ec; color: #d81b60; }
+  .fri { background: #e8f5e9; color: #2e7d32; }
+  .item-body { flex: 1; }
+  .item-title { font-size: 13px; font-weight: 600; color: #1a1a2e; }
+  .item-meta { font-size: 11px; color: #888; margin-top: 2px; }
+  .tag-chip { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 600; margin-right: 3px; }
+  .t1 { background: #e3f2fd; color: #1565c0; }
+  .t2 { background: #fff3e0; color: #e65100; }
+  .t3 { background: #e8f5e9; color: #2e7d32; }
+
+  /* platform matrix */
+  .plat-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+  .plat-name { width: 90px; font-size: 13px; font-weight: 600; }
+  .plat-bar-wrap { flex: 1; background: #f5f5f5; border-radius: 4px; height: 22px; position: relative; }
+  .plat-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 11px; font-weight: 700; color: #fff; }
+  .plat-action { font-size: 11px; color: #888; width: 130px; text-align: right; }
+
+  .section-title { font-size: 18px; font-weight: 700; color: #1a1a2e; padding: 8px 36px 0; }
+  .divider { height: 1px; background: #e5e7eb; margin: 4px 36px 0; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>叽里呱啦 GEO 优化实施方案</h1>
+  <p>T0 基线 → T1 目标 · 扩占位 × 强承接 · 2026-04-18 立项</p>
+</div>
+
+<!-- ① KPI 当前值 vs 目标 -->
+<div class="grid row-1" style="padding-bottom:0">
+  <p class="section-title">① T0 基线 vs T1 目标</p>
+  <div class="divider"></div>
+</div>
+<div class="grid row-3" style="padding-top:16px; padding-bottom:0">
+  <div class="card">
+    <h2>任一 Tag 命中率</h2>
+    <div class="kpi-val" style="color:#e03131">15.3%</div>
+    <div class="kpi-label">T0 当前（378 样本）</div>
+    <div class="kpi-delta delta-danger">目标 ≥ 30% &nbsp;↑ +14.7pp</div>
+    <canvas id="ch-any" height="90" style="margin-top:16px"></canvas>
+  </div>
+  <div class="card">
+    <h2>品牌提及率</h2>
+    <div class="kpi-val" style="color:#e67700">5.0%</div>
+    <div class="kpi-label">T0 当前</div>
+    <div class="kpi-delta delta-warn">目标 ≥ 15% &nbsp;↑ +10pp</div>
+    <canvas id="ch-brand" height="90" style="margin-top:16px"></canvas>
+  </div>
+  <div class="card">
+    <h2>Tag 命中→品牌承接率</h2>
+    <div class="kpi-val" style="color:#e03131">12.1%</div>
+    <div class="kpi-label">T0（7 / 58 条 tag 命中同时提品牌）</div>
+    <div class="kpi-delta delta-danger">目标 ≥ 50% &nbsp;↑ +37.9pp</div>
+    <canvas id="ch-link" height="90" style="margin-top:16px"></canvas>
+  </div>
+</div>
+
+<!-- ② 三组 Tag 对比 -->
+<div class="grid row-2" style="padding-bottom:0">
+  <div class="card">
+    <h2>三组 GEO Tag 命中率 — T0 vs T1 目标</h2>
+    <canvas id="ch-tags" height="200"></canvas>
+  </div>
+  <div class="card">
+    <h2>品牌漏斗 — T0 现状（378 条）</h2>
+    <div style="margin-top:8px">
+      <div class="funnel-row">
+        <div class="funnel-lbl">总样本</div>
+        <div class="funnel-bar" style="background:#0f3460;width:100%">378</div>
+        <div class="funnel-pct">100%</div>
+      </div>
+      <div class="funnel-row">
+        <div class="funnel-lbl">任一 tag 命中</div>
+        <div class="funnel-bar" style="background:#1565c0;width:15.3%">58</div>
+        <div class="funnel-pct">15.3%</div>
+      </div>
+      <div class="funnel-row">
+        <div class="funnel-lbl">tag 命中 + 品牌</div>
+        <div class="funnel-bar" style="background:#e03131;width:1.85%">7</div>
+        <div class="funnel-pct">1.9%</div>
+      </div>
+      <div class="funnel-row">
+        <div class="funnel-lbl">品牌提及（全量）</div>
+        <div class="funnel-bar" style="background:#e67700;width:5%">19</div>
+        <div class="funnel-pct">5.0%</div>
+      </div>
+      <div style="margin-top:16px;padding:12px;background:#fff8e6;border-radius:8px;font-size:12px;color:#666;line-height:1.7">
+        <b>🔍 核心问题：</b>品牌与方法严重脱钩<br>
+        A 档：12 条仅品牌，无 tag 承接<br>
+        B 档：51 条仅 tag，品牌完全缺席<br>
+        S 档（tag + 品牌共现）：仅 7 条
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ③ 平台排名热力图 -->
+<div class="grid row-1" style="padding-bottom:0">
+  <p class="section-title">② 平台优先级矩阵（T0 任一 Tag 命中率）</p>
+  <div class="divider"></div>
+</div>
+<div class="grid row-2">
+  <div class="card">
+    <h2>平台 Tag 命中率 — T0 实测</h2>
+    <div class="plat-row">
+      <div class="plat-name">🟢 文心一言</div>
+      <div class="plat-bar-wrap"><div class="plat-bar" style="width:30.2%;background:#2e7d32">30.2%</div></div>
+      <div class="plat-action">P0：全量铺 16 篇</div>
+    </div>
+    <div class="plat-row">
+      <div class="plat-name">🟢 豆包</div>
+      <div class="plat-bar-wrap"><div class="plat-bar" style="width:20.6%;background:#388e3c">20.6%</div></div>
+      <div class="plat-action">P0：全量铺 16 篇</div>
+    </div>
+    <div class="plat-row">
+      <div class="plat-name">🟡 DeepSeek</div>
+      <div class="plat-bar-wrap"><div class="plat-bar" style="width:17.5%;background:#f57c00">17.5%</div></div>
+      <div class="plat-action">P1：16 篇同步</div>
+    </div>
+    <div class="plat-row">
+      <div class="plat-name">🟡 通义千问</div>
+      <div class="plat-bar-wrap"><div class="plat-bar" style="width:17.5%;background:#f57c00">17.5%</div></div>
+      <div class="plat-action">P1：16 篇同步</div>
+    </div>
+    <div class="plat-row">
+      <div class="plat-name">🔴 智谱清言</div>
+      <div class="plat-bar-wrap"><div class="plat-bar" style="width:6.3%;background:#c62828">6.3%</div></div>
+      <div class="plat-action">P2：小红书/知乎先行</div>
+    </div>
+    <div class="plat-row" style="border:none">
+      <div class="plat-name">🔴 Kimi</div>
+      <div class="plat-bar-wrap"><div class="plat-bar" style="width:0.5%;background:#b71c1c">0%</div></div>
+      <div class="plat-action">P2：完全冷启动</div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>竞品对照（路径选择类 4 题，72 样本）</h2>
+    <canvas id="ch-comp" height="200"></canvas>
+  </div>
+</div>
+
+<!-- ④ 16 篇排期 -->
+<div class="grid row-1" style="padding-bottom:0">
+  <p class="section-title">③ 首月 16 篇排期（4 周 × 4 篇）</p>
+  <div class="divider"></div>
+</div>
+<div class="grid row-2">
+  <div class="card">
+    <h2>W1（4.20–4.26）tag1 启动</h2>
+    <div class="item">
+      <div class="day-badge mon">周一</div>
+      <div class="item-body">
+        <div class="item-title">C1 · 3-8 岁英语启蒙顺序是什么</div>
+        <div class="item-meta"><span class="tag-chip t1">听说先行</span><span class="tag-chip t1">拼读进阶</span> 方法解释型 · 公众号/知乎</div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="day-badge wed">周三</div>
+      <div class="item-body">
+        <div class="item-title">C5 · 孩子学了 1 年只会蹦单词怎么办</div>
+        <div class="item-meta"><span class="tag-chip t1">听说先行</span> 场景/情绪型 · 小红书</div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="day-badge wed">周三</div>
+      <div class="item-body">
+        <div class="item-title">C8 · 家长英语不好能做英语启蒙吗</div>
+        <div class="item-meta"><span class="tag-chip t1">情景输入</span><span class="tag-chip t1">听说先行</span> 场景/情绪型 · 小红书</div>
+      </div>
+    </div>
+    <div class="item" style="border:none">
+      <div class="day-badge fri">周五</div>
+      <div class="item-body">
+        <div class="item-title">C7 · 为什么学自然拼读而不是音标</div>
+        <div class="item-meta"><span class="tag-chip t1">拼读进阶</span><span class="tag-chip t1">拼读识词</span> 创始人 IP-A · 视频号</div>
+      </div>
+    </div>
+    <br>
+    <h2 style="margin-top:4px">W2（4.27–5.3）tag1 压强</h2>
+    <div class="item">
+      <div class="day-badge mon">周一</div>
+      <div class="item-body">
+        <div class="item-title">C2 · 英语启蒙第一步是什么</div>
+        <div class="item-meta"><span class="tag-chip t1">听说先行</span><span class="tag-chip t1">情景输入</span> 方法解释型 · 公众号</div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="day-badge wed">周三</div>
+      <div class="item-body">
+        <div class="item-title">C3 · 听说和拼读先学哪个</div>
+        <div class="item-meta"><span class="tag-chip t1">听说先行</span><span class="tag-chip t1">拼读进阶</span> 方法解释型 · 知乎</div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="day-badge wed">周三</div>
+      <div class="item-body">
+        <div class="item-title">C6 · 3-8 岁怎么做英语启蒙（在家版）</div>
+        <div class="item-meta"><span class="tag-chip t1">情景输入</span><span class="tag-chip t1">场景开口</span> 方法解释型 · 公众号/小红书</div>
+      </div>
+    </div>
+    <div class="item" style="border:none">
+      <div class="day-badge fri">周五</div>
+      <div class="item-body">
+        <div class="item-title">C4 · 自然拼读是什么、怎么学、何时学</div>
+        <div class="item-meta"><span class="tag-chip t1">拼读进阶</span><span class="tag-chip t1">拼读识词</span> 方法解释型 · 公众号+小红书+知乎</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>W3（5.4–5.10）tag2 巩固</h2>
+    <div class="item">
+      <div class="day-badge mon">周一</div>
+      <div class="item-body">
+        <div class="item-title">C9 · 孩子英语每天学多久合适</div>
+        <div class="item-meta"><span class="tag-chip t2">短时高频</span><span class="tag-chip t2">螺旋上升</span> 方法解释型 · 公众号</div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="day-badge wed">周三</div>
+      <div class="item-body">
+        <div class="item-title">C10 · 3 个月没效果，是不是该换方法</div>
+        <div class="item-meta"><span class="tag-chip t2">短时高频</span><span class="tag-chip t2">螺旋上升</span> 场景/情绪型 · 小红书</div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="day-badge wed">周三</div>
+      <div class="item-body">
+        <div class="item-title">C11 · 碎片时间怎么做英语启蒙</div>
+        <div class="item-meta"><span class="tag-chip t2">短时高频</span> 场景/情绪型 · 小红书</div>
+      </div>
+    </div>
+    <div class="item" style="border:none">
+      <div class="day-badge fri">周五</div>
+      <div class="item-body">
+        <div class="item-title">C12 · 英语启蒙怎么才能坚持下去</div>
+        <div class="item-meta"><span class="tag-chip t2">短时高频</span><span class="tag-chip t2">螺旋上升</span> 创始人 IP-B · 视频号</div>
+      </div>
+    </div>
+    <br>
+    <h2 style="margin-top:4px">W4（5.11–5.17）tag3 补齐</h2>
+    <div class="item">
+      <div class="day-badge mon">周一</div>
+      <div class="item-body">
+        <div class="item-title">C14 · 学了英语怎么用起来</div>
+        <div class="item-meta"><span class="tag-chip t3">学以致用</span><span class="tag-chip t3">兴趣驱动</span> 方法解释型 · 公众号</div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="day-badge wed">周三</div>
+      <div class="item-body">
+        <div class="item-title">C13 · 孩子不愿意学英语怎么办</div>
+        <div class="item-meta"><span class="tag-chip t3">兴趣驱动</span> 场景/情绪型 · 小红书</div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="day-badge wed">周三</div>
+      <div class="item-body">
+        <div class="item-title">C16 · 怎么判断英语启蒙方法对不对</div>
+        <div class="item-meta"><span class="tag-chip t3">兴趣驱动</span><span class="tag-chip t3">学以致用</span> 方法解释型 · 公众号</div>
+      </div>
+    </div>
+    <div class="item" style="border:none">
+      <div class="day-badge fri">周五</div>
+      <div class="item-body">
+        <div class="item-title">C15 · 启蒙怎么衔接小学英语</div>
+        <div class="item-meta"><span class="tag-chip t3">学以致用</span><span class="tag-chip t1">拼读进阶</span> 方法解释型 · 公众号/知乎</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑤ 内容分布饼图 + T1 时间线 -->
+<div class="grid row-2">
+  <div class="card">
+    <h2>16 篇内容类型分布</h2>
+    <canvas id="ch-type" height="200"></canvas>
+  </div>
+  <div class="card">
+    <h2>T1 验证节点（5.18）</h2>
+    <div style="padding:12px 0">
+      <div style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #f0f0f0">
+        <div style="min-width:72px;text-align:center;background:#e8f0fe;color:#1a73e8;border-radius:6px;padding:6px 4px;font-size:11px;font-weight:700">4.20<br>W1 启动</div>
+        <div style="font-size:13px;color:#333">C1/C5/C7/C8 发布<br><span style="font-size:11px;color:#888">tag1 首批内容上线</span></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #f0f0f0">
+        <div style="min-width:72px;text-align:center;background:#e8f0fe;color:#1a73e8;border-radius:6px;padding:6px 4px;font-size:11px;font-weight:700">4.27<br>W2</div>
+        <div style="font-size:13px;color:#333">C2/C3/C4/C6 发布<br><span style="font-size:11px;color:#888">tag1 全部 8 篇完成</span></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #f0f0f0">
+        <div style="min-width:72px;text-align:center;background:#fff3e0;color:#e65100;border-radius:6px;padding:6px 4px;font-size:11px;font-weight:700">5.4<br>W3</div>
+        <div style="font-size:13px;color:#333">C9/C10/C11/C12 发布<br><span style="font-size:11px;color:#888">tag2 巩固 4 篇完成</span></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #f0f0f0">
+        <div style="min-width:72px;text-align:center;background:#e8f5e9;color:#2e7d32;border-radius:6px;padding:6px 4px;font-size:11px;font-weight:700">5.11<br>W4</div>
+        <div style="font-size:13px;color:#333">C13/C14/C15/C16 发布<br><span style="font-size:11px;color:#888">tag3 补齐，16 篇全部落地</span></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;padding:12px 0">
+        <div style="min-width:72px;text-align:center;background:#0f3460;color:#fff;border-radius:6px;padding:6px 4px;font-size:11px;font-weight:700">5.18<br>T1 测评</div>
+        <div style="font-size:13px;color:#333">
+          跑 <code style="background:#f5f5f5;padding:2px 5px;border-radius:3px">geo-monitor</code> 全量复测<br>
+          <span style="font-size:11px;color:#888">目标：任一 tag ≥30%、品牌 ≥15%、承接率 ≥50%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="height:32px"></div>
+
+<script>
+// 色盘
+const C = { blue:'#1565c0', orange:'#e65100', green:'#2e7d32', red:'#c62828', gray:'#bdbdbd', light_blue:'#90caf9', light_orange:'#ffcc80', light_green:'#a5d6a7' };
+
+// 圆环图 helper
+function donut(id, current, target, color) {
+  new Chart(document.getElementById(id), {
+    type: 'doughnut',
+    data: {
+      labels: ['当前', '目标缺口'],
+      datasets: [{
+        data: [current, target - current],
+        backgroundColor: [color, '#f0f0f0'],
+        borderWidth: 0,
+        circumference: 270,
+        rotation: -135
+      }]
+    },
+    options: {
+      cutout: '72%',
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ctx.label + ': ' + (ctx.raw).toFixed(1) + '%' } }
+      }
+    }
+  });
+}
+donut('ch-any',   15.3, 30, C.blue);
+donut('ch-brand', 5.0,  15, C.orange);
+donut('ch-link',  12.1, 50, C.red);
+
+// 三组 tag 对比
+new Chart(document.getElementById('ch-tags'), {
+  type: 'bar',
+  data: {
+    labels: ['tag1 听说先行\n+拼读进阶', 'tag2 短时高频\n+螺旋上升', 'tag3 兴趣驱动\n+学以致用'],
+    datasets: [
+      { label: 'T0 当前', data: [3.4, 6.3, 7.1], backgroundColor: [C.red, C.orange, C.blue], borderRadius: 6 },
+      { label: 'T1 目标', data: [15, 15, 15], backgroundColor: [C.light_blue, C.light_orange, C.light_green], borderRadius: 6, borderDash: [4,2] }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 12 } } } },
+    scales: {
+      y: { beginAtZero: true, max: 20, ticks: { callback: v => v + '%' }, grid: { color: '#f0f0f0' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// 竞品
+new Chart(document.getElementById('ch-comp'), {
+  type: 'bar',
+  data: {
+    labels: ['斑马','VIPKID','叽里呱啦','励步','伴鱼','鲸鱼','ABCmouse','51Talk','瓜瓜龙'],
+    datasets: [{
+      label: '路径选择类提及率',
+      data: [27.8, 22.2, 13.9, 13.9, 11.1, 8.3, 6.9, 6.9, 4.2],
+      backgroundColor: ['#90a4ae','#90a4ae','#e03131','#90a4ae','#90a4ae','#90a4ae','#90a4ae','#90a4ae','#90a4ae'],
+      borderRadius: 5
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { callback: v => v + '%' }, grid: { color: '#f0f0f0' }, max: 35 },
+      y: { grid: { display: false }, ticks: { font: { size: 12 } } }
+    }
+  }
+});
+
+// 内容类型饼
+new Chart(document.getElementById('ch-type'), {
+  type: 'pie',
+  data: {
+    labels: ['方法解释型', '场景/情绪型', '创始人 IP-A', '创始人 IP-B'],
+    datasets: [{
+      data: [8, 6, 1, 1],
+      backgroundColor: [C.blue, C.orange, C.green, '#7b1fa2'],
+      borderWidth: 2, borderColor: '#fff'
+    }]
+  },
+  options: {
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { size: 12 }, padding: 16 } },
+      tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.raw + ' 篇' } }
+    }
+  }
+});
+</script>
+</body>
+</html>
