@@ -60,14 +60,14 @@ table.heatmap th.q{text-align:left;min-width:60px}
 table.heatmap td{padding:8px 10px;text-align:center;border-bottom:1px solid #F7F8FC}
 table.heatmap td.q{text-align:left;font-weight:600;color:#1A1A2E}
 table.heatmap td.avg{font-weight:700;background:#F7F8FC}
-table.heatmap tr.avg-row td{font-weight:700;background:#F0FAF4;border-top:2px solid #E8ECF4;color:#29c07b}
+table.heatmap tr.avg-row td{font-weight:700;background:#FFF7E6;border-top:2px solid #E8ECF4;color:#f78e20}
 
-/* 热力图：单一绿色色相，浅→深 */
+/* 热力图：品牌橙色色相，浅→深 */
 .cell-0{color:#B0B7C3}
-.cell-low{background:#D6F5E8;color:#1a7a50}
-.cell-mid{background:#7DD4B0;color:#fff}
-.cell-high{background:#29c07b;color:#fff;font-weight:600}
-.cell-max{background:#1a6b42;color:#fff;font-weight:700}
+.cell-low{background:#FEF0DC;color:#a05f00}
+.cell-mid{background:#FDC97A;color:#6b3a00}
+.cell-high{background:#f78e20;color:#fff;font-weight:600}
+.cell-max{background:#c46800;color:#fff;font-weight:700}
 
 /* Competitor table */
 .comp-table{width:100%;border-collapse:collapse;font-size:13px}
@@ -108,12 +108,17 @@ table.heatmap tr.avg-row td{font-weight:700;background:#F0FAF4;border-top:2px so
 .case-card .desc{font-size:11px;color:#B0B7C3;margin-top:4px;line-height:1.4}
 
 .funnel-box{background:#fff;border-radius:20px;padding:28px;box-shadow:0 2px 16px rgba(41,192,123,.08);border:1px solid #E8ECF4}
-.funnel{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:12px}
-.funnel-step{text-align:center;flex:1;min-width:100px}
-.funnel-bar{background:#29c07b;color:#fff;border-radius:12px;padding:12px;font-size:22px;font-weight:800}
-.funnel-bar.dim{background:#E8ECF4;color:#6B7280}
-.funnel-label{font-size:11px;color:#6B7280;margin-top:8px}
-.funnel-arrow{font-size:22px;color:#D1D5DB;flex:0 0 auto}
+
+/* 四象限矩阵 */
+.matrix-grid{display:grid;grid-template-columns:80px 1fr 1fr;gap:8px;margin-top:12px}
+.matrix-col-hdr{background:#F7F8FC;border-radius:10px;padding:8px 12px;font-size:12px;font-weight:700;color:#6B7280;text-align:center}
+.matrix-row-hdr{background:#F7F8FC;border-radius:10px;padding:10px 12px;font-size:12px;font-weight:700;color:#6B7280;display:flex;align-items:center;line-height:1.4}
+.matrix-cell{border-radius:16px;padding:18px 14px;text-align:center}
+.mc-tier{font-size:12px;font-weight:700;margin-bottom:4px}
+.mc-num{font-size:32px;font-weight:800;line-height:1}
+.mc-pct{font-size:11px;margin-top:4px;opacity:.75}
+.mc-desc{font-size:10px;margin-top:6px;line-height:1.4;opacity:.7}
+@media(max-width:760px){.matrix-grid{grid-template-columns:56px 1fr 1fr}.mc-num{font-size:24px}}
 
 .insight{background:#FFFBE6;border-left:4px solid #f78e20;padding:14px 18px;border-radius:0 12px 12px 0;font-size:13px;line-height:1.7;margin-top:14px;color:#6B7280}
 .insight strong{color:#1A1A2E}
@@ -137,10 +142,6 @@ footer{text-align:center;font-size:12px;color:#6B7280;margin-top:48px;padding:24
   .page-body{padding:16px 16px 40px}
   /* KPI */
   .kpi-card .val{font-size:28px}
-  /* 漏斗：竖排 */
-  .funnel{flex-direction:column;align-items:stretch}
-  .funnel-step{min-width:auto}
-  .funnel-arrow{display:none}
   /* 竞品/平台表格横滑 */
   .table-wrap{padding:16px}
 }
@@ -153,7 +154,7 @@ footer{text-align:center;font-size:12px;color:#6B7280;margin-top:48px;padding:24
     <div class="nav-brand">叽里呱啦 <span>GEO</span></div>
     <div class="nav-links">
       <a href="../../index.html">总览</a>
-      <a href="../../content_ops/index.html">实施看板</a>
+      <a href="../../content_ops/index.html">优化行动</a>
       <a href="../../content_ops/trends.html">趋势追踪</a>
       <a href="baseline_T0_report.html" class="active">基线报告</a>
       <a href="../../content_ops/cases.html">案例明细</a>
@@ -165,6 +166,7 @@ footer{text-align:center;font-size:12px;color:#6B7280;margin-top:48px;padding:24
   <div class="page-hero-inner">
     <h1>叽里呱啦 GEO 基线报告 · T0</h1>
     <div class="meta">生成时间：2026-04-18 &nbsp;|&nbsp; 378 条样本 &nbsp;|&nbsp; 6 平台 &nbsp;|&nbsp; 21 题</div>
+    <div class="meta" style="margin-top:4px;color:#9CA3AF">T0 基线完整数据报告，所有后续 T1 优化目标的数据原点与对比参照</div>
   </div>
 </div>
 
@@ -217,28 +219,47 @@ footer{text-align:center;font-size:12px;color:#6B7280;margin-top:48px;padding:24
   </div>
 </div>
 
-<!-- ② Tag 命中漏斗 -->
+<!-- ② Tag命中 × 品牌提及 四象限矩阵 -->
 <div class="section">
-  <div class="section-title">② Tag 命中 → 品牌承接 漏斗</div>
+  <div class="section-title">② Tag命中 × 品牌提及 · 四象限分布</div>
   <div class="funnel-box">
-    <div class="funnel">
-      <div class="funnel-step">
-        <div class="funnel-bar">378</div>
-        <div class="funnel-label">全部回答</div>
+    <div style="font-size:12px;color:#6B7280;margin-bottom:12px">378 条回答按「是否命中Tag」×「是否提及品牌」分入四个象限，揭示两个独立维度的真实现状</div>
+    <div class="matrix-grid">
+      <!-- 顶部列标题 -->
+      <div></div>
+      <div class="matrix-col-hdr">✅ 有品牌提及</div>
+      <div class="matrix-col-hdr">❌ 无品牌提及</div>
+      <!-- 行1：有Tag命中 -->
+      <div class="matrix-row-hdr">有 Tag<br>命中</div>
+      <div class="matrix-cell" style="background:#FFF7E6">
+        <div class="mc-tier" style="color:#f78e20">S 档</div>
+        <div class="mc-num" style="color:#f78e20">5</div>
+        <div class="mc-pct" style="color:#f78e20">占总量 1.3%</div>
+        <div class="mc-desc" style="color:#6B7280">Tag + 品牌共现<br>✅ 最优结果</div>
       </div>
-      <div class="funnel-arrow">▶</div>
-      <div class="funnel-step">
-        <div class="funnel-bar">58</div>
-        <div class="funnel-label">任一 Tag 命中<br><strong>15.3%</strong></div>
+      <div class="matrix-cell" style="background:#EEF2FF">
+        <div class="mc-tier" style="color:#6366f1">B 档</div>
+        <div class="mc-num" style="color:#6366f1">57</div>
+        <div class="mc-pct" style="color:#6366f1">占总量 15.1%</div>
+        <div class="mc-desc" style="color:#6B7280">Tag命中 · 品牌缺席<br>⚠️ 最大漏斗损失</div>
       </div>
-      <div class="funnel-arrow">▶</div>
-      <div class="funnel-step">
-        <div class="funnel-bar dim">7</div>
-        <div class="funnel-label">同时提及品牌<br><strong style="color:#ee4b4a">12.1%</strong></div>
+      <!-- 行2：无Tag命中 -->
+      <div class="matrix-row-hdr">无 Tag<br>命中</div>
+      <div class="matrix-cell" style="background:#FFF1F0">
+        <div class="mc-tier" style="color:#ee4b4a">A 档</div>
+        <div class="mc-num" style="color:#ee4b4a">13</div>
+        <div class="mc-pct" style="color:#ee4b4a">占总量 3.4%</div>
+        <div class="mc-desc" style="color:#6B7280">品牌提及 · Tag缺席<br>💡 仅作为APP推荐</div>
+      </div>
+      <div class="matrix-cell" style="background:#F7F8FC">
+        <div class="mc-tier" style="color:#B0B7C3">未命中</div>
+        <div class="mc-num" style="color:#B0B7C3">303</div>
+        <div class="mc-pct" style="color:#B0B7C3">占总量 80.2%</div>
+        <div class="mc-desc" style="color:#B0B7C3">无Tag · 无品牌<br>— 完全缺失</div>
       </div>
     </div>
     <div class="insight">
-      <strong>核心问题：</strong>AI 已学会方法论（58次tag命中），但几乎不把叽里呱啦和方法关联——58次方法命中中只有 7 次同时提到了品牌。这是最大的优化杠杆点。
+      <strong>核心洞察：</strong>62次Tag命中中仅 5 次同时提及品牌（<strong style="color:#ee4b4a">承接率 8.1%</strong>）；另有 13 条是品牌被当作普通APP推荐但无任何方法论挂钩（A档）。<strong>AI 知道叽里呱啦，但不知道它的方法</strong>——需同时解决「占位」和「承接」两个问题。
     </div>
   </div>
 </div>
@@ -392,22 +413,22 @@ footer{text-align:center;font-size:12px;color:#6B7280;margin-top:48px;padding:24
   <div class="section-title">⑦ 曝光案例分档（共 378 条）</div>
   <div class="case-grid">
     <a class="case-card s" href="../../content_ops/cases.html?tier=S">
-      <div class="num">7</div>
+      <div class="num">5</div>
       <div class="lbl">S 档 · 最优</div>
       <div class="desc">品牌 + Tag 共现<br>GEO 最有价值成果</div>
     </a>
     <a class="case-card a" href="../../content_ops/cases.html?tier=A">
-      <div class="num">12</div>
+      <div class="num">13</div>
       <div class="lbl">A 档 · 待改善</div>
       <div class="desc">仅品牌提及<br>方法论承接缺失</div>
     </a>
     <a class="case-card b" href="../../content_ops/cases.html?tier=B">
-      <div class="num">51</div>
+      <div class="num">57</div>
       <div class="lbl">B 档 · 占位</div>
       <div class="desc">仅 Tag 命中<br>品牌未承接</div>
     </a>
     <a class="case-card none" href="../../content_ops/cases.html">
-      <div class="num">308</div>
+      <div class="num">303</div>
       <div class="lbl">未命中</div>
       <div class="desc">品牌和 Tag<br>均未出现</div>
     </a>

@@ -59,9 +59,10 @@ body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
 
 /* funnel */
 .funnel-row{display:flex;align-items:center;margin-bottom:10px;gap:10px}
-.funnel-bar{height:38px;border-radius:8px;display:flex;align-items:center;padding:0 14px;color:#fff;font-weight:700;font-size:14px;min-width:60px;transition:width .4s}
-.funnel-pct{font-size:13px;color:#6B7280;width:44px;text-align:right}
-.funnel-lbl{font-size:13px;color:#1A1A2E;width:110px}
+.funnel-lbl{font-size:13px;color:#1A1A2E;width:110px;flex-shrink:0}
+.funnel-track{flex:1;background:#F0F2F7;border-radius:8px;height:38px;overflow:hidden;position:relative}
+.funnel-fill{height:100%;border-radius:8px;display:flex;align-items:center;padding:0 14px;color:#fff;font-weight:700;font-size:14px;min-width:0;transition:width .4s}
+.funnel-pct{font-size:13px;color:#6B7280;width:44px;text-align:right;flex-shrink:0}
 
 /* heatmap */
 table.heat{width:100%;border-collapse:collapse;font-size:12px}
@@ -128,7 +129,7 @@ table.heat .row-lbl{text-align:left;color:#1A1A2E;font-weight:500;padding-left:0
     <div class="nav-brand">叽里呱啦 <span>GEO</span></div>
     <div class="nav-links">
       <a href="../index.html">总览</a>
-      <a href="index.html" class="active">实施看板</a>
+      <a href="index.html" class="active">优化行动</a>
       <a href="trends.html">趋势追踪</a>
       <a href="../baseline_T0/report/baseline_T0_report.html">基线报告</a>
       <a href="cases.html">案例明细</a>
@@ -138,8 +139,9 @@ table.heat .row-lbl{text-align:left;color:#1A1A2E;font-weight:500;padding-left:0
 
 <div class="page-hero">
   <div class="page-hero-inner">
-    <h1>叽里呱啦 GEO 优化实施方案</h1>
+    <h1>叽里呱啦 GEO 优化行动</h1>
     <p>T0 基线 → T1 目标 · 扩占位 × 强承接 · 2026-04-18 立项</p>
+    <p style="font-size:12px;color:#9CA3AF;margin-top:4px">首月 16 篇内容的发布排期、选题清单和执行状态，追踪内容从创作到 AI 语料库的全链路落地</p>
   </div>
 </div>
 
@@ -247,26 +249,26 @@ table.heat .row-lbl{text-align:left;color:#1A1A2E;font-weight:500;padding-left:0
     <div style="margin-top:8px">
       <div class="funnel-row">
         <div class="funnel-lbl">总样本</div>
-        <div class="funnel-bar" style="background:#29c07b;width:100%">378</div>
+        <div class="funnel-track"><div class="funnel-fill" style="background:#29c07b;width:100%">378</div></div>
         <div class="funnel-pct">100%</div>
       </div>
       <div class="funnel-row">
         <div class="funnel-lbl">任一 tag 命中</div>
-        <div class="funnel-bar" style="background:#29c07b;width:15.3%">58</div>
+        <div class="funnel-track"><div class="funnel-fill" style="background:#29c07b;width:15.3%">58</div></div>
         <div class="funnel-pct">15.3%</div>
       </div>
       <div class="funnel-row">
         <div class="funnel-lbl">tag 命中 + 品牌</div>
-        <div class="funnel-bar" style="background:#ee4b4a;width:1.85%">7</div>
-        <div class="funnel-pct">1.9%</div>
+        <div class="funnel-track"><div class="funnel-fill" style="background:#ee4b4a;width:1.85%">5</div></div>
+        <div class="funnel-pct">1.3%</div>
       </div>
       <div class="funnel-row">
         <div class="funnel-lbl">品牌提及（全量）</div>
-        <div class="funnel-bar" style="background:#6366f1;width:5%">19</div>
-        <div class="funnel-pct">5.0%</div>
+        <div class="funnel-track"><div class="funnel-fill" style="background:#6366f1;width:4.8%">18</div></div>
+        <div class="funnel-pct">4.8%</div>
       </div>
       <div class="insight-box">
-        <b>核心问题：</b>品牌与方法严重脱钩<br>
+        <b>核心问题：</b>品牌与方法严重脱钩（数据来自 CSV 实测）<br>
         A 档：12 条仅品牌，无 tag 承接<br>
         B 档：51 条仅 tag，品牌完全缺席<br>
         S 档（tag + 品牌共现）：仅 7 条
