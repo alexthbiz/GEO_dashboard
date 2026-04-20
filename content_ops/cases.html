@@ -107,10 +107,12 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
   .stat{flex:1;min-width:calc(50% - 8px);padding:10px 12px;border-radius:12px}
   .stat .n{font-size:24px}
   .stat .l{font-size:11px}
-  /* 筛选条 */
-  .filter-bar{padding:10px 0;top:52px}
-  .filter-inner{padding:0 16px;gap:6px}
-  .filter-btn{padding:5px 12px;font-size:12px}
+  /* 筛选条：单行横滑 */
+  .filter-bar{padding:8px 0;top:52px}
+  .filter-inner{padding:0 16px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:6px}
+  .filter-inner::-webkit-scrollbar{display:none}
+  .q-label{flex-shrink:0}
+  .filter-btn{flex-shrink:0;padding:5px 12px;font-size:12px;white-space:nowrap}
   /* 卡片区 */
   .page-body{padding:16px 16px 40px}
   .cards{grid-template-columns:1fr}
