@@ -13,14 +13,14 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 .topnav{background:#fff;border-bottom:1px solid #E8ECF4;position:sticky;top:0;z-index:100}
 .nav-inner{max-width:1200px;margin:0 auto;padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between}
 .nav-brand{font-size:18px;font-weight:800;color:#1A1A2E}
-.nav-brand span{color:#4B6FE4}
+.nav-brand span{color:#29c07b}
 .nav-links{display:flex;gap:32px}
 .nav-links a{font-size:13px;color:#6B7280;text-decoration:none;font-weight:500;transition:.2s}
-.nav-links a:hover{color:#4B6FE4}
-.nav-links a.active{color:#4B6FE4;font-weight:700}
+.nav-links a:hover{color:#29c07b}
+.nav-links a.active{color:#29c07b;font-weight:700}
 
 /* Hero */
-.page-hero{background:linear-gradient(135deg,#f0f4ff 0%,#fff 60%);border-bottom:1px solid #E8ECF4;padding:40px 40px 36px}
+.page-hero{background:linear-gradient(135deg,#f0faf4 0%,#fff 60%);border-bottom:1px solid #E8ECF4;padding:40px 40px 36px}
 .page-hero-inner{max-width:1200px;margin:0 auto}
 .page-hero h1{font-size:28px;font-weight:800;color:#1A1A2E}
 .page-hero .meta{font-size:13px;color:#6B7280;margin-top:8px}
@@ -29,20 +29,20 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 .page-body{max-width:1200px;margin:0 auto;padding:32px 40px 60px}
 
 /* Section 标题 */
-.section-title{font-size:18px;font-weight:700;color:#1A1A2E;margin-bottom:16px;padding-left:14px;border-left:4px solid #4B6FE4}
+.section-title{font-size:18px;font-weight:700;color:#1A1A2E;margin-bottom:16px;padding-left:14px;border-left:4px solid #29c07b}
 
 /* KPI 横排 6 格 */
 .kpi-row{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:32px}
-.kpi{background:#fff;border-radius:16px;padding:20px 16px;box-shadow:0 2px 16px rgba(74,111,228,.08);border:1px solid #E8ECF4;text-align:center;transition:.2s}
-.kpi:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(74,111,228,.14)}
-.kpi .val{font-size:28px;font-weight:800;color:#4B6FE4}
+.kpi{background:#fff;border-radius:16px;padding:20px 16px;box-shadow:0 2px 16px rgba(41,192,123,.08);border:1px solid #E8ECF4;text-align:center;transition:.2s}
+.kpi:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(41,192,123,.14)}
+.kpi .val{font-size:28px;font-weight:800;color:#29c07b}
 .kpi .lbl{font-size:11px;color:#6B7280;margin-top:6px;line-height:1.4}
 .kpi .chg{font-size:12px;font-weight:600;margin-top:6px}
 .kpi .t1-hint{font-size:10px;color:#B0B7C3;margin-top:4px}
-.up{color:#00B96B}.dn{color:#FF4D4F}.flat{color:#6B7280}
+.up{color:#29c07b}.dn{color:#ee4b4a}.flat{color:#6B7280}
 
 /* 图表容器 */
-.chart-box{background:#fff;border-radius:20px;padding:28px;box-shadow:0 2px 16px rgba(74,111,228,.08);border:1px solid #E8ECF4;margin-bottom:24px}
+.chart-box{background:#fff;border-radius:20px;padding:28px;box-shadow:0 2px 16px rgba(41,192,123,.08);border:1px solid #E8ECF4;margin-bottom:24px}
 .chart-box canvas{max-height:340px}
 .legend-note{font-size:11px;color:#6B7280;margin-top:10px;text-align:right}
 
@@ -50,7 +50,7 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 @media(max-width:680px){.grid2{grid-template-columns:1fr}}
 
 /* 数据表 */
-.table-wrap{background:#fff;border-radius:20px;padding:24px;box-shadow:0 2px 16px rgba(74,111,228,.08);border:1px solid #E8ECF4;overflow-x:auto}
+.table-wrap{background:#fff;border-radius:20px;padding:24px;box-shadow:0 2px 16px rgba(41,192,123,.08);border:1px solid #E8ECF4;overflow-x:auto}
 .data-table{width:100%;border-collapse:collapse;font-size:12px}
 .data-table th{padding:10px 14px;background:#F7F8FC;font-weight:700;color:#6B7280;border-bottom:2px solid #E8ECF4;text-align:center}
 .data-table th:first-child{text-align:left}
@@ -138,7 +138,7 @@ footer{text-align:center;font-size:12px;color:#6B7280;margin-top:40px;padding:24
 
 </div><!-- page-body -->
 
-<footer>叽里呱啦 · GEO 周度追踪 · <a href="../index.html" style="color:#4B6FE4">返回监控中心</a></footer>
+<footer>叽里呱啦 · GEO 周度追踪 · <a href="../index.html" style="color:#29c07b">返回监控中心</a></footer>
 
 <script>
 // ── 数据（每周更新这里）──────────────────────────────────
@@ -187,12 +187,12 @@ kpiDefs.forEach(d => {
 
 // ── 图表配置 ──────────────────────────────────────────────
 const COLORS = {
-  any:    '#4B6FE4',
-  t1:     '#FF4D4F',
-  t2:     '#FA8C16',
-  t3:     '#00B96B',
-  brand:  '#7B6FDE',
-  funnel: '#FF6B35',
+  any:    '#29c07b',
+  t1:     '#ee4b4a',
+  t2:     '#f78e20',
+  t3:     '#29c07b',
+  brand:  '#ac4fa2',
+  funnel: '#f78e20',
 };
 
 function targetLine(key, len) {
