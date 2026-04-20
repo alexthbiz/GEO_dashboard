@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="../assets/favicon.ico">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>叽里呱啦 GEO 优化方案 · 可视化看板</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -11,7 +11,7 @@
 body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #F7F8FC; color: #1A1A2E; }
 
 /* 导航栏 */
-.topnav{background:#fff;border-bottom:1px solid #E8ECF4;position:sticky;top:0;z-index:100;position:relative}
+.topnav{background:#fff;border-bottom:1px solid #E8ECF4;position:sticky;top:0;z-index:100;padding-top:env(safe-area-inset-top)}
 .nav-inner{max-width:1200px;margin:0 auto;padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between}
 .nav-brand{display:flex;flex-direction:row;align-items:center;gap:8px;line-height:1}
 .nav-brand span{color:#29c07b}
@@ -103,7 +103,7 @@ table.heat .row-lbl{text-align:left;color:#1A1A2E;font-weight:500;padding-left:0
   /* 导航 */
   .nav-hamburger{display:flex!important}
   .nav-inner{padding:0 16px;height:52px}
-  .nav-links{display:none;position:absolute;top:52px;left:0;width:100%;background:#fff;border-bottom:1px solid #E8ECF4;flex-direction:column;padding:8px 20px 14px;gap:0;z-index:200;box-shadow:0 6px 20px rgba(0,0,0,.08)}
+  .nav-links{display:none;position:absolute;top:calc(52px + env(safe-area-inset-top));left:0;width:100%;background:#fff;border-bottom:1px solid #E8ECF4;flex-direction:column;padding:8px 20px 14px;gap:0;z-index:200;box-shadow:0 6px 20px rgba(0,0,0,.08)}
   .nav-links.open{display:flex}
   .nav-links a{padding:11px 0;font-size:14px;border-bottom:1px solid #F7F8FC;white-space:nowrap}
   /* Hero */

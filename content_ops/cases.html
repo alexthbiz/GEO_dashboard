@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="../assets/favicon.ico">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>T0 曝光案例明细</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#F7F8FC;color:#1A1A2E}
 
 /* 导航栏 */
-.topnav{background:#fff;border-bottom:1px solid #E8ECF4;position:sticky;top:0;z-index:100;position:relative}
+.topnav{background:#fff;border-bottom:1px solid #E8ECF4;position:sticky;top:0;z-index:100;padding-top:env(safe-area-inset-top)}
 .nav-inner{max-width:1200px;margin:0 auto;padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between}
 .nav-brand{display:flex;flex-direction:row;align-items:center;gap:8px;line-height:1}
 .nav-brand span{color:#29c07b}
@@ -38,7 +38,7 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 .none-stat{background:#F0FAF4;color:#29c07b}
 
 /* 筛选栏 */
-.filter-bar{background:#fff;border-bottom:1px solid #E8ECF4;padding:14px 0;position:sticky;top:60px;z-index:90}
+.filter-bar{background:#fff;border-bottom:1px solid #E8ECF4;padding:14px 0;position:sticky;top:calc(60px + env(safe-area-inset-top));z-index:90}
 .filter-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .q-label{font-size:13px;font-weight:600;color:#1A1A2E;margin-right:4px}
 .filter-btn{padding:7px 18px;border-radius:24px;border:1.5px solid #E8ECF4;background:#fff;cursor:pointer;font-size:13px;font-weight:600;color:#6B7280;transition:.15s}
@@ -108,7 +108,7 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
   .stat .n{font-size:24px}
   .stat .l{font-size:11px}
   /* 筛选条：单行横滑 */
-  .filter-bar{padding:8px 0;top:52px}
+  .filter-bar{padding:8px 0;top:calc(52px + env(safe-area-inset-top))}
   .filter-inner{padding:0 16px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:6px}
   .filter-inner::-webkit-scrollbar{display:none}
   .q-label{flex-shrink:0}
@@ -118,7 +118,7 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
   .cards{grid-template-columns:1fr}
   .nav-hamburger{display:flex!important}
   .nav-inner{padding:0 16px;height:52px}
-  .nav-links{display:none;position:absolute;top:52px;left:0;width:100%;background:#fff;border-bottom:1px solid #E8ECF4;flex-direction:column;padding:8px 20px 14px;gap:0;z-index:200;box-shadow:0 6px 20px rgba(0,0,0,.08)}
+  .nav-links{display:none;position:absolute;top:calc(52px + env(safe-area-inset-top));left:0;width:100%;background:#fff;border-bottom:1px solid #E8ECF4;flex-direction:column;padding:8px 20px 14px;gap:0;z-index:200;box-shadow:0 6px 20px rgba(0,0,0,.08)}
   .nav-links.open{display:flex}
   .nav-links a{padding:11px 0;font-size:14px;border-bottom:1px solid #F7F8FC;white-space:nowrap}
 }
