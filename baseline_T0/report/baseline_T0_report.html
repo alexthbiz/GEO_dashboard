@@ -71,25 +71,24 @@ table.heatmap tr.avg-row td{font-weight:700;background:#FFF7E6;border-top:2px so
 .cell-high{background:#f78e20;color:#fff;font-weight:600}
 .cell-max{background:#c46800;color:#fff;font-weight:700}
 
-/* 题目分类徽章 */
-.cat-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px;vertical-align:middle;flex-shrink:0}
-.cat-a{background:#6366f1}
-.cat-m{background:#10b981}
-.cat-p{background:#f78e20}
-.cat-e{background:#ee4b4a}
-table.heatmap td.q{cursor:default;white-space:nowrap}
-
-/* 题目索引折叠面板 */
-.q-legend{margin-top:12px;border:1px solid #E8ECF4;border-radius:12px;overflow:hidden}
-.q-legend-toggle{width:100%;background:#F7F8FC;border:none;padding:10px 16px;text-align:left;font-size:12px;font-weight:700;color:#6B7280;cursor:pointer;display:flex;align-items:center;gap:6px;transition:.2s}
-.q-legend-toggle:hover{background:#eef0f6}
-.q-legend-toggle .arrow{transition:transform .2s;font-style:normal}
-.q-legend-body{display:none;padding:12px 16px;display:none}
-.q-legend-body.open{display:grid;grid-template-columns:1fr 1fr;gap:6px 20px}
-@media(max-width:600px){.q-legend-body.open{grid-template-columns:1fr}}
-.q-item{display:flex;align-items:baseline;gap:6px;font-size:11px;color:#374151;line-height:1.5}
-.q-item .qid{font-weight:700;flex-shrink:0;width:24px}
-.q-item .qtxt{color:#6B7280}
+/* 题目分类说明表 */
+.qref-wrap{background:#fff;border-radius:20px;padding:24px;box-shadow:0 2px 16px rgba(41,192,123,.08);border:1px solid #E8ECF4;margin-bottom:20px}
+.qref-wrap h3{font-size:14px;font-weight:700;margin-bottom:16px;color:#1A1A2E}
+.qref-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:760px){.qref-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.qref-grid{grid-template-columns:1fr}}
+.qref-col{}
+.qref-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid #E8ECF4}
+.qref-badge{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+.qref-badge.a{background:#6366f1}
+.qref-badge.m{background:#10b981}
+.qref-badge.p{background:#f78e20}
+.qref-badge.e{background:#ee4b4a}
+.qref-cat{font-size:12px;font-weight:700;color:#1A1A2E}
+.qref-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px}
+.qref-list li{display:flex;gap:6px;font-size:11px;line-height:1.5;color:#374151}
+.qref-list li .qid{font-weight:700;flex-shrink:0;width:22px;color:#1A1A2E}
+.qref-list li .qtxt{color:#6B7280}
 
 /* Competitor table */
 .comp-table{width:100%;border-collapse:collapse;font-size:13px}
@@ -385,9 +384,60 @@ footer{text-align:center;font-size:12px;color:#6B7280;margin-top:48px;padding:24
   </div>
 </div>
 
-<!-- ⑤ 热力图 Tag命中 -->
+<!-- 题目分类说明 -->
 <div class="section">
-  <div class="section-title">⑤ 任一 Tag 命中热力图（问题 × 平台）</div>
+  <div class="section-title">⑤ 题目分类说明</div>
+  <div class="qref-wrap">
+    <h3>21 道测评题按用户决策阶段分为 4 类</h3>
+    <div class="qref-grid">
+      <div class="qref-col">
+        <div class="qref-hd"><span class="qref-badge a">A</span><span class="qref-cat">认知类 · 5 题</span></div>
+        <ul class="qref-list">
+          <li><span class="qid">A1</span><span class="qtxt">孩子有没有必要学英语？</span></li>
+          <li><span class="qid">A2</span><span class="qtxt">孩子什么时候开始学英语最合适？</span></li>
+          <li><span class="qid">A3</span><span class="qtxt">学英语会不会影响孩子的母语？</span></li>
+          <li><span class="qid">A4</span><span class="qtxt">普通家庭没英语环境，还能做英语启蒙吗？</span></li>
+          <li><span class="qid">A5</span><span class="qtxt">3-8岁英语启蒙应该达到什么目标？</span></li>
+        </ul>
+      </div>
+      <div class="qref-col">
+        <div class="qref-hd"><span class="qref-badge m">M</span><span class="qref-cat">方法类 · 6 题</span></div>
+        <ul class="qref-list">
+          <li><span class="qid">M1</span><span class="qtxt">3-8岁英语启蒙顺序是什么？</span></li>
+          <li><span class="qid">M2</span><span class="qtxt">在家怎么做英语启蒙？每天学多久合适？</span></li>
+          <li><span class="qid">M3</span><span class="qtxt">动画、绘本、听音频哪种方式适合英语启蒙？</span></li>
+          <li><span class="qid">M4</span><span class="qtxt">怎么判断孩子的英语启蒙方法是否正确？</span></li>
+          <li><span class="qid">M5</span><span class="qtxt">英语启蒙多久能看到效果？</span></li>
+          <li><span class="qid">M6</span><span class="qtxt">自然拼读什么时候开始学？怎么学？</span></li>
+        </ul>
+      </div>
+      <div class="qref-col">
+        <div class="qref-hd"><span class="qref-badge p">P</span><span class="qref-cat">路径类 · 4 题</span></div>
+        <ul class="qref-list">
+          <li><span class="qid">P1</span><span class="qtxt">英语启蒙要不要报班？自学行不行？</span></li>
+          <li><span class="qid">P2</span><span class="qtxt">3-8岁英语启蒙课程怎么选？有哪些推荐？</span></li>
+          <li><span class="qid">P3</span><span class="qtxt">英语启蒙线上课和线下课哪个更好？</span></li>
+          <li><span class="qid">P4</span><span class="qtxt">英语启蒙要不要找外教？中教行不行？</span></li>
+        </ul>
+      </div>
+      <div class="qref-col">
+        <div class="qref-hd"><span class="qref-badge e">E</span><span class="qref-cat">执行类 · 6 题</span></div>
+        <ul class="qref-list">
+          <li><span class="qid">E1</span><span class="qtxt">孩子不愿意学英语、一提英语就抗拒怎么办？</span></li>
+          <li><span class="qid">E2</span><span class="qtxt">孩子学英语很久没效果怎么办？</span></li>
+          <li><span class="qid">E3</span><span class="qtxt">英语启蒙怎么坚持下去？总是中断怎么办？</span></li>
+          <li><span class="qid">E4</span><span class="qtxt">家长没时间怎么给孩子做英语启蒙？</span></li>
+          <li><span class="qid">E5</span><span class="qtxt">家长不会英语怎么教孩子英语启蒙？</span></li>
+          <li><span class="qid">E6</span><span class="qtxt">孩子注意力不集中、坐不住怎么做英语启蒙？</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑥ 热力图 Tag命中 -->
+<div class="section">
+  <div class="section-title">⑥ 任一 Tag 命中热力图（问题 × 平台）</div>
   <div class="heatmap-wrap">
     <h3>颜色越深 = 命中率越高 &nbsp;|&nbsp; · = 0%</h3>
     <table class="heatmap">
@@ -405,18 +455,12 @@ footer{text-align:center;font-size:12px;color:#6B7280;margin-top:48px;padding:24
       </thead>
       <tbody id="hmBody"></tbody>
     </table>
-    <div class="q-legend" id="legendTag">
-      <button class="q-legend-toggle" onclick="toggleLegend('legendTag',this)">
-        <em class="arrow">▶</em> 题目索引（点击展开）
-      </button>
-      <div class="q-legend-body" id="legendTagBody"></div>
-    </div>
   </div>
 </div>
 
-<!-- ⑥ 品牌提及热力图 -->
+<!-- ⑦ 品牌提及热力图 -->
 <div class="section">
-  <div class="section-title">⑥ 品牌提及热力图（问题 × 平台）</div>
+  <div class="section-title">⑦ 品牌提及热力图（问题 × 平台）</div>
   <div class="heatmap-wrap">
     <h3>叽里呱啦在哪些题目/平台被提到</h3>
     <table class="heatmap">
@@ -434,18 +478,12 @@ footer{text-align:center;font-size:12px;color:#6B7280;margin-top:48px;padding:24
       </thead>
       <tbody id="hmBodyBrand"></tbody>
     </table>
-    <div class="q-legend" id="legendBrand">
-      <button class="q-legend-toggle" onclick="toggleLegend('legendBrand',this)">
-        <em class="arrow">▶</em> 题目索引（点击展开）
-      </button>
-      <div class="q-legend-body" id="legendBrandBody"></div>
-    </div>
   </div>
 </div>
 
 <!-- ⑦ 曝光案例 -->
 <div class="section">
-  <div class="section-title">⑦ 曝光案例分档（共 378 条）</div>
+  <div class="section-title">⑧ 曝光案例分档（共 378 条）</div>
   <div class="case-grid">
     <a class="case-card s" href="../../content_ops/cases.html?tier=S">
       <div class="num">5</div>
@@ -574,32 +612,6 @@ const brandData = {
   P4:[0,0,0,0,33,0,6]
 };
 
-const QUESTIONS = {
-  A1:'孩子有没有必要学英语？',
-  A2:'孩子什么时候开始学英语最合适？',
-  A3:'学英语会不会影响孩子的母语？',
-  A4:'普通家庭没英语环境，还能做英语启蒙吗？',
-  A5:'3-8岁英语启蒙应该达到什么目标？',
-  M1:'3-8岁英语启蒙顺序是什么？',
-  M2:'在家怎么做英语启蒙？每天学多久合适？',
-  M3:'动画、绘本、听音频哪种方式适合英语启蒙？',
-  M4:'怎么判断孩子的英语启蒙方法是否正确？',
-  M5:'英语启蒙多久能看到效果？',
-  M6:'自然拼读什么时候开始学？怎么学？',
-  P1:'英语启蒙要不要报班？自学行不行？',
-  P2:'3-8岁英语启蒙课程怎么选？有哪些推荐？',
-  P3:'英语启蒙线上课和线下课哪个更好？',
-  P4:'英语启蒙要不要找外教？中教行不行？',
-  E1:'孩子不愿意学英语、一提英语就抗拒怎么办？',
-  E2:'孩子学英语很久没效果怎么办？',
-  E3:'英语启蒙怎么坚持下去？总是中断怎么办？',
-  E4:'家长没时间怎么给孩子做英语启蒙？每天学多久？',
-  E5:'家长不会英语怎么教孩子英语启蒙？',
-  E6:'孩子注意力不集中、坐不住怎么做英语启蒙？'
-};
-
-const CAT_LABELS = {A:'认知类',M:'方法类',P:'路径类',E:'执行类'};
-
 function cellClass(v) {
   if (v === 0) return 'cell-0';
   if (v <= 33) return 'cell-low';
@@ -613,9 +625,7 @@ function renderHeatmap(tbodyId, data) {
   const colSums = [0,0,0,0,0,0,0];
   let rows = '';
   Object.entries(data).forEach(([q, vals]) => {
-    const cat = q[0].toLowerCase();
-    const tip = QUESTIONS[q] || q;
-    rows += `<tr><td class="q" title="${tip}"><span class="cat-dot cat-${cat}"></span>${q}</td>`;
+    rows += `<tr><td class="q">${q}</td>`;
     vals.forEach((v, i) => {
       if (i === 6) {
         rows += `<td class="avg ${cellClass(v)}">${v > 0 ? v + '%' : '·'}</td>`;
@@ -637,31 +647,8 @@ function renderHeatmap(tbodyId, data) {
   tbody.innerHTML = rows;
 }
 
-function renderLegend(bodyId, data) {
-  const el = document.getElementById(bodyId);
-  if (!el) return;
-  let html = '';
-  Object.keys(data).forEach(q => {
-    const cat = q[0].toLowerCase();
-    const txt = QUESTIONS[q] || '';
-    html += `<div class="q-item"><span class="cat-dot cat-${cat}" style="width:8px;height:8px;margin-right:4px;flex-shrink:0"></span><span class="qid">${q}</span><span class="qtxt">${txt}</span></div>`;
-  });
-  el.innerHTML = html;
-}
-
-function toggleLegend(wrapperId, btn) {
-  const body = document.getElementById(wrapperId + 'Body');
-  const arrow = btn.querySelector('.arrow');
-  const isOpen = body.classList.contains('open');
-  body.classList.toggle('open', !isOpen);
-  arrow.textContent = isOpen ? '▶' : '▼';
-  btn.childNodes[1].textContent = isOpen ? ' 题目索引（点击展开）' : ' 题目索引（点击收起）';
-}
-
 renderHeatmap('hmBody', tagData);
 renderHeatmap('hmBodyBrand', brandData);
-renderLegend('legendTagBody', tagData);
-renderLegend('legendBrandBody', brandData);
 </script>
 <script>
 (function(){
