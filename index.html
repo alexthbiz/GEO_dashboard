@@ -6,56 +6,182 @@
 <title>叽里呱啦 GEO 监控中心</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#f0f2f5;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px}
-.logo{font-size:28px;font-weight:800;color:#1a1a2e;margin-bottom:6px;letter-spacing:1px}
-.sub{font-size:14px;color:#888;margin-bottom:48px}
-.cards{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;max-width:860px}
-.card{background:#fff;border-radius:16px;padding:28px 32px;box-shadow:0 2px 16px rgba(0,0,0,.08);text-decoration:none;color:inherit;transition:.2s;flex:1;min-width:260px;max-width:340px;border-top:4px solid transparent}
-.card:hover{transform:translateY(-4px);box-shadow:0 8px 28px rgba(0,0,0,.13)}
-.card.c1{border-top-color:#0f3460}
-.card.c2{border-top-color:#e03131}
-.card.c3{border-top-color:#2e7d32}
-.card.c4{border-top-color:#7b1fa2}
-.card-icon{font-size:32px;margin-bottom:12px}
-.card-title{font-size:17px;font-weight:700;color:#1a1a2e;margin-bottom:6px}
-.card-desc{font-size:13px;color:#888;line-height:1.6}
-.card-meta{font-size:11px;color:#bbb;margin-top:14px;padding-top:10px;border-top:1px solid #f0f0f0}
-.footer{margin-top:48px;font-size:12px;color:#bbb}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#0f1117;min-height:100vh;color:#fff}
+
+/* 顶部 header */
+.header{padding:56px 60px 48px;max-width:1100px;margin:0 auto}
+.header-eyebrow{font-size:12px;font-weight:600;letter-spacing:2px;color:#4a9eff;text-transform:uppercase;margin-bottom:16px}
+.header h1{font-size:40px;font-weight:800;line-height:1.15;letter-spacing:-0.5px}
+.header h1 span{background:linear-gradient(90deg,#4a9eff,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header-sub{font-size:15px;color:#6b7280;margin-top:12px;line-height:1.6}
+
+/* KPI 小条 */
+.kpi-strip{display:flex;gap:0;max-width:1100px;margin:0 auto 40px;padding:0 60px}
+.kpi-item{flex:1;padding:20px 24px;border-top:1px solid #1e2330;border-right:1px solid #1e2330}
+.kpi-item:first-child{border-left:1px solid #1e2330;border-radius:12px 0 0 12px}
+.kpi-item:last-child{border-radius:0 12px 12px 0}
+.kpi-item .v{font-size:28px;font-weight:800;color:#fff;line-height:1}
+.kpi-item .l{font-size:11px;color:#6b7280;margin-top:6px}
+.kpi-item .chg{font-size:11px;font-weight:600;margin-top:4px}
+.up{color:#34d399}.dn{color:#f87171}.flat{color:#9ca3af}
+.kpi-item.accent{background:linear-gradient(135deg,#1a2744,#1e1a3a);border-color:#2a3050}
+
+/* 主网格 */
+.grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:16px;max-width:1100px;margin:0 auto;padding:0 60px 60px}
+
+.card{background:#161b27;border:1px solid #1e2330;border-radius:16px;padding:32px;text-decoration:none;color:inherit;display:block;transition:all .25s;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent,#4a9eff);opacity:0;transition:.25s}
+.card:hover{border-color:#2a3050;background:#1a2035;transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.card:hover::before{opacity:1}
+.card.c1{--accent:#4a9eff}
+.card.c2{--accent:#f87171}
+.card.c3{--accent:#34d399}
+.card.c4{--accent:#a78bfa}
+
+/* 主卡（左上，跨行） */
+.card.main{grid-row:1/3;display:flex;flex-direction:column;justify-content:space-between}
+
+.card-tag{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent,#4a9eff);margin-bottom:16px;opacity:.8}
+.card-icon{width:44px;height:44px;border-radius:10px;background:rgba(74,158,255,.1);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:20px}
+.card.c2 .card-icon{background:rgba(248,113,113,.1)}
+.card.c3 .card-icon{background:rgba(52,211,153,.1)}
+.card.c4 .card-icon{background:rgba(167,139,250,.1)}
+
+.card-title{font-size:20px;font-weight:700;color:#f1f5f9;margin-bottom:10px;line-height:1.3}
+.card.main .card-title{font-size:24px}
+.card-desc{font-size:13px;color:#6b7280;line-height:1.7}
+.card-meta{margin-top:24px;padding-top:16px;border-top:1px solid #1e2330;display:flex;flex-wrap:wrap;gap:8px}
+.meta-chip{font-size:11px;color:#4b5563;background:#1e2330;padding:4px 10px;border-radius:20px}
+
+.card-arrow{position:absolute;bottom:28px;right:28px;width:28px;height:28px;border-radius:50%;background:#1e2330;display:flex;align-items:center;justify-content:center;font-size:12px;color:#6b7280;transition:.2s}
+.card:hover .card-arrow{background:var(--accent,#4a9eff);color:#fff}
+
+/* 主卡底部数据预览 */
+.preview-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
+.pstat{background:#1e2330;border-radius:10px;padding:14px}
+.pstat .pv{font-size:22px;font-weight:800;color:#fff}
+.pstat .pl{font-size:10px;color:#6b7280;margin-top:3px}
+.pstat .pc{font-size:11px;font-weight:600;margin-top:3px}
+
+footer{text-align:center;font-size:12px;color:#374151;padding:24px;border-top:1px solid #1e2330;max-width:1100px;margin:0 auto}
+
+@media(max-width:700px){
+  .header{padding:36px 24px 28px}
+  .kpi-strip{padding:0 24px;flex-wrap:wrap}
+  .kpi-item{min-width:45%;border-radius:0}
+  .grid{grid-template-columns:1fr;padding:0 24px 40px}
+  .card.main{grid-row:auto}
+}
 </style>
 </head>
 <body>
-  <div class="logo">叽里呱啦 GEO 监控中心</div>
-  <div class="sub">Generative Engine Optimization · 方法语义占位 × 品牌承接漏斗</div>
 
-  <div class="cards">
-    <a class="card c1" href="content_ops/index.html">
+<div class="header">
+  <div class="header-eyebrow">Generative Engine Optimization</div>
+  <h1>叽里呱啦 <span>GEO 监控中心</span></h1>
+  <div class="header-sub">方法语义占位 × 品牌承接漏斗 · T0 基线 2026-04-18 · 每周自动复测</div>
+</div>
+
+<!-- KPI 快览条 -->
+<div class="kpi-strip">
+  <div class="kpi-item accent">
+    <div class="v">16.4%</div>
+    <div class="l">任一 Tag 命中率（W1）</div>
+    <div class="chg up">↑ +1.1pp vs T0</div>
+  </div>
+  <div class="kpi-item">
+    <div class="v">4.8%</div>
+    <div class="l">品牌提及率（W1）</div>
+    <div class="chg dn">↓ -0.2pp vs T0</div>
+  </div>
+  <div class="kpi-item">
+    <div class="v">8.1%</div>
+    <div class="l">品牌承接率（W1）</div>
+    <div class="chg dn">↓ -4.0pp vs T0</div>
+  </div>
+  <div class="kpi-item">
+    <div class="v">T1</div>
+    <div class="l">目标节点</div>
+    <div class="chg flat">→ 2026-05-18</div>
+  </div>
+</div>
+
+<!-- 四张卡片 -->
+<div class="grid">
+
+  <!-- 主卡：优化实施看板 -->
+  <a class="card c1 main" href="content_ops/index.html">
+    <div>
+      <div class="card-tag">总览</div>
       <div class="card-icon">📊</div>
       <div class="card-title">优化实施看板</div>
-      <div class="card-desc">T0 基线 vs T1 目标、三组 Tag 命中率、平台优先级矩阵、首月 16 篇排期</div>
-      <div class="card-meta">T0 · 378 样本 · 6 平台 · 21 题</div>
-    </a>
-    <a class="card c2" href="content_ops/cases.html">
-      <div class="card-icon">🔍</div>
-      <div class="card-title">曝光案例明细</div>
-      <div class="card-desc">S / A / B 三档案例原文片段，关键词高亮，可按平台筛选，直观看清承接断点</div>
-      <div class="card-meta">S档 7 · A档 12 · B档 51 · 未命中 308</div>
-    </a>
-    <a class="card c3" href="baseline_T0/report/baseline_T0_report.html">
-      <div class="card-icon">📄</div>
-      <div class="card-title">T0 基线报告</div>
-      <div class="card-desc">可视化报告，含 KPI 卡片、命中热力图、竞品对照、平台排名、品牌承接漏斗</div>
-      <div class="card-meta">baseline_T0_report.html</div>
-    </a>
-  </div>
+      <div class="card-desc">T0 基线 vs T1 目标、三组 Tag 命中率周对周趋势、平台优先级矩阵、首月 16 篇内容排期</div>
+      <div class="preview-stats">
+        <div class="pstat">
+          <div class="pv">378</div>
+          <div class="pl">样本总量</div>
+        </div>
+        <div class="pstat">
+          <div class="pv">6</div>
+          <div class="pl">监测平台</div>
+        </div>
+        <div class="pstat">
+          <div class="pv">21</div>
+          <div class="pl">核心问题</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-meta">
+      <span class="meta-chip">每周更新</span>
+      <span class="meta-chip">T0 · 2026-04-18</span>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
 
-    <a class="card c4" href="content_ops/trends.html">
-      <div class="card-icon">📈</div>
-      <div class="card-title">周度趋势追踪</div>
-      <div class="card-desc">任一Tag / 品牌提及 / 品牌承接率周对周折线图，含T1目标参考线</div>
-      <div class="card-meta">每周自动更新 · 对比T0基线</div>
-    </a>
-  </div>
+  <!-- 曝光案例明细 -->
+  <a class="card c2" href="content_ops/cases.html">
+    <div class="card-tag">案例分析</div>
+    <div class="card-icon">🔍</div>
+    <div class="card-title">曝光案例明细</div>
+    <div class="card-desc">S / A / B 三档案例原文片段，关键词高亮，按平台筛选，直观看清承接断点</div>
+    <div class="card-meta">
+      <span class="meta-chip">S档 7</span>
+      <span class="meta-chip">A档 12</span>
+      <span class="meta-chip">B档 51</span>
+      <span class="meta-chip">未命中 308</span>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
 
-  <div class="footer">叽里呱啦 · GEO 持续优化 · T0 基线 2026-04-18</div>
+  <!-- 周度趋势 -->
+  <a class="card c4" href="content_ops/trends.html">
+    <div class="card-tag">趋势追踪</div>
+    <div class="card-icon">📈</div>
+    <div class="card-title">周度趋势追踪</div>
+    <div class="card-desc">任一Tag / 品牌提及 / 品牌承接率周对周折线图，含 T1 目标参考线，自动累积</div>
+    <div class="card-meta">
+      <span class="meta-chip">每周自动更新</span>
+      <span class="meta-chip">对比 T0 基线</span>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+
+  <!-- T0 基线报告 -->
+  <a class="card c3" href="baseline_T0/report/baseline_T0_report.html">
+    <div class="card-tag">基线数据</div>
+    <div class="card-icon">📄</div>
+    <div class="card-title">T0 基线报告</div>
+    <div class="card-desc">可视化报告，含 KPI 卡片、命中热力图、竞品对照、平台排名、品牌承接漏斗</div>
+    <div class="card-meta">
+      <span class="meta-chip">2026-04-18</span>
+      <span class="meta-chip">全量 378 条</span>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+
+</div>
+
+<footer>叽里呱啦 · GEO 持续优化 · T0 基线 2026-04-18</footer>
+
 </body>
 </html>
