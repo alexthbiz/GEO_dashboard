@@ -28,6 +28,14 @@
   .delta-danger { background: #fff0f0; color: #e03131; }
   .delta-warn   { background: #fff8e6; color: #e67700; }
   .delta-ok     { background: #ebfbee; color: #2f9e44; }
+  /* 周对周区块 */
+  .wow-block { margin-top: 14px; padding-top: 12px; border-top: 1px solid #f0f0f0; display: flex; align-items: center; justify-content: space-between; }
+  .wow-item { text-align: center; }
+  .wow-val { font-size: 20px; font-weight: 800; }
+  .wow-lbl { font-size: 10px; color: #aaa; margin-top: 2px; }
+  .wow-chg { font-size: 12px; font-weight: 700; margin-top: 3px; }
+  .wow-divider { width: 1px; height: 36px; background: #f0f0f0; }
+  .chg-up { color: #2e7d32; } .chg-dn { color: #e03131; } .chg-flat { color: #aaa; }
 
   /* funnel */
   .funnel-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
@@ -84,16 +92,50 @@
   <div class="card">
     <h2>任一 Tag 命中率</h2>
     <div class="kpi-val" style="color:#e03131">15.3%</div>
-    <div class="kpi-label">T0 当前（378 样本）</div>
+    <div class="kpi-label">T0 基线（378 样本）</div>
     <div class="kpi-delta delta-danger">目标 ≥ 30% &nbsp;↑ +14.7pp</div>
     <canvas id="ch-any" height="90" style="margin-top:16px"></canvas>
+    <div class="wow-block">
+      <div class="wow-item">
+        <div class="wow-val" style="color:#888">15.3%</div>
+        <div class="wow-lbl">T0 基线</div>
+      </div>
+      <div class="wow-divider"></div>
+      <div class="wow-item">
+        <div class="wow-val" style="color:#0f3460">16.4%</div>
+        <div class="wow-lbl">W1 本周</div>
+        <div class="wow-chg chg-up">↑ +1.1pp</div>
+      </div>
+      <div class="wow-divider"></div>
+      <div class="wow-item">
+        <div class="wow-val" style="color:#2e7d32">30%</div>
+        <div class="wow-lbl">T1 目标</div>
+      </div>
+    </div>
   </div>
   <div class="card">
     <h2>品牌提及率</h2>
     <div class="kpi-val" style="color:#e67700">5.0%</div>
-    <div class="kpi-label">T0 当前</div>
+    <div class="kpi-label">T0 基线</div>
     <div class="kpi-delta delta-warn">目标 ≥ 15% &nbsp;↑ +10pp</div>
     <canvas id="ch-brand" height="90" style="margin-top:16px"></canvas>
+    <div class="wow-block">
+      <div class="wow-item">
+        <div class="wow-val" style="color:#888">5.0%</div>
+        <div class="wow-lbl">T0 基线</div>
+      </div>
+      <div class="wow-divider"></div>
+      <div class="wow-item">
+        <div class="wow-val" style="color:#e03131">4.8%</div>
+        <div class="wow-lbl">W1 本周</div>
+        <div class="wow-chg chg-dn">↓ -0.2pp</div>
+      </div>
+      <div class="wow-divider"></div>
+      <div class="wow-item">
+        <div class="wow-val" style="color:#2e7d32">15%</div>
+        <div class="wow-lbl">T1 目标</div>
+      </div>
+    </div>
   </div>
   <div class="card">
     <h2>Tag 命中→品牌承接率</h2>
@@ -101,6 +143,23 @@
     <div class="kpi-label">T0（7 / 58 条 tag 命中同时提品牌）</div>
     <div class="kpi-delta delta-danger">目标 ≥ 50% &nbsp;↑ +37.9pp</div>
     <canvas id="ch-link" height="90" style="margin-top:16px"></canvas>
+    <div class="wow-block">
+      <div class="wow-item">
+        <div class="wow-val" style="color:#888">12.1%</div>
+        <div class="wow-lbl">T0 基线</div>
+      </div>
+      <div class="wow-divider"></div>
+      <div class="wow-item">
+        <div class="wow-val" style="color:#e03131">8.1%</div>
+        <div class="wow-lbl">W1 本周</div>
+        <div class="wow-chg chg-dn">↓ -4.0pp</div>
+      </div>
+      <div class="wow-divider"></div>
+      <div class="wow-item">
+        <div class="wow-val" style="color:#2e7d32">50%</div>
+        <div class="wow-lbl">T1 目标</div>
+      </div>
+    </div>
   </div>
 </div>
 
