@@ -10,10 +10,11 @@
 body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#F7F8FC;color:#1A1A2E}
 
 /* 导航栏 */
-.topnav{background:#fff;border-bottom:1px solid #E8ECF4;position:sticky;top:0;z-index:100}
+.topnav{background:#fff;border-bottom:1px solid #E8ECF4;position:sticky;top:0;z-index:100;position:relative}
 .nav-inner{max-width:1200px;margin:0 auto;padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between}
-.nav-brand{display:flex;flex-direction:column;align-items:flex-start;gap:0;line-height:1}
+.nav-brand{display:flex;flex-direction:row;align-items:center;gap:8px;line-height:1}
 .nav-brand span{color:#29c07b}
+.nav-hamburger{display:none;align-items:center;justify-content:center;width:36px;height:36px;border:none;background:none;cursor:pointer;color:#1A1A2E;font-size:22px;flex-shrink:0;padding:0}
 .nav-links{display:flex;gap:32px}
 .nav-links a{font-size:13px;color:#6B7280;text-decoration:none;font-weight:500;transition:.2s}
 .nav-links a:hover{color:#29c07b}
@@ -102,8 +103,11 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
   .filter-bar{padding:12px 20px}
   .page-body{padding:20px 20px 40px}
   .cards{grid-template-columns:1fr}
-  .nav-inner{padding:0 20px}
-  .nav-links{gap:16px}
+  .nav-hamburger{display:flex!important}
+  .nav-inner{padding:0 16px;height:52px}
+  .nav-links{display:none;position:absolute;top:52px;left:0;width:100%;background:#fff;border-bottom:1px solid #E8ECF4;flex-direction:column;padding:8px 20px 14px;gap:0;z-index:200;box-shadow:0 6px 20px rgba(0,0,0,.08)}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:11px 0;font-size:14px;border-bottom:1px solid #F7F8FC;white-space:nowrap}
 }
 </style>
 </head>
@@ -111,7 +115,7 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 
 <nav class="topnav">
   <div class="nav-inner">
-    <div class="nav-brand"><img src="../assets/logo.png" alt="叽里呱啦" style="height:28px;width:auto;display:block"><span style="font-size:11px;font-weight:700;color:#29c07b;letter-spacing:1px;margin-top:1px">GEO 监控中心</span></div>
+    <div class="nav-brand"><img src="../assets/logo.png" alt="叽里呱啦" style="height:28px;width:auto"><span style="font-size:11px;font-weight:700;color:#29c07b;letter-spacing:1px;white-space:nowrap">GEO 监控中心</span></div>
     <div class="nav-links">
       <a href="../index.html">总览</a>
       <a href="index.html">优化行动</a>
@@ -119,6 +123,7 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
       <a href="../baseline_T0/report/baseline_T0_report.html">基线报告</a>
       <a href="cases.html" class="active">案例明细</a>
     </div>
+  <button class="nav-hamburger" id="navToggle" aria-label="导航菜单">☰</button>
   </div>
 </nav>
 
