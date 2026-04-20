@@ -98,10 +98,19 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 .diag.b-diag{border-left-color:#6366f1;background:#F3F0FF}
 
 @media(max-width:760px){
-  .page-hero{padding:28px 20px 24px}
-  .stats-bar{padding:16px 20px}
-  .filter-bar{padding:12px 20px}
-  .page-body{padding:20px 20px 40px}
+  /* Hero */
+  .page-hero{padding:24px 0 20px}
+  .page-hero-inner{padding:0 16px}
+  /* 统计条 */
+  .stats-bar{padding:12px 0}
+  .stats-inner{padding:0 16px;flex-wrap:wrap;gap:8px}
+  .stat{flex:1;min-width:calc(50% - 8px);padding:10px 12px;border-radius:12px}
+  .stat .n{font-size:24px}
+  .stat .l{font-size:11px}
+  /* 筛选条 */
+  .filter-bar{padding:10px 16px}
+  /* 卡片区 */
+  .page-body{padding:16px 16px 40px}
   .cards{grid-template-columns:1fr}
   .nav-hamburger{display:flex!important}
   .nav-inner{padding:0 16px;height:52px}
