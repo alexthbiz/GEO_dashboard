@@ -143,110 +143,70 @@ table.heat .row-lbl{text-align:left;color:#1A1A2E;font-weight:500;padding-left:0
 <div class="page-hero">
   <div class="page-hero-inner">
     <h1>叽里呱啦 GEO 优化行动</h1>
-    <p>T0 基线 → T1 目标 · 扩占位 × 强承接 · 2026-04-18 立项</p>
-    <p style="font-size:12px;color:#9CA3AF;margin-top:4px">首月 16 篇内容的发布排期、选题清单和执行状态，追踪内容从创作到 AI 语料库的全链路落地</p>
+    <p>首月 16 篇内容排期、平台策略与执行进度 · 2026-04-18 立项</p>
+    <p style="font-size:12px;color:#9CA3AF;margin-top:4px">任务板：做什么、在哪发、发多少。数据趋势见<a href="trends.html" style="color:#29c07b;text-decoration:none;font-weight:600">趋势追踪</a></p>
   </div>
 </div>
 
 <div class="page-body">
 
-<!-- ① KPI 当前值 vs 目标 -->
-<div class="section-title">① T0 基线 vs T1 目标</div>
+<!-- ① 目标缺口 -->
+<div class="section-title">① T0 基线 → T1 目标</div>
 <div class="section-divider"></div>
-<div class="grid row-3">
+<div class="grid row-2">
   <div class="card">
-    <h2>任一 Tag 命中率</h2>
-    <div class="kpi-val" style="color:#ee4b4a">15.3%</div>
-    <div class="kpi-label">T0 基线（378 样本）</div>
-    <div class="kpi-delta delta-danger">目标 ≥ 30% &nbsp;↑ +14.7pp</div>
-    <canvas id="ch-any" height="90" style="margin-top:16px"></canvas>
-    <div class="wow-block">
-      <div class="wow-item">
-        <div class="wow-val" style="color:#6B7280">15.3%</div>
-        <div class="wow-lbl">T0 基线</div>
-      </div>
-      <div class="wow-divider"></div>
-      <div class="wow-item">
-        <div class="wow-val" style="color:#29c07b">16.4%</div>
-        <div class="wow-lbl">W1 本周</div>
-        <div class="wow-chg chg-up">↑ +1.1pp</div>
-      </div>
-      <div class="wow-divider"></div>
-      <div class="wow-item">
-        <div class="wow-val" style="color:#29c07b">30%</div>
-        <div class="wow-lbl">T1 目标</div>
-      </div>
-    </div>
+    <h2>目标缺口一览</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead>
+        <tr style="border-bottom:2px solid #E8ECF4">
+          <th style="text-align:left;padding:8px 0;color:#6B7280;font-weight:700">指标</th>
+          <th style="text-align:center;padding:8px 6px;color:#6B7280;font-weight:700">T0</th>
+          <th style="text-align:center;padding:8px 6px;color:#6B7280;font-weight:700">T1目标</th>
+          <th style="text-align:center;padding:8px 0;color:#6B7280;font-weight:700">缺口</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #F7F8FC">
+          <td style="padding:9px 0;font-weight:600">任一 Tag 命中</td>
+          <td style="text-align:center;color:#ee4b4a;font-weight:700">15.3%</td>
+          <td style="text-align:center;color:#29c07b;font-weight:700">30%</td>
+          <td style="text-align:center;color:#6B7280">−14.7pp</td>
+        </tr>
+        <tr style="border-bottom:1px solid #F7F8FC">
+          <td style="padding:9px 0;font-weight:600">Tag1 听说先行</td>
+          <td style="text-align:center;color:#ee4b4a;font-weight:700">3.4%</td>
+          <td style="text-align:center;color:#29c07b;font-weight:700">15%</td>
+          <td style="text-align:center;color:#6B7280">−11.6pp</td>
+        </tr>
+        <tr style="border-bottom:1px solid #F7F8FC">
+          <td style="padding:9px 0;font-weight:600">Tag2 短时高频</td>
+          <td style="text-align:center;color:#f78e20;font-weight:700">6.3%</td>
+          <td style="text-align:center;color:#29c07b;font-weight:700">15%</td>
+          <td style="text-align:center;color:#6B7280">−8.7pp</td>
+        </tr>
+        <tr style="border-bottom:1px solid #F7F8FC">
+          <td style="padding:9px 0;font-weight:600">Tag3 兴趣驱动</td>
+          <td style="text-align:center;color:#f78e20;font-weight:700">7.1%</td>
+          <td style="text-align:center;color:#29c07b;font-weight:700">15%</td>
+          <td style="text-align:center;color:#6B7280">−7.9pp</td>
+        </tr>
+        <tr style="border-bottom:1px solid #F7F8FC">
+          <td style="padding:9px 0;font-weight:600">品牌提及率</td>
+          <td style="text-align:center;color:#ee4b4a;font-weight:700">5.0%</td>
+          <td style="text-align:center;color:#29c07b;font-weight:700">15%</td>
+          <td style="text-align:center;color:#6B7280">−10.0pp</td>
+        </tr>
+        <tr>
+          <td style="padding:9px 0;font-weight:600">品牌承接率</td>
+          <td style="text-align:center;color:#ee4b4a;font-weight:700">12.1%</td>
+          <td style="text-align:center;color:#29c07b;font-weight:700">50%</td>
+          <td style="text-align:center;color:#6B7280">−37.9pp</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:12px;font-size:11px;color:#9CA3AF">实时周度变化见 <a href="trends.html" style="color:#29c07b;font-weight:600;text-decoration:none">趋势追踪 →</a></div>
   </div>
-  <div class="card">
-    <h2>品牌提及率</h2>
-    <div class="kpi-val" style="color:#6366f1">5.0%</div>
-    <div class="kpi-label">T0 基线</div>
-    <div class="kpi-delta delta-warn">目标 ≥ 15% &nbsp;↑ +10pp</div>
-    <canvas id="ch-brand" height="90" style="margin-top:16px"></canvas>
-    <div class="wow-block">
-      <div class="wow-item">
-        <div class="wow-val" style="color:#6B7280">5.0%</div>
-        <div class="wow-lbl">T0 基线</div>
-      </div>
-      <div class="wow-divider"></div>
-      <div class="wow-item">
-        <div class="wow-val" style="color:#ee4b4a">4.8%</div>
-        <div class="wow-lbl">W1 本周</div>
-        <div class="wow-chg chg-dn">↓ -0.2pp</div>
-      </div>
-      <div class="wow-divider"></div>
-      <div class="wow-item">
-        <div class="wow-val" style="color:#29c07b">15%</div>
-        <div class="wow-lbl">T1 目标</div>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <h2>Tag 命中→品牌承接率</h2>
-    <div class="kpi-val" style="color:#ee4b4a">12.1%</div>
-    <div class="kpi-label">T0（7 / 58 条 tag 命中同时提品牌）</div>
-    <div class="kpi-delta delta-danger">目标 ≥ 50% &nbsp;↑ +37.9pp</div>
-    <canvas id="ch-link" height="90" style="margin-top:16px"></canvas>
-    <div class="wow-block">
-      <div class="wow-item">
-        <div class="wow-val" style="color:#6B7280">12.1%</div>
-        <div class="wow-lbl">T0 基线</div>
-      </div>
-      <div class="wow-divider"></div>
-      <div class="wow-item">
-        <div class="wow-val" style="color:#ee4b4a">8.1%</div>
-        <div class="wow-lbl">W1 本周</div>
-        <div class="wow-chg chg-dn">↓ -4.0pp</div>
-      </div>
-      <div class="wow-divider"></div>
-      <div class="wow-item">
-        <div class="wow-val" style="color:#29c07b">50%</div>
-        <div class="wow-lbl">T1 目标</div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- 周度趋势 -->
-<div class="section-title" style="margin-top:40px">① 周度趋势曲线</div>
-<div class="section-divider"></div>
-<div class="grid row-1">
-  <div class="card">
-    <h2>核心指标周对周趋势（虚线 = T1 目标）</h2>
-    <canvas id="ch-trend" height="110"></canvas>
-    <div style="text-align:right;margin-top:8px">
-      <a href="trends.html" style="font-size:12px;color:#29c07b;text-decoration:none;font-weight:600">查看完整趋势页 →</a>
-    </div>
-  </div>
-</div>
-
-<!-- ② 三组 Tag 对比 -->
-<div class="grid row-2" style="margin-top:20px">
-  <div class="card">
-    <h2>三组 GEO Tag 命中率 — T0 vs T1 目标</h2>
-    <canvas id="ch-tags" height="200"></canvas>
-  </div>
   <div class="card">
     <h2>品牌漏斗 — T0 现状（378 条）</h2>
     <div style="margin-top:8px">
@@ -280,7 +240,7 @@ table.heat .row-lbl{text-align:left;color:#1A1A2E;font-weight:500;padding-left:0
   </div>
 </div>
 
-<!-- ③ 平台排名热力图 -->
+<!-- ② 平台排名热力图 -->
 <div class="section-title" style="margin-top:40px">② 平台优先级矩阵（T0 任一 Tag 命中率）</div>
 <div class="section-divider"></div>
 <div class="grid row-2">
@@ -323,7 +283,7 @@ table.heat .row-lbl{text-align:left;color:#1A1A2E;font-weight:500;padding-left:0
   </div>
 </div>
 
-<!-- ④ 16 篇排期 -->
+<!-- ③ 16 篇排期 -->
 <div class="section-title" style="margin-top:40px">③ 首月 16 篇排期（4 周 × 4 篇）</div>
 <div class="section-divider"></div>
 <div class="grid row-2">
@@ -491,84 +451,6 @@ table.heat .row-lbl{text-align:left;color:#1A1A2E;font-weight:500;padding-left:0
 </div><!-- page-body -->
 
 <script>
-// 色盘
-const C = { blue:'#29c07b', orange:'#f78e20', green:'#29c07b', red:'#ee4b4a', gray:'#E8ECF4', light_blue:'#a8e6cc', light_orange:'#FED7AA', light_green:'#a8e6cc' };
-
-// 圆环图 helper
-function donut(id, current, target, color) {
-  new Chart(document.getElementById(id), {
-    type: 'doughnut',
-    data: {
-      labels: ['当前', '目标缺口'],
-      datasets: [{
-        data: [current, target - current],
-        backgroundColor: [color, '#F7F8FC'],
-        borderWidth: 0,
-        circumference: 270,
-        rotation: -135
-      }]
-    },
-    options: {
-      cutout: '72%',
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ctx.label + ': ' + (ctx.raw).toFixed(1) + '%' } }
-      }
-    }
-  });
-}
-donut('ch-any',   15.3, 30, '#29c07b');
-donut('ch-brand', 5.0,  15, '#6366f1');
-donut('ch-link',  12.1, 50, '#f78e20');
-
-// 周度趋势图（每周更新 WEEKLY_DATA）
-const WEEKLY_DATA = [
-  { label:'T0基线', any:15.3, brand:5.0, funnel:12.1, t1:3.4, t2:6.3, t3:7.1 },
-  { label:'W1',     any:16.4, brand:4.8, funnel:8.1,  t1:2.6, t2:7.1, t3:7.7 },
-];
-const wLabels = WEEKLY_DATA.map(d => d.label);
-new Chart(document.getElementById('ch-trend'), {
-  type: 'line',
-  data: {
-    labels: wLabels,
-    datasets: [
-      { label:'任一Tag命中', data: WEEKLY_DATA.map(d=>d.any),    borderColor:'#29c07b', backgroundColor:'#29c07b22', tension:.3, fill:true,  pointRadius:5, borderWidth:2 },
-      { label:'品牌提及率',  data: WEEKLY_DATA.map(d=>d.brand),  borderColor:'#6366f1', backgroundColor:'transparent', tension:.3, fill:false, pointRadius:5, borderWidth:2 },
-      { label:'品牌承接率',  data: WEEKLY_DATA.map(d=>d.funnel), borderColor:'#f78e20', backgroundColor:'transparent', tension:.3, fill:false, pointRadius:5, borderWidth:2 },
-      { label:'T1目标·Tag30%',    data: Array(wLabels.length).fill(30), borderColor:'#29c07b80', borderDash:[5,4], borderWidth:1.5, pointRadius:0, fill:false },
-      { label:'T1目标·品牌15%',   data: Array(wLabels.length).fill(15), borderColor:'#6366f180', borderDash:[5,4], borderWidth:1.5, pointRadius:0, fill:false },
-      { label:'T1目标·承接50%',   data: Array(wLabels.length).fill(50), borderColor:'#f78e2080', borderDash:[5,4], borderWidth:1.5, pointRadius:0, fill:false },
-    ]
-  },
-  options: {
-    responsive:true,
-    plugins:{ legend:{ position:'bottom', labels:{ font:{size:11}, boxWidth:12 } },
-      tooltip:{ callbacks:{ label: ctx => ctx.dataset.label+': '+ctx.parsed.y.toFixed(1)+'%' } } },
-    scales:{ y:{ beginAtZero:true, max:55, ticks:{ callback: v=>v+'%', font:{size:11} }, grid:{color:'#F7F8FC'} },
-             x:{ ticks:{ font:{size:11} }, grid:{color:'#F7F8FC'} } }
-  }
-});
-
-// 三组 tag 对比
-new Chart(document.getElementById('ch-tags'), {
-  type: 'bar',
-  data: {
-    labels: ['tag1 听说先行\n+拼读进阶', 'tag2 短时高频\n+螺旋上升', 'tag3 兴趣驱动\n+学以致用'],
-    datasets: [
-      { label: 'T0 当前', data: [3.4, 6.3, 7.1], backgroundColor: ['#ee4b4a', '#f78e20', '#29c07b'], borderRadius: 8 },
-      { label: 'T1 目标', data: [15, 15, 15], backgroundColor: ['#ee4b4a40', '#f78e2040', '#29c07b40'], borderRadius: 8 }
-    ]
-  },
-  options: {
-    responsive: true,
-    plugins: { legend: { position: 'bottom', labels: { font: { size: 12 } } } },
-    scales: {
-      y: { beginAtZero: true, max: 20, ticks: { callback: v => v + '%' }, grid: { color: '#F7F8FC' } },
-      x: { grid: { display: false } }
-    }
-  }
-});
-
 // 竞品
 new Chart(document.getElementById('ch-comp'), {
   type: 'bar',
