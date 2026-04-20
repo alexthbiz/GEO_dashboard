@@ -108,13 +108,33 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 
 footer{text-align:center;font-size:12px;color:#6B7280;padding:24px 40px;border-top:1px solid #E8ECF4;background:#fff}
 
+/* ── Tooltip ── */
+.tip{position:relative;cursor:help;border-bottom:1px dashed #9CA3AF;display:inline}
+.tip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1A1A2E;color:#fff;font-size:11px;line-height:1.6;padding:7px 11px;border-radius:8px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:9999;font-weight:400;width:200px;white-space:normal;text-align:left;box-shadow:0 4px 16px rgba(0,0,0,.18)}
+.tip::before{content:'';position:absolute;bottom:calc(100% + 2px);left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1A1A2E;pointer-events:none;opacity:0;transition:opacity .15s;z-index:9999}
+.tip:hover::after,.tip:hover::before{opacity:1}
+
 @media(max-width:760px){
-  .hero{padding:32px 0 28px}
-  .main-wrap{padding:0 20px 40px}
-  .progress-strip{grid-template-columns:1fr}
+  /* 导航 */
+  .nav-inner{padding:0 16px;height:52px}
+  .nav-brand{font-size:15px;flex-shrink:0}
+  .nav-links{gap:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-shrink:1;min-width:0;padding-right:4px;scrollbar-width:none}
+  .nav-links::-webkit-scrollbar{display:none}
+  .nav-links a{font-size:11px;white-space:nowrap}
+  /* Hero */
+  .hero{padding:28px 0 24px}
+  .hero h1{font-size:26px}
+  .hero-sub{font-size:12px}
+  /* 进度条 */
+  .progress-strip{grid-template-columns:1fr;gap:10px}
+  /* 卡片网格 */
+  .main-wrap{padding:0 16px 40px}
   .grid{grid-template-columns:1fr}
-  .nav-inner{padding:0 20px}
-  .nav-links{gap:16px}
+  /* 排期文字换行 */
+  .sched-row{flex-wrap:wrap;gap:6px}
+  .sched-text{width:100%;order:3;flex:none}
+  /* footer */
+  footer{padding:20px 16px}
 }
 </style>
 </head>
@@ -144,7 +164,7 @@ footer{text-align:center;font-size:12px;color:#6B7280;padding:24px 40px;border-t
 
       <div class="prog-item">
         <div class="prog-head">
-          <span class="prog-label">任一 Tag 命中率</span>
+          <span class="prog-label"><span class="tip" data-tip="378条AI回答中，至少包含"听说先行/短时高频/兴趣驱动"三组方法标签中任意一个关键词的比例">任一 Tag 命中率</span></span>
           <span class="prog-vals"><b>16.4%</b> / 目标 30%</span>
         </div>
         <div class="prog-track"><div class="prog-bar bar-green" style="width:54.7%"></div></div>
@@ -156,7 +176,7 @@ footer{text-align:center;font-size:12px;color:#6B7280;padding:24px 40px;border-t
 
       <div class="prog-item">
         <div class="prog-head">
-          <span class="prog-label">品牌提及率</span>
+          <span class="prog-label"><span class="tip" data-tip="AI回答中直接出现"叽里呱啦"品牌名称的比例，不要求关联到具体方法">品牌提及率</span></span>
           <span class="prog-vals"><b>4.8%</b> / 目标 15%</span>
         </div>
         <div class="prog-track"><div class="prog-bar bar-orange" style="width:32%"></div></div>
@@ -168,7 +188,7 @@ footer{text-align:center;font-size:12px;color:#6B7280;padding:24px 40px;border-t
 
       <div class="prog-item">
         <div class="prog-head">
-          <span class="prog-label">品牌承接率</span>
+          <span class="prog-label"><span class="tip" data-tip="Tag命中的回答中，同时也提到叽里呱啦品牌的比例。反映AI说了方法但是否把品牌挂上去——这是最关键的漏斗转化">品牌承接率</span></span>
           <span class="prog-vals"><b>8.1%</b> / 目标 50%</span>
         </div>
         <div class="prog-track"><div class="prog-bar bar-red" style="width:16.2%"></div></div>
@@ -189,7 +209,7 @@ footer{text-align:center;font-size:12px;color:#6B7280;padding:24px 40px;border-t
     <div class="card c-alert">
       <div class="card-tag">⚠ 本周关键问题</div>
       <div class="card-title">品牌承接漏斗严重断裂</div>
-      <div class="card-desc">AI 在回答中提到了叽里呱啦的方法，但没有关联到品牌——这是最大的杠杆点</div>
+      <div class="card-desc">AI 在回答中提到了方法标签，但没有把叽里呱啦和这些方法挂钩——<span class="tip" data-tip="S档：品牌+Tag共现（最理想）&#10;A档：仅品牌，无方法关联&#10;B档：仅Tag，品牌缺席&#10;目标是把B档转化为S档">这是最大的杠杆点</span></div>
 
       <!-- 漏斗可视化 -->
       <div class="funnel-vis">

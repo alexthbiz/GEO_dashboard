@@ -123,10 +123,26 @@ table.heatmap tr.avg-row td{font-weight:700;background:#F0FAF4;border-top:2px so
 footer{text-align:center;font-size:12px;color:#6B7280;margin-top:48px;padding:24px;border-top:1px solid #E8ECF4;background:#fff}
 
 @media(max-width:760px){
-  .page-hero{padding:28px 20px 24px}
-  .page-body{padding:20px 20px 40px}
-  .nav-inner{padding:0 20px}
-  .nav-links{gap:16px}
+  /* 导航 */
+  .nav-inner{padding:0 16px;height:52px}
+  .nav-brand{font-size:15px;flex-shrink:0}
+  .nav-links{gap:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-shrink:1;min-width:0;scrollbar-width:none}
+  .nav-links::-webkit-scrollbar{display:none}
+  .nav-links a{font-size:11px;white-space:nowrap}
+  /* Hero */
+  .page-hero{padding:24px 0 20px}
+  .page-hero-inner{padding:0 16px}
+  .page-hero h1{font-size:22px}
+  /* 内容 */
+  .page-body{padding:16px 16px 40px}
+  /* KPI */
+  .kpi-card .val{font-size:28px}
+  /* 漏斗：竖排 */
+  .funnel{flex-direction:column;align-items:stretch}
+  .funnel-step{min-width:auto}
+  .funnel-arrow{display:none}
+  /* 竞品/平台表格横滑 */
+  .table-wrap{padding:16px}
 }
 </style>
 </head>

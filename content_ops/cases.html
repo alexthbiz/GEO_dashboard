@@ -94,15 +94,36 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 .diag.s-diag{border-left-color:#f78e20;background:#FFFBE6}
 .diag.a-diag{border-left-color:#ee4b4a;background:#FFF1F0}
 .diag.b-diag{border-left-color:#6366f1;background:#F3F0FF}
+.tip{position:relative;cursor:help;border-bottom:1px dashed #9CA3AF}
+.tip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1A1A2E;color:#fff;font-size:11px;line-height:1.6;padding:7px 11px;border-radius:8px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:9999;width:200px;white-space:normal;text-align:left;box-shadow:0 4px 16px rgba(0,0,0,.18)}
+.tip::before{content:'';position:absolute;bottom:calc(100% + 2px);left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1A1A2E;pointer-events:none;opacity:0;transition:opacity .15s;z-index:9999}
+.tip:hover::after,.tip:hover::before{opacity:1}
 
 @media(max-width:760px){
-  .page-hero{padding:28px 20px 24px}
-  .stats-bar{padding:16px 20px}
-  .filter-bar{padding:12px 20px}
-  .page-body{padding:20px 20px 40px}
+  /* 导航 */
+  .nav-inner{padding:0 16px;height:52px}
+  .nav-brand{font-size:15px;flex-shrink:0}
+  .nav-links{gap:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-shrink:1;min-width:0;scrollbar-width:none}
+  .nav-links::-webkit-scrollbar{display:none}
+  .nav-links a{font-size:11px;white-space:nowrap}
+  /* Hero */
+  .page-hero{padding:24px 0 20px}
+  .page-hero-inner{padding:0 16px}
+  .page-hero h1{font-size:20px}
+  /* Stats bar：2列wrap */
+  .stats-bar{padding:12px 0}
+  .stats-inner{padding:0 16px;flex-wrap:wrap;gap:10px}
+  .stat{min-width:calc(50% - 5px);flex:1 0 calc(50% - 5px);padding:10px 8px}
+  .stat .n{font-size:24px}
+  /* 筛选栏 */
+  .filter-bar{padding:10px 0;top:52px}
+  .filter-inner{padding:0 16px;gap:6px}
+  .filter-btn{padding:5px 12px;font-size:12px}
+  /* 内容 */
+  .page-body{padding:16px 16px 40px}
   .cards{grid-template-columns:1fr}
-  .nav-inner{padding:0 20px}
-  .nav-links{gap:16px}
+  /* snippet长文本换行 */
+  .snippet{overflow-wrap:break-word;word-break:break-all}
 }
 </style>
 </head>
@@ -130,10 +151,10 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 
 <div class="stats-bar">
   <div class="stats-inner">
-    <div class="stat s-stat"><div class="n">5</div><div class="l">S档：品牌 + tag 共现</div></div>
-    <div class="stat a-stat"><div class="n">13</div><div class="l">A档：仅品牌，无tag承接</div></div>
-    <div class="stat b-stat"><div class="n">57</div><div class="l">B档：仅tag，无品牌</div></div>
-    <div class="stat none-stat"><div class="n">303</div><div class="l">完全未命中</div></div>
+    <div class="stat s-stat"><div class="n">5</div><div class="l"><span class="tip" data-tip="AI回答中同时出现叽里呱啦品牌名和方法Tag关键词，是最理想的GEO成果">S档：品牌 + tag 共现</span></div></div>
+    <div class="stat a-stat"><div class="n">13</div><div class="l"><span class="tip" data-tip="AI提到了叽里呱啦，但没有关联到方法论——品牌被当作普通APP推荐，缺乏方法承接">A档：仅品牌，无tag承接</span></div></div>
+    <div class="stat b-stat"><div class="n">57</div><div class="l"><span class="tip" data-tip="AI说了方法（Tag命中），但完全没提叽里呱啦——占位成功但承接断裂，是最主要的优化目标">B档：仅tag，无品牌</span></div></div>
+    <div class="stat none-stat"><div class="n">303</div><div class="l"><span class="tip" data-tip="AI回答中既没有方法Tag词，也没有提到叽里呱啦——完全没有进入AI的知识范围">完全未命中</span></div></div>
   </div>
 </div>
 

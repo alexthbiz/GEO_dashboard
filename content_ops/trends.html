@@ -60,13 +60,26 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 .data-table tr.latest td{background:#FFFBE6;font-weight:700}
 
 footer{text-align:center;font-size:12px;color:#6B7280;margin-top:40px;padding:24px;border-top:1px solid #E8ECF4;background:#fff}
+.tip{position:relative;cursor:help;border-bottom:1px dashed #9CA3AF}
+.tip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1A1A2E;color:#fff;font-size:11px;line-height:1.6;padding:7px 11px;border-radius:8px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:9999;width:200px;white-space:normal;text-align:left;box-shadow:0 4px 16px rgba(0,0,0,.18)}
+.tip::before{content:'';position:absolute;bottom:calc(100% + 2px);left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1A1A2E;pointer-events:none;opacity:0;transition:opacity .15s;z-index:9999}
+.tip:hover::after,.tip:hover::before{opacity:1}
 
 @media(max-width:760px){
-  .page-hero{padding:28px 20px 24px}
-  .page-body{padding:20px 20px 40px}
-  .kpi-row{grid-template-columns:repeat(3,1fr)}
-  .nav-inner{padding:0 20px}
-  .nav-links{gap:16px}
+  /* 导航 */
+  .nav-inner{padding:0 16px;height:52px}
+  .nav-brand{font-size:15px;flex-shrink:0}
+  .nav-links{gap:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-shrink:1;min-width:0;scrollbar-width:none}
+  .nav-links::-webkit-scrollbar{display:none}
+  .nav-links a{font-size:11px;white-space:nowrap}
+  /* Hero */
+  .page-hero{padding:24px 0 20px}
+  .page-hero-inner{padding:0 16px}
+  .page-hero h1{font-size:22px}
+  /* 内容 */
+  .page-body{padding:16px 16px 40px}
+  .kpi-row{grid-template-columns:repeat(2,1fr)}
+  .kpi .val{font-size:22px}
 }
 </style>
 </head>
@@ -164,12 +177,12 @@ document.getElementById('metaLine').textContent =
 
 // ── KPI 卡片 ──────────────────────────────────────────────
 const kpiDefs = [
-  { key:'any',    label:'任一Tag命中',   t1:T1.any },
-  { key:'t1',     label:'Tag1 听说先行', t1:T1.t1  },
-  { key:'t2',     label:'Tag2 短时高频', t1:T1.t2  },
-  { key:'t3',     label:'Tag3 兴趣驱动', t1:T1.t3  },
-  { key:'brand',  label:'品牌提及率',    t1:T1.brand  },
-  { key:'funnel', label:'品牌承接率',    t1:T1.funnel },
+  { key:'any',    label:'任一Tag命中',   t1:T1.any,    tip:'378条AI回答中，三组方法Tag至少命中一个的比例' },
+  { key:'t1',     label:'Tag1 听说先行', t1:T1.t1,     tip:'包含"听说先行/拼读进阶"等Tag1关键词的比例，目前最弱，是首月内容重点' },
+  { key:'t2',     label:'Tag2 短时高频', t1:T1.t2,     tip:'包含"短时高频/螺旋上升"等Tag2关键词的比例' },
+  { key:'t3',     label:'Tag3 兴趣驱动', t1:T1.t3,     tip:'包含"兴趣驱动/学以致用"等Tag3关键词的比例' },
+  { key:'brand',  label:'品牌提及率',    t1:T1.brand,  tip:'AI回答中直接提到"叽里呱啦"的比例' },
+  { key:'funnel', label:'品牌承接率',    t1:T1.funnel, tip:'Tag命中的回答中，同时也提到叽里呱啦的比例。是最关键的漏斗转化指标，目标≥50%' },
 ];
 const kpiRow = document.getElementById('kpiRow');
 kpiDefs.forEach(d => {
@@ -179,7 +192,7 @@ kpiDefs.forEach(d => {
   kpiRow.innerHTML += `
     <div class="kpi">
       <div class="val">${pct(cur)}</div>
-      <div class="lbl">${d.label}</div>
+      <div class="lbl"><span class="tip" data-tip="${d.tip}">${d.label}</span></div>
       <div class="chg ${cls}">${sym} ${diff > 0 ? '+' : ''}${diff}% vs 上轮</div>
       <div class="t1-hint">T1目标 ${d.t1}%</div>
     </div>`;

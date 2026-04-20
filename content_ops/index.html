@@ -97,11 +97,27 @@ table.heat .row-lbl{text-align:left;color:#1A1A2E;font-weight:500;padding-left:0
 .insight-box b{color:#1A1A2E}
 
 @media(max-width:760px){
-  .page-hero{padding:28px 20px 24px}
-  .page-body{padding:20px 20px 40px}
+  /* 导航 */
+  .nav-inner{padding:0 16px;height:52px}
+  .nav-brand{font-size:15px;flex-shrink:0}
+  .nav-links{gap:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-shrink:1;min-width:0;scrollbar-width:none}
+  .nav-links::-webkit-scrollbar{display:none}
+  .nav-links a{font-size:11px;white-space:nowrap}
+  /* Hero */
+  .page-hero{padding:24px 0 20px}
+  .page-hero-inner{padding:0 16px}
+  .page-hero h1{font-size:22px}
+  /* 内容 */
+  .page-body{padding:16px 16px 40px}
   .row-3,.row-2{grid-template-columns:1fr}
-  .nav-inner{padding:0 20px}
-  .nav-links{gap:16px}
+  /* KPI 字体缩小 */
+  .kpi-val{font-size:32px}
+  /* 平台矩阵 */
+  .plat-action{width:auto;font-size:10px}
+  .plat-name{width:64px}
+  /* 漏斗 */
+  .funnel-lbl{width:80px;font-size:11px}
+  .funnel-pct{width:36px}
 }
 </style>
 </head>
