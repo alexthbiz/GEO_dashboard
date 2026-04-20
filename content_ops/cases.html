@@ -85,6 +85,11 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 .hl-tag{background:#F0FAF4;padding:1px 4px;border-radius:4px;font-weight:700;color:#29c07b}
 .hl-prop{background:#F3F0FF;padding:1px 4px;border-radius:4px;font-weight:700;color:#6366f1}
 
+.paged-hidden{display:none!important}
+.load-more-wrap{margin-top:16px;text-align:center}
+.load-more-btn{padding:10px 28px;border-radius:24px;border:1.5px solid #29c07b;background:#fff;color:#29c07b;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+.load-more-btn:hover{background:#29c07b;color:#fff}
+
 .diag{font-size:11px;color:#6B7280;margin-top:10px;padding:8px 12px;background:#F7F8FC;border-radius:8px;border-left:3px solid #E8ECF4;line-height:1.6}
 .diag.s-diag{border-left-color:#f78e20;background:#FFFBE6}
 .diag.a-diag{border-left-color:#ee4b4a;background:#FFF1F0}
@@ -409,17 +414,59 @@ document.querySelectorAll('.snippet').forEach(el => {
   });
 });
 
+// ── 每档分页（每次展开 10 条）──────────────────────────────
+const PAGE_SIZE = 10;
+
+function initPaging() {
+  document.querySelectorAll('.section[data-tier]').forEach(section => {
+    const cards = [...section.querySelectorAll('.card')];
+    if (cards.length <= PAGE_SIZE) return; // 不超过10条不加按钮
+
+    // 记录当前已显示数量
+    section._shown = PAGE_SIZE;
+
+    // 默认隐藏第10条以后的
+    cards.forEach((c, i) => { if (i >= PAGE_SIZE) c.classList.add('paged-hidden'); });
+
+    // 创建"展开更多"按钮
+    const wrap = document.createElement('div');
+    wrap.className = 'load-more-wrap';
+    wrap.innerHTML = `<button class="load-more-btn">展开更多 10 条 · 还有 ${cards.length - PAGE_SIZE} 条 ↓</button>`;
+    section.appendChild(wrap);
+
+    const btn = wrap.querySelector('.load-more-btn');
+    btn.addEventListener('click', () => {
+      const start = section._shown;
+      const end   = Math.min(start + PAGE_SIZE, cards.length);
+      for (let i = start; i < end; i++) cards[i].classList.remove('paged-hidden');
+      section._shown = end;
+      const left = cards.length - end;
+      if (left <= 0) { wrap.remove(); }
+      else { btn.textContent = `展开更多 10 条 · 还有 ${left} 条 ↓`; }
+    });
+  });
+}
+initPaging();
+
+// ── 筛选（筛选时忽略分页隐藏） ───────────────────────────────
 function filter(key) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
   const sections = document.querySelectorAll('[data-tier]');
   const cards = document.querySelectorAll('.card');
+
+  // 筛选时先全部取消 paged-hidden，让筛选结果完整展示
+  cards.forEach(c => c.classList.remove('paged-hidden'));
+  document.querySelectorAll('.load-more-wrap').forEach(w => w.remove());
+
   if (key === 'all') {
     sections.forEach(s => s.style.display = '');
     cards.forEach(c => c.style.display = '');
+    // 重新初始化分页
+    document.querySelectorAll('.section[data-tier]').forEach(s => delete s._shown);
+    initPaging();
     return;
   }
-  // tier filter
   if (['s','a','b'].includes(key)) {
     sections.forEach(s => { s.style.display = s.dataset.tier === key ? '' : 'none'; });
     cards.forEach(c => c.style.display = '');
@@ -430,7 +477,6 @@ function filter(key) {
   cards.forEach(c => {
     c.style.display = c.dataset.plat === key ? '' : 'none';
   });
-  // hide empty sections
   sections.forEach(s => {
     const visible = [...s.querySelectorAll('.card')].some(c => c.style.display !== 'none');
     s.style.display = visible ? '' : 'none';
