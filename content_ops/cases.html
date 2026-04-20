@@ -74,7 +74,13 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 .chip-tag{background:#F0FAF4;color:#29c07b;border:1px solid #a8e6cc}
 .chip-prop{background:#F3F0FF;color:#6366f1;border:1px solid #d4a8d4}
 
-.snippet{font-size:13px;line-height:1.8;color:#1A1A2E;background:#F7F8FC;padding:14px 16px;border-radius:10px;border:1px solid #E8ECF4}
+.snippet{font-size:13px;line-height:1.8;color:#1A1A2E;background:#F7F8FC;padding:14px 16px;border-radius:10px;border:1px solid #E8ECF4;position:relative}
+.snippet-inner{max-height:4.5em;overflow:hidden;transition:max-height .35s ease}
+.snippet-inner.expanded{max-height:600px}
+.snippet-fade{position:absolute;bottom:0;left:0;right:0;height:40px;background:linear-gradient(transparent,#F7F8FC);border-radius:0 0 10px 10px;pointer-events:none;transition:opacity .25s}
+.snippet-fade.hidden{opacity:0}
+.snippet-toggle{display:block;margin-top:8px;font-size:11px;font-weight:700;color:#29c07b;cursor:pointer;user-select:none;text-align:right;padding:2px 0}
+.snippet-toggle:hover{text-decoration:underline}
 .hl-brand{background:#FFF7E6;padding:1px 4px;border-radius:4px;font-weight:700;color:#f78e20}
 .hl-tag{background:#F0FAF4;padding:1px 4px;border-radius:4px;font-weight:700;color:#29c07b}
 .hl-prop{background:#F3F0FF;padding:1px 4px;border-radius:4px;font-weight:700;color:#6366f1}
@@ -371,6 +377,38 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 </div><!-- page-body -->
 
 <script>
+// ── 展开/收起 ──────────────────────────────────────────────
+document.querySelectorAll('.snippet').forEach(el => {
+  // 把现有内容包进 inner div
+  const inner = document.createElement('div');
+  inner.className = 'snippet-inner';
+  inner.innerHTML = el.innerHTML;
+  el.innerHTML = '';
+  el.appendChild(inner);
+
+  // 渐隐遮罩
+  const fade = document.createElement('div');
+  fade.className = 'snippet-fade';
+  el.appendChild(fade);
+
+  // 只有内容超出时才加按钮
+  if (inner.scrollHeight <= inner.clientHeight + 4) {
+    fade.classList.add('hidden');
+    return;
+  }
+
+  const btn = document.createElement('span');
+  btn.className = 'snippet-toggle';
+  btn.textContent = '展开全文 ↓';
+  el.appendChild(btn);
+
+  btn.addEventListener('click', () => {
+    const expanded = inner.classList.toggle('expanded');
+    btn.textContent = expanded ? '收起 ↑' : '展开全文 ↓';
+    fade.classList.toggle('hidden', expanded);
+  });
+});
+
 function filter(key) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
