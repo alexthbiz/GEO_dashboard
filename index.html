@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>叽里呱啦 GEO 监控中心</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#F7F8FC;min-height:100vh;color:#1A1A2E}
@@ -19,106 +20,101 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 .nav-links a.active{color:#29c07b;font-weight:700}
 
 /* Hero */
-.hero{background:#fff;border-bottom:1px solid #E8ECF4;padding:48px 0 44px}
+.hero{background:#fff;border-bottom:1px solid #E8ECF4;padding:44px 0 40px}
 .hero-inner{max-width:1200px;margin:0 auto;padding:0 40px}
-.hero-eyebrow{font-size:12px;font-weight:700;letter-spacing:2px;color:#29c07b;text-transform:uppercase;margin-bottom:14px}
-.hero h1{font-size:38px;font-weight:800;line-height:1.15;letter-spacing:-0.5px;color:#1A1A2E}
+.hero-eyebrow{font-size:11px;font-weight:700;letter-spacing:2px;color:#29c07b;text-transform:uppercase;margin-bottom:12px}
+.hero h1{font-size:36px;font-weight:800;line-height:1.15;letter-spacing:-0.5px;color:#1A1A2E}
 .hero h1 span{color:#29c07b}
-.hero-sub{font-size:13px;color:#6B7280;margin-top:10px;line-height:1.7}
+.hero-sub{font-size:13px;color:#6B7280;margin-top:10px}
 
-/* KPI 条 */
-.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;max-width:1200px;margin:28px auto 0;border:1px solid #E8ECF4;border-radius:16px;background:#fff;overflow:hidden}
-.kpi-item{padding:20px 24px;border-right:1px solid #E8ECF4}
-.kpi-item:last-child{border-right:none}
-.kpi-item .v{font-size:30px;font-weight:800;color:#29c07b;line-height:1}
-.kpi-item .l{font-size:11px;color:#6B7280;margin-top:5px}
-.kpi-item .chg{font-size:11px;font-weight:600;margin-top:5px}
-.up{color:#29c07b}.dn{color:#ee4b4a}.flat{color:#6B7280}
+/* ── 进度条区 ── */
+.progress-strip{margin-top:28px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.prog-item{background:#F7F8FC;border:1px solid #E8ECF4;border-radius:14px;padding:18px 20px}
+.prog-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.prog-label{font-size:12px;font-weight:600;color:#6B7280}
+.prog-vals{font-size:12px;color:#9CA3AF}
+.prog-vals b{color:#1A1A2E;font-weight:700}
+.prog-track{height:7px;background:#E8ECF4;border-radius:10px;overflow:hidden}
+.prog-bar{height:100%;border-radius:10px;transition:width .6s ease}
+.bar-green{background:#29c07b}
+.bar-orange{background:#f78e20}
+.bar-red{background:#ee4b4a}
+.prog-foot{margin-top:7px;display:flex;justify-content:space-between;font-size:11px;color:#9CA3AF}
+.prog-foot .chg{font-weight:700}
+.chg.up{color:#29c07b}.chg.dn{color:#ee4b4a}.chg.flat{color:#9CA3AF}
 
-/* 主网格 */
-.main-wrap{max-width:1200px;margin:36px auto;padding:0 40px 60px}
-.grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:20px}
+/* ── 主网格 ── */
+.main-wrap{max-width:1200px;margin:32px auto;padding:0 40px 60px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 
-/* 卡片基础 */
-.card{background:#fff;border-radius:20px;padding:32px;text-decoration:none;color:inherit;display:block;transition:all .25s;position:relative;overflow:hidden;box-shadow:0 2px 16px rgba(41,192,123,.07);border:1px solid #E8ECF4}
-.card:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(41,192,123,.16)}
-.card.main{grid-row:1/3;display:flex;flex-direction:column}
+/* 卡片 */
+.card{background:#fff;border-radius:20px;padding:28px;text-decoration:none;color:inherit;display:block;transition:all .25s;position:relative;overflow:hidden;box-shadow:0 2px 16px rgba(41,192,123,.07);border:1px solid #E8ECF4}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(41,192,123,.15)}
 
-.card-tag{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px}
-.c1 .card-tag{color:#29c07b}
-.c2 .card-tag{color:#f78e20}
-.c3 .card-tag{color:#29c07b}
-.c4 .card-tag{color:#ac4fa2}
+.card-tag{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px}
+.c-alert .card-tag{color:#ee4b4a}
+.c-warn  .card-tag{color:#f78e20}
+.c-info  .card-tag{color:#29c07b}
+.c-base  .card-tag{color:#ac4fa2}
 
-.card-title{font-size:18px;font-weight:700;color:#1A1A2E;margin-bottom:6px;line-height:1.3}
-.card.main .card-title{font-size:20px}
-.card-desc{font-size:12px;color:#6B7280;line-height:1.6;margin-bottom:20px}
+.card-title{font-size:17px;font-weight:700;color:#1A1A2E;margin-bottom:6px;line-height:1.3}
+.card-desc{font-size:12px;color:#6B7280;line-height:1.65;margin-bottom:18px}
 
-.card-arrow{position:absolute;bottom:24px;right:24px;width:30px;height:30px;border-radius:50%;background:#F7F8FC;border:1px solid #E8ECF4;display:flex;align-items:center;justify-content:center;font-size:12px;color:#6B7280;transition:.2s}
+.card-arrow{position:absolute;bottom:22px;right:22px;width:28px;height:28px;border-radius:50%;background:#F7F8FC;border:1px solid #E8ECF4;display:flex;align-items:center;justify-content:center;font-size:11px;color:#6B7280;transition:.2s}
 .card:hover .card-arrow{background:#29c07b;color:#fff;border-color:#29c07b}
 
-/* ── 主卡：6指标网格 ── */
-.kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:20px}
-.kpi-cell{background:#F7F8FC;border-radius:12px;padding:14px 16px;border:1px solid #E8ECF4}
-.kpi-cell .kv{font-size:22px;font-weight:800;color:#1A1A2E;line-height:1}
-.kpi-cell .kv.green{color:#29c07b}
-.kpi-cell .kl{font-size:11px;color:#6B7280;margin-top:3px}
-.kpi-cell .kdelta{font-size:11px;font-weight:600;margin-top:4px}
-.kpi-cell .kt1{font-size:10px;color:#B0B7C3;margin-top:2px}
+/* ── 卡1：问题聚焦（漏斗断点） ── */
+.funnel-vis{display:flex;align-items:center;gap:0;margin-bottom:16px}
+.fv-step{flex:1;text-align:center;padding:12px 6px;background:#F7F8FC;border:1px solid #E8ECF4;border-right:none}
+.fv-step:first-child{border-radius:10px 0 0 10px}
+.fv-step:last-child{border-right:1px solid #E8ECF4;border-radius:0 10px 10px 0}
+.fv-v{font-size:18px;font-weight:800;color:#1A1A2E}
+.fv-l{font-size:10px;color:#6B7280;margin-top:2px}
+.fv-arrow{font-size:14px;color:#D1D5DB;padding:0 2px;flex-shrink:0;align-self:center}
 
-/* ── 案例明细卡：漏斗 ── */
-.funnel-row{display:flex;gap:8px;margin-top:16px}
-.funnel-item{flex:1;border-radius:12px;padding:14px 12px;text-align:center}
-.fi-s{background:rgba(41,192,123,.1);border:1px solid rgba(41,192,123,.2)}
-.fi-a{background:rgba(247,142,32,.1);border:1px solid rgba(247,142,32,.2)}
-.fi-b{background:rgba(172,79,162,.1);border:1px solid rgba(172,79,162,.2)}
-.fi-x{background:#F7F8FC;border:1px solid #E8ECF4}
-.funnel-item .fn{font-size:22px;font-weight:800}
-.fi-s .fn{color:#29c07b}
-.fi-a .fn{color:#f78e20}
-.fi-b .fn{color:#ac4fa2}
-.fi-x .fn{color:#9CA3AF}
-.funnel-item .fl{font-size:10px;font-weight:700;letter-spacing:.5px;margin-top:3px}
-.fi-s .fl{color:#29c07b}
-.fi-a .fl{color:#f78e20}
-.fi-b .fl{color:#ac4fa2}
-.fi-x .fl{color:#9CA3AF}
-.funnel-item .fp{font-size:10px;color:#6B7280;margin-top:2px}
+.alert-box{background:rgba(238,75,74,.06);border:1px solid rgba(238,75,74,.18);border-radius:10px;padding:12px 14px;font-size:12px;color:#C0392B;line-height:1.6}
+.alert-box strong{font-weight:700}
 
-/* ── 趋势卡：W-o-W ── */
-.wow-list{display:flex;flex-direction:column;gap:8px;margin-top:16px}
-.wow-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#F7F8FC;border-radius:10px;border:1px solid #E8ECF4}
-.wow-label{font-size:12px;color:#6B7280;font-weight:500}
-.wow-right{display:flex;align-items:baseline;gap:6px}
-.wow-cur{font-size:16px;font-weight:800;color:#1A1A2E}
-.wow-delta{font-size:11px;font-weight:700;padding:2px 7px;border-radius:20px}
-.wow-delta.up{color:#29c07b;background:rgba(41,192,123,.12)}
-.wow-delta.dn{color:#ee4b4a;background:rgba(238,75,74,.10)}
-.wow-delta.flat{color:#6B7280;background:#E8ECF4}
+/* ── 卡2：本周重点（排期进度） ── */
+.schedule-list{display:flex;flex-direction:column;gap:8px}
+.sched-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;background:#F7F8FC;border:1px solid #E8ECF4;font-size:12px}
+.sched-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-done{background:#29c07b}
+.dot-now{background:#f78e20}
+.dot-next{background:#E8ECF4;border:1.5px solid #D1D5DB}
+.sched-week{font-weight:700;color:#1A1A2E;min-width:28px}
+.sched-text{color:#6B7280;flex:1}
+.sched-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0}
+.badge-done{background:rgba(41,192,123,.12);color:#29c07b}
+.badge-now{background:rgba(247,142,32,.12);color:#f78e20}
+.badge-next{background:#F7F8FC;color:#9CA3AF;border:1px solid #E8ECF4}
 
-/* ── 基线卡：3大KPI ── */
-.baseline-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
-.bt-item{border-radius:12px;padding:14px 10px;text-align:center;background:#F7F8FC;border:1px solid #E8ECF4}
-.bt-item .bv{font-size:20px;font-weight:800;color:#1A1A2E}
-.bt-item .bl{font-size:10px;color:#6B7280;margin-top:3px;line-height:1.4}
-.bt-item .bt1{font-size:10px;color:#29c07b;font-weight:600;margin-top:4px}
+/* ── 卡3：平台排名 ── */
+.platform-list{display:flex;flex-direction:column;gap:7px}
+.plat-row{display:flex;align-items:center;gap:10px;font-size:12px}
+.plat-name{min-width:64px;font-weight:600;color:#1A1A2E}
+.plat-track{flex:1;height:6px;background:#E8ECF4;border-radius:10px;overflow:hidden}
+.plat-bar{height:100%;border-radius:10px;background:#29c07b}
+.plat-bar.mid{background:#f78e20}
+.plat-bar.low{background:#ee4b4a}
+.plat-pct{min-width:36px;text-align:right;font-weight:700;color:#1A1A2E}
+.plat-chg{min-width:50px;text-align:right;font-size:11px;font-weight:600}
 
-.card-footer{margin-top:20px;padding-top:14px;border-top:1px solid #E8ECF4;display:flex;flex-wrap:wrap;gap:6px}
-.meta-chip{font-size:10px;color:#6B7280;background:#F7F8FC;padding:3px 10px;border-radius:20px;border:1px solid #E8ECF4}
+/* ── 卡4：趋势迷你图 ── */
+.mini-chart-wrap{height:120px;margin-bottom:12px}
+.trend-legend{display:flex;gap:12px;flex-wrap:wrap}
+.tl-item{display:flex;align-items:center;gap:5px;font-size:11px;color:#6B7280}
+.tl-dot{width:8px;height:8px;border-radius:50%}
 
-/* Footer */
-footer{text-align:center;font-size:12px;color:#6B7280;padding:28px 40px;border-top:1px solid #E8ECF4;background:#fff}
+footer{text-align:center;font-size:12px;color:#6B7280;padding:24px 40px;border-top:1px solid #E8ECF4;background:#fff}
 
 @media(max-width:760px){
-  .hero{padding:32px 20px 28px}
+  .hero{padding:32px 0 28px}
   .main-wrap{padding:0 20px 40px}
-  .kpi-strip{grid-template-columns:1fr 1fr;margin:20px 20px 0}
-  .kpi-item{border-bottom:1px solid #E8ECF4}
+  .progress-strip{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr}
-  .card.main{grid-row:auto}
   .nav-inner{padding:0 20px}
   .nav-links{gap:16px}
-  .funnel-row{gap:4px}
 }
 </style>
 </head>
@@ -139,31 +135,49 @@ footer{text-align:center;font-size:12px;color:#6B7280;padding:28px 40px;border-t
 
 <div class="hero">
   <div class="hero-inner">
-    <div class="hero-eyebrow">Generative Engine Optimization</div>
+    <div class="hero-eyebrow">Generative Engine Optimization · W1 2026-04-20</div>
     <h1>叽里呱啦 <span>GEO 监控中心</span></h1>
-    <div class="hero-sub">方法语义占位 × 品牌承接漏斗 · T0 基线 2026-04-18 · 每周自动复测</div>
+    <div class="hero-sub">T0 基线 2026-04-18 · T1 目标 2026-05-18 · 每周自动复测 · 6 平台 378 样本</div>
 
-    <div class="kpi-strip">
-      <div class="kpi-item">
-        <div class="v">16.4%</div>
-        <div class="l">任一 Tag 命中率（W1）</div>
-        <div class="chg up">↑ +1.1pp vs T0</div>
+    <!-- 三项核心指标进度条 -->
+    <div class="progress-strip">
+
+      <div class="prog-item">
+        <div class="prog-head">
+          <span class="prog-label">任一 Tag 命中率</span>
+          <span class="prog-vals"><b>16.4%</b> / 目标 30%</span>
+        </div>
+        <div class="prog-track"><div class="prog-bar bar-green" style="width:54.7%"></div></div>
+        <div class="prog-foot">
+          <span>T0: 15.3%</span>
+          <span class="chg up">↑ +1.1pp W1</span>
+        </div>
       </div>
-      <div class="kpi-item">
-        <div class="v">4.8%</div>
-        <div class="l">品牌提及率（W1）</div>
-        <div class="chg dn">↓ −0.2pp vs T0</div>
+
+      <div class="prog-item">
+        <div class="prog-head">
+          <span class="prog-label">品牌提及率</span>
+          <span class="prog-vals"><b>4.8%</b> / 目标 15%</span>
+        </div>
+        <div class="prog-track"><div class="prog-bar bar-orange" style="width:32%"></div></div>
+        <div class="prog-foot">
+          <span>T0: 5.0%</span>
+          <span class="chg dn">↓ −0.2pp W1</span>
+        </div>
       </div>
-      <div class="kpi-item">
-        <div class="v">8.1%</div>
-        <div class="l">品牌承接率（W1）</div>
-        <div class="chg dn">↓ −4.0pp vs T0</div>
+
+      <div class="prog-item">
+        <div class="prog-head">
+          <span class="prog-label">品牌承接率</span>
+          <span class="prog-vals"><b>8.1%</b> / 目标 50%</span>
+        </div>
+        <div class="prog-track"><div class="prog-bar bar-red" style="width:16.2%"></div></div>
+        <div class="prog-foot">
+          <span>T0: 12.1%</span>
+          <span class="chg dn">↓ −4.0pp W1</span>
+        </div>
       </div>
-      <div class="kpi-item">
-        <div class="v">T1</div>
-        <div class="l">目标节点</div>
-        <div class="chg flat">→ 2026-05-18</div>
-      </div>
+
     </div>
   </div>
 </div>
@@ -171,161 +185,132 @@ footer{text-align:center;font-size:12px;color:#6B7280;padding:28px 40px;border-t
 <div class="main-wrap">
   <div class="grid">
 
-    <!-- 主卡：优化实施看板 -->
-    <a class="card c1 main" href="content_ops/index.html">
-      <div>
-        <div class="card-tag">实施看板</div>
-        <div class="card-title">优化实施看板</div>
-        <div class="card-desc">W1 各指标 vs T0 基线 · 6 平台 378 样本 · 首月 16 篇排期</div>
-      </div>
+    <!-- 卡1：最需关注的问题 -->
+    <div class="card c-alert">
+      <div class="card-tag">⚠ 本周关键问题</div>
+      <div class="card-title">品牌承接漏斗严重断裂</div>
+      <div class="card-desc">AI 在回答中提到了叽里呱啦的方法，但没有关联到品牌——这是最大的杠杆点</div>
 
-      <div class="kpi-grid">
-        <div class="kpi-cell">
-          <div class="kv green">16.4%</div>
-          <div class="kl">任一 Tag 命中率</div>
-          <div class="kdelta up">↑ +1.1pp</div>
-          <div class="kt1">T1 目标 30%</div>
+      <!-- 漏斗可视化 -->
+      <div class="funnel-vis">
+        <div class="fv-step">
+          <div class="fv-v">378</div>
+          <div class="fv-l">总样本</div>
         </div>
-        <div class="kpi-cell">
-          <div class="kv">2.6%</div>
-          <div class="kl">Tag1 听说先行</div>
-          <div class="kdelta dn">↓ −0.8pp</div>
-          <div class="kt1">T1 目标 15%</div>
+        <div class="fv-arrow">▶</div>
+        <div class="fv-step">
+          <div class="fv-v" style="color:#f78e20">62</div>
+          <div class="fv-l">Tag 命中</div>
         </div>
-        <div class="kpi-cell">
-          <div class="kv">7.1%</div>
-          <div class="kl">Tag2 短时高频</div>
-          <div class="kdelta up">↑ +0.8pp</div>
-          <div class="kt1">T1 目标 15%</div>
-        </div>
-        <div class="kpi-cell">
-          <div class="kv">7.7%</div>
-          <div class="kl">Tag3 兴趣驱动</div>
-          <div class="kdelta up">↑ +0.6pp</div>
-          <div class="kt1">T1 目标 15%</div>
-        </div>
-        <div class="kpi-cell">
-          <div class="kv">4.8%</div>
-          <div class="kl">品牌提及率</div>
-          <div class="kdelta dn">↓ −0.2pp</div>
-          <div class="kt1">T1 目标 15%</div>
-        </div>
-        <div class="kpi-cell">
-          <div class="kv">8.1%</div>
-          <div class="kl">品牌承接率</div>
-          <div class="kdelta dn">↓ −4.0pp</div>
-          <div class="kt1">T1 目标 50%</div>
+        <div class="fv-arrow">▶</div>
+        <div class="fv-step">
+          <div class="fv-v" style="color:#ee4b4a">5</div>
+          <div class="fv-l">品牌承接</div>
         </div>
       </div>
 
-      <div class="card-footer">
-        <span class="meta-chip">每周更新</span>
-        <span class="meta-chip">W1 · 2026-04-20</span>
-        <span class="meta-chip">6 平台</span>
+      <div class="alert-box">
+        <strong>Tag 命中后只有 8.1% 转化为品牌曝光</strong>，目标是 50%。<br>
+        根因：AI 说了方法，但没说"叽里呱啦就是这么做的"。<br>
+        对策：每篇内容末尾必须加品牌承接句。
       </div>
-      <div class="card-arrow">→</div>
-    </a>
+    </div>
 
-    <!-- 曝光案例明细 -->
-    <a class="card c2" href="content_ops/cases.html">
-      <div class="card-tag">案例分析</div>
-      <div class="card-title">曝光案例明细</div>
-      <div class="card-desc">S / A / B 三档案例原文片段，关键词高亮，按平台筛选</div>
+    <!-- 卡2：本周内容排期进度 -->
+    <a class="card c-warn" href="content_ops/index.html">
+      <div class="card-tag">内容排期</div>
+      <div class="card-title">首月 16 篇 · 当前进度</div>
+      <div class="card-desc">W1 主攻 Tag1「听说先行」，解决命中率最低项（2.6%）</div>
 
-      <div class="funnel-row">
-        <div class="funnel-item fi-s">
-          <div class="fn">7</div>
-          <div class="fl">S 档</div>
-          <div class="fp">1.9%</div>
+      <div class="schedule-list">
+        <div class="sched-row">
+          <div class="sched-dot dot-now"></div>
+          <span class="sched-week">W1</span>
+          <span class="sched-text">C1听说顺序 · C5只会蹦单词 · C7为什么拼读 · C8家长英语差</span>
+          <span class="sched-badge badge-now">进行中</span>
         </div>
-        <div class="funnel-item fi-a">
-          <div class="fn">12</div>
-          <div class="fl">A 档</div>
-          <div class="fp">3.2%</div>
+        <div class="sched-row">
+          <div class="sched-dot dot-next"></div>
+          <span class="sched-week">W2</span>
+          <span class="sched-text">C2英语启蒙第一步 · C3听说vs拼读 · C4自然拼读 · C6 3-8岁</span>
+          <span class="sched-badge badge-next">待发布</span>
         </div>
-        <div class="funnel-item fi-b">
-          <div class="fn">51</div>
-          <div class="fl">B 档</div>
-          <div class="fp">13.5%</div>
+        <div class="sched-row">
+          <div class="sched-dot dot-next"></div>
+          <span class="sched-week">W3</span>
+          <span class="sched-text">Tag2 短时高频 × 4 篇</span>
+          <span class="sched-badge badge-next">待发布</span>
         </div>
-        <div class="funnel-item fi-x">
-          <div class="fn">308</div>
-          <div class="fl">未命中</div>
-          <div class="fp">81.5%</div>
+        <div class="sched-row">
+          <div class="sched-dot dot-next"></div>
+          <span class="sched-week">W4</span>
+          <span class="sched-text">Tag3 兴趣驱动 + 学以致用 × 4 篇</span>
+          <span class="sched-badge badge-next">待发布</span>
         </div>
-      </div>
-
-      <div class="card-footer">
-        <span class="meta-chip">T0 全量 378 条</span>
-        <span class="meta-chip">命中率 18.5%</span>
       </div>
       <div class="card-arrow">→</div>
     </a>
 
-    <!-- 周度趋势 -->
-    <a class="card c3" href="content_ops/trends.html">
+    <!-- 卡3：平台排名 -->
+    <a class="card c-info" href="content_ops/index.html">
+      <div class="card-tag">平台表现</div>
+      <div class="card-title">各平台 Tag 命中率（T0）</div>
+      <div class="card-desc">文心、豆包领先；智谱、Kimi 接近零，需先从外部语料打入</div>
+
+      <div class="platform-list">
+        <div class="plat-row">
+          <span class="plat-name">文心</span>
+          <div class="plat-track"><div class="plat-bar" style="width:100%"></div></div>
+          <span class="plat-pct">30%</span>
+          <span class="plat-chg up">P0 冲量</span>
+        </div>
+        <div class="plat-row">
+          <span class="plat-name">豆包</span>
+          <div class="plat-track"><div class="plat-bar" style="width:70%"></div></div>
+          <span class="plat-pct">21%</span>
+          <span class="plat-chg up">P0 冲量</span>
+        </div>
+        <div class="plat-row">
+          <span class="plat-name">DeepSeek</span>
+          <div class="plat-track"><div class="plat-bar mid" style="width:58%"></div></div>
+          <span class="plat-pct">17.5%</span>
+          <span class="plat-chg flat">P1 拉升</span>
+        </div>
+        <div class="plat-row">
+          <span class="plat-name">通义</span>
+          <div class="plat-track"><div class="plat-bar mid" style="width:58%"></div></div>
+          <span class="plat-pct">17.5%</span>
+          <span class="plat-chg flat">P1 拉升</span>
+        </div>
+        <div class="plat-row">
+          <span class="plat-name">智谱</span>
+          <div class="plat-track"><div class="plat-bar low" style="width:20%"></div></div>
+          <span class="plat-pct">6%</span>
+          <span class="plat-chg dn">P2 冷启</span>
+        </div>
+        <div class="plat-row">
+          <span class="plat-name">Kimi</span>
+          <div class="plat-track"><div class="plat-bar low" style="width:0%"></div></div>
+          <span class="plat-pct">0%</span>
+          <span class="plat-chg dn">P2 冷启</span>
+        </div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- 卡4：周趋势迷你图 -->
+    <a class="card c-base" href="content_ops/trends.html">
       <div class="card-tag">趋势追踪</div>
-      <div class="card-title">周度趋势追踪</div>
-      <div class="card-desc">W1 vs T0 基线周对周变化</div>
+      <div class="card-title">周对周趋势（T0 → W1）</div>
+      <div class="card-desc">任一Tag↑ 品牌提及↓ 品牌承接↓ · 内容尚未起效，承接改善是当前重点</div>
 
-      <div class="wow-list">
-        <div class="wow-row">
-          <span class="wow-label">任一 Tag 命中率</span>
-          <div class="wow-right">
-            <span class="wow-cur">16.4%</span>
-            <span class="wow-delta up">↑ +1.1pp</span>
-          </div>
-        </div>
-        <div class="wow-row">
-          <span class="wow-label">品牌提及率</span>
-          <div class="wow-right">
-            <span class="wow-cur">4.8%</span>
-            <span class="wow-delta dn">↓ −0.2pp</span>
-          </div>
-        </div>
-        <div class="wow-row">
-          <span class="wow-label">品牌承接率</span>
-          <div class="wow-right">
-            <span class="wow-cur">8.1%</span>
-            <span class="wow-delta dn">↓ −4.0pp</span>
-          </div>
-        </div>
+      <div class="mini-chart-wrap">
+        <canvas id="miniChart"></canvas>
       </div>
-
-      <div class="card-footer">
-        <span class="meta-chip">每周自动更新</span>
-        <span class="meta-chip">2 轮数据</span>
-      </div>
-      <div class="card-arrow">→</div>
-    </a>
-
-    <!-- T0 基线报告 -->
-    <a class="card c4" href="baseline_T0/report/baseline_T0_report.html">
-      <div class="card-tag">基线数据</div>
-      <div class="card-title">T0 基线报告</div>
-      <div class="card-desc">可视化报告，含命中热力图、竞品对照、平台排名、品牌承接漏斗</div>
-
-      <div class="baseline-trio">
-        <div class="bt-item">
-          <div class="bv">15.3%</div>
-          <div class="bl">任一 Tag<br>命中率</div>
-          <div class="bt1">→ 30%</div>
-        </div>
-        <div class="bt-item">
-          <div class="bv">5.0%</div>
-          <div class="bl">品牌<br>提及率</div>
-          <div class="bt1">→ 15%</div>
-        </div>
-        <div class="bt-item">
-          <div class="bv">12.1%</div>
-          <div class="bl">品牌<br>承接率</div>
-          <div class="bt1">→ 50%</div>
-        </div>
-      </div>
-
-      <div class="card-footer">
-        <span class="meta-chip">2026-04-18</span>
-        <span class="meta-chip">全量 378 条</span>
+      <div class="trend-legend">
+        <div class="tl-item"><div class="tl-dot" style="background:#29c07b"></div>任一Tag</div>
+        <div class="tl-item"><div class="tl-dot" style="background:#ac4fa2"></div>品牌提及</div>
+        <div class="tl-item"><div class="tl-dot" style="background:#f78e20"></div>品牌承接</div>
       </div>
       <div class="card-arrow">→</div>
     </a>
@@ -333,7 +318,32 @@ footer{text-align:center;font-size:12px;color:#6B7280;padding:28px 40px;border-t
   </div>
 </div>
 
-<footer>叽里呱啦 · GEO 持续优化 · T0 基线 2026-04-18</footer>
+<footer>叽里呱啦 · GEO 持续优化 · T0 基线 2026-04-18 · <a href="content_ops/trends.html" style="color:#29c07b">查看完整趋势</a></footer>
 
+<script>
+// 迷你趋势图
+new Chart(document.getElementById('miniChart'), {
+  type: 'line',
+  data: {
+    labels: ['T0 基线', 'W1'],
+    datasets: [
+      { label:'任一Tag', data:[15.3,16.4], borderColor:'#29c07b', backgroundColor:'rgba(41,192,123,.08)', tension:.3, fill:true,  pointRadius:5, borderWidth:2.5 },
+      { label:'品牌提及', data:[5.0,4.8],   borderColor:'#ac4fa2', backgroundColor:'transparent', tension:.3, fill:false, pointRadius:5, borderWidth:2.5 },
+      { label:'品牌承接', data:[12.1,8.1],  borderColor:'#f78e20', backgroundColor:'transparent', tension:.3, fill:false, pointRadius:5, borderWidth:2.5 },
+    ]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:true,
+    scales:{
+      y:{ beginAtZero:true, ticks:{callback:v=>v+'%',font:{size:10}}, grid:{color:'#F7F8FC'} },
+      x:{ grid:{color:'#F7F8FC'}, ticks:{font:{size:11}} }
+    },
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.parsed.y.toFixed(1)+'%'}}
+    }
+  }
+});
+</script>
 </body>
 </html>
