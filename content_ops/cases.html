@@ -994,6 +994,23 @@ function filter(key) {
     s.style.display = visible ? '' : 'none';
   });
 }
+
+// ── 汉堡菜单 ─────────────────────────────────────────────────
+(function(){
+  var btn = document.getElementById('navToggle');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    var links = document.querySelector('.nav-links');
+    links.classList.toggle('open');
+    btn.textContent = links.classList.contains('open') ? '✕' : '☰';
+  });
+  document.querySelectorAll('.nav-links a').forEach(function(a){
+    a.addEventListener('click', function(){
+      document.querySelector('.nav-links').classList.remove('open');
+      btn.textContent = '☰';
+    });
+  });
+})();
 </script>
 </body>
 </html>
