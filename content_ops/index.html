@@ -75,7 +75,7 @@ table.heat .row-lbl{text-align:left;color:#1A1A2E;font-weight:500;padding-left:0
 .item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #F7F8FC}
 .day-badge{font-size:10px;font-weight:700;padding:3px 7px;border-radius:8px;min-width:36px;text-align:center;flex-shrink:0;margin-top:1px}
 .mon{background:#F0FAF4;color:#29c07b}
-.wed{background:#FFF0F6;color:#ac4fa2}
+.wed{background:#FFF0F6;color:#6366f1}
 .fri{background:#F0FAF4;color:#29c07b}
 .item-body{flex:1}
 .item-title{font-size:13px;font-weight:600;color:#1A1A2E}
@@ -159,7 +159,7 @@ table.heat .row-lbl{text-align:left;color:#1A1A2E;font-weight:500;padding-left:0
   </div>
   <div class="card">
     <h2>品牌提及率</h2>
-    <div class="kpi-val" style="color:#ac4fa2">5.0%</div>
+    <div class="kpi-val" style="color:#6366f1">5.0%</div>
     <div class="kpi-label">T0 基线</div>
     <div class="kpi-delta delta-warn">目标 ≥ 15% &nbsp;↑ +10pp</div>
     <canvas id="ch-brand" height="90" style="margin-top:16px"></canvas>
@@ -246,7 +246,7 @@ table.heat .row-lbl{text-align:left;color:#1A1A2E;font-weight:500;padding-left:0
       </div>
       <div class="funnel-row">
         <div class="funnel-lbl">品牌提及（全量）</div>
-        <div class="funnel-bar" style="background:#ac4fa2;width:5%">19</div>
+        <div class="funnel-bar" style="background:#6366f1;width:5%">19</div>
         <div class="funnel-pct">5.0%</div>
       </div>
       <div class="insight-box">
@@ -497,7 +497,7 @@ function donut(id, current, target, color) {
   });
 }
 donut('ch-any',   15.3, 30, '#29c07b');
-donut('ch-brand', 5.0,  15, '#ac4fa2');
+donut('ch-brand', 5.0,  15, '#6366f1');
 donut('ch-link',  12.1, 50, '#f78e20');
 
 // 周度趋势图（每周更新 WEEKLY_DATA）
@@ -512,10 +512,10 @@ new Chart(document.getElementById('ch-trend'), {
     labels: wLabels,
     datasets: [
       { label:'任一Tag命中', data: WEEKLY_DATA.map(d=>d.any),    borderColor:'#29c07b', backgroundColor:'#29c07b22', tension:.3, fill:true,  pointRadius:5, borderWidth:2 },
-      { label:'品牌提及率',  data: WEEKLY_DATA.map(d=>d.brand),  borderColor:'#ac4fa2', backgroundColor:'transparent', tension:.3, fill:false, pointRadius:5, borderWidth:2 },
+      { label:'品牌提及率',  data: WEEKLY_DATA.map(d=>d.brand),  borderColor:'#6366f1', backgroundColor:'transparent', tension:.3, fill:false, pointRadius:5, borderWidth:2 },
       { label:'品牌承接率',  data: WEEKLY_DATA.map(d=>d.funnel), borderColor:'#f78e20', backgroundColor:'transparent', tension:.3, fill:false, pointRadius:5, borderWidth:2 },
       { label:'T1目标·Tag30%',    data: Array(wLabels.length).fill(30), borderColor:'#29c07b80', borderDash:[5,4], borderWidth:1.5, pointRadius:0, fill:false },
-      { label:'T1目标·品牌15%',   data: Array(wLabels.length).fill(15), borderColor:'#ac4fa280', borderDash:[5,4], borderWidth:1.5, pointRadius:0, fill:false },
+      { label:'T1目标·品牌15%',   data: Array(wLabels.length).fill(15), borderColor:'#6366f180', borderDash:[5,4], borderWidth:1.5, pointRadius:0, fill:false },
       { label:'T1目标·承接50%',   data: Array(wLabels.length).fill(50), borderColor:'#f78e2080', borderDash:[5,4], borderWidth:1.5, pointRadius:0, fill:false },
     ]
   },
@@ -577,7 +577,7 @@ new Chart(document.getElementById('ch-type'), {
     labels: ['方法解释型', '场景/情绪型', '创始人 IP-A', '创始人 IP-B'],
     datasets: [{
       data: [8, 6, 1, 1],
-      backgroundColor: ['#29c07b', '#f78e20', '#ac4fa2', '#ee4b4a'],
+      backgroundColor: ['#29c07b', '#f78e20', '#6366f1', '#ee4b4a'],
       borderWidth: 3, borderColor: '#fff'
     }]
   },
