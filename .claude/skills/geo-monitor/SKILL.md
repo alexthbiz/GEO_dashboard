@@ -11,8 +11,8 @@ description: 对叽里呱啦品牌的 GEO（生成式引擎优化）效果做定
 
 | 场景 | 用户可能的说法 | 跑什么 |
 |---|---|---|
-| 月度快测 | "跑一下 T1 快测" / "月度监控" | `tier 1` 4 题 × 6 平台 × 3 轮 = 72 条 |
-| 季度全量 | "跑 T2 全量基线" / "季度复测" | 21 题 × 6 平台 × 3 轮 = 378 条 |
+| 月度快测 | "跑一下 T1 快测" / "月度监控" | `tier 1` 4 题 × 7 平台 × 3 轮 = 84 条 |
+| 季度全量 | "跑 T2 全量基线" / "季度复测" | 21 题 × 7 平台 × 3 轮 = 441 条 |
 | 首轮基线 | "做 GEO 现状诊断" | 同全量 |
 | 单平台复查 | "只跑 kimi 看下" | 指定 `--platform` |
 
@@ -31,7 +31,7 @@ description: 对叽里呱啦品牌的 GEO（生成式引擎优化）效果做定
 跑之前先确认 6 个 API key 环境变量都在：
 
 ```bash
-for k in DEEPSEEK_API_KEY MOONSHOT_API_KEY DASHSCOPE_API_KEY ZHIPUAI_API_KEY ARK_API_KEY QIANFAN_API_KEY; do
+for k in DEEPSEEK_API_KEY MOONSHOT_API_KEY DASHSCOPE_API_KEY ZHIPUAI_API_KEY ARK_API_KEY QIANFAN_API_KEY HUNYUAN_API_KEY; do
   eval "echo $k=\${${k}:-MISSING}"
 done
 ```
@@ -54,7 +54,7 @@ exec zsh -i -c "python -u collectors/api_runner.py --force"
 exec zsh -i -c "python -u collectors/api_runner.py --platform kimi --force"
 ```
 
-**并行模式下**所有 6 平台同时跑，全量约 5-7 分钟。后台运行，等完成通知。
+**并行模式下**所有 7 平台同时跑，全量约 5-7 分钟。后台运行，等完成通知。
 
 **关键参数**：
 - `--force`：覆盖已有 raw 文件（复测必须加，否则会跳过）
@@ -68,14 +68,11 @@ exec zsh -i -c "python -u collectors/api_runner.py --platform kimi --force"
 exec zsh -i -c "python scoring/auto_scorer.py"
 ```
 
-脚本自动完成 7 个字段（tag 匹配、品牌词、竞品列表、路径启发式）。
+脚本自动完成全部字段，分两层：
+- **关键词精确匹配**：tag 命中、品牌提及、竞品列表
+- **LLM 语义判断**（调用 DeepSeek）：`brand_position`（品牌排名位置）/ `brand_method_link`（品牌与方法词是否同段）/ `path_explained`（路径逻辑完整度）
 
-**人工补录 3 列**（打开 `scoring/scoring.csv`）：
-- `brand_position` 0–4（参见 `scoring_rules.yaml.brand_position_rules`）
-- `brand_method_link` 0/1（品牌词与 tag 是否同段）
-- `path_explained` 脚本已给草稿，需人工复核
-
-如果这一轮不做人工复核，报告里会显示"待人工补录"占位，不影响脚本打分。
+**无需人工补录。** 如需跳过 LLM 步骤，加 `--no-llm` 参数。
 
 ### Step 3：生成报告
 

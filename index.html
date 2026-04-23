@@ -2,51 +2,360 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/png" href="assets/favicon.ico">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>叽里呱啦 GEO 监控中心</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#f0f2f5;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px}
-.logo{font-size:28px;font-weight:800;color:#1a1a2e;margin-bottom:6px;letter-spacing:1px}
-.sub{font-size:14px;color:#888;margin-bottom:48px}
-.cards{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;max-width:860px}
-.card{background:#fff;border-radius:16px;padding:28px 32px;box-shadow:0 2px 16px rgba(0,0,0,.08);text-decoration:none;color:inherit;transition:.2s;flex:1;min-width:260px;max-width:340px;border-top:4px solid transparent}
-.card:hover{transform:translateY(-4px);box-shadow:0 8px 28px rgba(0,0,0,.13)}
-.card.c1{border-top-color:#0f3460}
-.card.c2{border-top-color:#e03131}
-.card.c3{border-top-color:#2e7d32}
-.card-icon{font-size:32px;margin-bottom:12px}
-.card-title{font-size:17px;font-weight:700;color:#1a1a2e;margin-bottom:6px}
-.card-desc{font-size:13px;color:#888;line-height:1.6}
-.card-meta{font-size:11px;color:#bbb;margin-top:14px;padding-top:10px;border-top:1px solid #f0f0f0}
-.footer{margin-top:48px;font-size:12px;color:#bbb}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#F7F8FC;min-height:100vh;color:#1A1A2E}
+
+/* 导航栏 */
+.topnav{background:#fff;border-bottom:1px solid #E8ECF4;position:sticky;top:0;z-index:100;padding-top:env(safe-area-inset-top)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;flex-direction:row;align-items:center;gap:8px;line-height:1;text-decoration:none}
+.nav-brand span{color:#29c07b}
+.nav-hamburger{display:none;align-items:center;justify-content:center;width:36px;height:36px;border:none;background:none;cursor:pointer;color:#1A1A2E;font-size:22px;flex-shrink:0;padding:0}
+.nav-links{display:flex;gap:32px}
+.nav-links a{font-size:15px;color:#6B7280;text-decoration:none;font-weight:500;transition:.2s}
+.nav-links a:hover{color:#29c07b}
+.nav-links a.active{color:#29c07b;font-weight:700}
+
+/* Hero */
+.hero{background:#fff;border-bottom:1px solid #E8ECF4;padding:44px 0 40px}
+.hero-inner{max-width:1200px;margin:0 auto;padding:0 40px}
+.hero-eyebrow{font-size:13px;font-weight:700;letter-spacing:2px;color:#29c07b;text-transform:uppercase;margin-bottom:12px}
+.hero h1{font-size:36px;font-weight:800;line-height:1.15;letter-spacing:-0.5px;color:#1A1A2E}
+.hero h1 span{color:#29c07b}
+.hero-sub{font-size:16px;color:#6B7280;margin-top:10px}
+
+/* ── 进度条区 ── */
+.progress-strip{margin-top:28px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.prog-item{background:#F7F8FC;border:1px solid #E8ECF4;border-radius:14px;padding:18px 20px}
+.prog-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.prog-label{font-size:15px;font-weight:600;color:#6B7280}
+.prog-vals{font-size:15px;color:#9CA3AF}
+.prog-vals b{color:#1A1A2E;font-weight:700}
+.prog-track{height:7px;background:#E8ECF4;border-radius:10px;overflow:hidden}
+.prog-bar{height:100%;border-radius:10px;transition:width .6s ease}
+.bar-green{background:#29c07b}
+.bar-orange{background:#f78e20}
+.bar-red{background:#ee4b4a}
+.prog-foot{margin-top:7px;display:flex;justify-content:space-between;font-size:14px;color:#9CA3AF}
+.prog-foot .chg{font-weight:700}
+.chg.up{color:#29c07b}.chg.dn{color:#ee4b4a}.chg.flat{color:#9CA3AF}
+
+/* ── 主网格 ── */
+.main-wrap{max-width:1200px;margin:32px auto;padding:0 40px 60px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+
+/* 卡片 */
+.card{background:#fff;border-radius:20px;padding:28px;text-decoration:none;color:inherit;display:block;transition:all .25s;position:relative;overflow:hidden;box-shadow:0 2px 16px rgba(41,192,123,.07);border:1px solid #E8ECF4}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(41,192,123,.15)}
+
+.card-tag{font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px}
+.c-alert .card-tag{color:#ee4b4a}
+.c-warn  .card-tag{color:#f78e20}
+.c-info  .card-tag{color:#29c07b}
+.c-base  .card-tag{color:#6366f1}
+
+.card-title{font-size:19px;font-weight:700;color:#1A1A2E;margin-bottom:6px;line-height:1.3}
+.card-desc{font-size:15px;color:#6B7280;line-height:1.65;margin-bottom:18px}
+
+.card-arrow{position:absolute;bottom:22px;right:22px;width:28px;height:28px;border-radius:50%;background:#F7F8FC;border:1px solid #E8ECF4;display:flex;align-items:center;justify-content:center;font-size:13px;color:#6B7280;transition:.2s}
+.card:hover .card-arrow{background:#29c07b;color:#fff;border-color:#29c07b}
+
+/* ── 卡1：问题聚焦（漏斗断点） ── */
+.funnel-vis{display:flex;align-items:center;gap:0;margin-bottom:16px}
+.fv-step{flex:1;text-align:center;padding:12px 6px;background:#F7F8FC;border:1px solid #E8ECF4;border-right:none}
+.fv-step:first-child{border-radius:10px 0 0 10px}
+.fv-step:last-child{border-right:1px solid #E8ECF4;border-radius:0 10px 10px 0}
+.fv-v{font-size:20px;font-weight:800;color:#1A1A2E}
+.fv-l{font-size:14px;color:#6B7280;margin-top:2px}
+.fv-arrow{font-size:16px;color:#D1D5DB;padding:0 2px;flex-shrink:0;align-self:center}
+
+.alert-box{background:rgba(238,75,74,.06);border:1px solid rgba(238,75,74,.18);border-radius:10px;padding:12px 14px;font-size:15px;color:#C0392B;line-height:1.6}
+.alert-box strong{font-weight:700}
+
+/* ── 卡2：本周重点（排期进度） ── */
+.schedule-list{display:flex;flex-direction:column;gap:8px}
+.sched-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;background:#F7F8FC;border:1px solid #E8ECF4;font-size:15px}
+.sched-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-done{background:#29c07b}
+.dot-now{background:#f78e20}
+.dot-next{background:#E8ECF4;border:1.5px solid #D1D5DB}
+.sched-week{font-weight:700;color:#1A1A2E;min-width:28px}
+.sched-text{color:#6B7280;flex:1}
+.sched-badge{font-size:12px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0}
+.badge-done{background:rgba(41,192,123,.12);color:#29c07b}
+.badge-now{background:rgba(247,142,32,.12);color:#f78e20}
+.badge-next{background:#F7F8FC;color:#9CA3AF;border:1px solid #E8ECF4}
+
+/* ── 卡3：平台排名 ── */
+.platform-list{display:flex;flex-direction:column;gap:7px}
+.plat-row{display:flex;align-items:center;gap:10px;font-size:15px}
+.plat-name{min-width:64px;font-weight:600;color:#1A1A2E}
+.plat-track{flex:1;height:6px;background:#E8ECF4;border-radius:10px;overflow:hidden}
+.plat-bar{height:100%;border-radius:10px;background:#29c07b}
+.plat-bar.mid{background:#f78e20}
+.plat-bar.low{background:#ee4b4a}
+.plat-pct{min-width:36px;text-align:right;font-weight:700;color:#1A1A2E}
+.plat-chg{min-width:50px;text-align:right;font-size:13px;font-weight:600}
+
+/* ── 结论卡通用 ── */
+.conclusion{padding:24px}
+.conclusion .card-title{font-size:17px;min-height:40px}
+.cn-stat{display:flex;align-items:baseline;gap:10px;margin:12px 0 10px;padding:12px 14px;background:#F7F8FC;border-radius:12px;border:1px solid #E8ECF4}
+.cn-val{font-size:30px;font-weight:800;line-height:1}
+.cn-lbl{font-size:14px;color:#6B7280;line-height:1.4}
+.cn-desc{font-size:15px;color:#4B5563;line-height:1.65;margin-bottom:8px}
+.cn-action{font-size:14px;color:#29c07b;font-weight:700;margin-top:8px}
+.c-alert .cn-val{color:#ee4b4a}
+.c-warn  .cn-val{color:#f78e20}
+.c-info  .cn-val{color:#6366f1}
+.c-base  .cn-val{color:#29c07b}
+.c-alert .cn-stat{background:rgba(238,75,74,.05);border-color:rgba(238,75,74,.15)}
+.c-warn  .cn-stat{background:rgba(247,142,32,.05);border-color:rgba(247,142,32,.15)}
+.c-info  .cn-stat{background:rgba(99,102,241,.05);border-color:rgba(99,102,241,.15)}
+
+/* 比较行 */
+.cn-compare{display:flex;gap:16px;margin:12px 0 10px}
+.cn-cmp-item{flex:1;padding:10px 12px;background:#F7F8FC;border-radius:10px;border:1px solid #E8ECF4;text-align:center}
+.cn-cmp-v{font-size:20px;font-weight:800}
+.cn-cmp-l{font-size:14px;color:#6B7280;margin-top:2px}
+
+footer{text-align:center;font-size:14px;color:#6B7280;padding:24px 40px;padding-bottom:calc(24px + env(safe-area-inset-bottom));border-top:1px solid #E8ECF4;background:#fff}
+
+/* ── Tooltip ── */
+.tip{position:relative;cursor:help;border-bottom:1px dashed #9CA3AF;display:inline}
+.tip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1A1A2E;color:#fff;font-size:13px;line-height:1.6;padding:7px 11px;border-radius:8px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:9999;font-weight:400;width:200px;white-space:normal;text-align:left;box-shadow:0 4px 16px rgba(0,0,0,.18)}
+.tip::before{content:'';position:absolute;bottom:calc(100% + 2px);left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1A1A2E;pointer-events:none;opacity:0;transition:opacity .15s;z-index:9999}
+.tip:hover::after,.tip:hover::before{opacity:1}
+
+@media(max-width:760px){
+  /* 导航 */
+  .nav-hamburger{display:flex!important}
+  .nav-inner{padding:0 16px;height:52px}
+  .nav-links{display:none;position:absolute;top:calc(52px + env(safe-area-inset-top));left:0;width:100%;background:#fff;border-bottom:1px solid #E8ECF4;flex-direction:column;padding:8px 20px 14px;gap:0;z-index:200;box-shadow:0 6px 20px rgba(0,0,0,.08)}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:11px 0;font-size:16px;border-bottom:1px solid #F7F8FC;white-space:nowrap}
+  /* Hero */
+  .hero{padding:28px 0 24px}
+  .hero-inner{padding:0 16px}
+  .hero h1{font-size:26px}
+  .hero-sub{font-size:14px}
+  /* 进度条 */
+  .progress-strip{grid-template-columns:1fr;gap:10px}
+  /* 卡片网格 */
+  .main-wrap{padding:0 16px 40px}
+  .grid{grid-template-columns:1fr}
+  /* 排期文字换行 */
+  .sched-row{flex-wrap:wrap;gap:6px}
+  .sched-text{width:100%;order:3;flex:none}
+  /* footer */
+  footer{padding:20px 16px}
+}
 </style>
 </head>
 <body>
-  <div class="logo">叽里呱啦 GEO 监控中心</div>
-  <div class="sub">Generative Engine Optimization · 方法语义占位 × 品牌承接漏斗</div>
 
-  <div class="cards">
-    <a class="card c1" href="content_ops/index.html">
-      <div class="card-icon">📊</div>
-      <div class="card-title">优化实施看板</div>
-      <div class="card-desc">T0 基线 vs T1 目标、三组 Tag 命中率、平台优先级矩阵、首月 16 篇排期</div>
-      <div class="card-meta">T0 · 378 样本 · 6 平台 · 21 题</div>
-    </a>
-    <a class="card c2" href="content_ops/cases.html">
-      <div class="card-icon">🔍</div>
-      <div class="card-title">曝光案例明细</div>
-      <div class="card-desc">S / A / B 三档案例原文片段，关键词高亮，可按平台筛选，直观看清承接断点</div>
-      <div class="card-meta">S档 7 · A档 12 · B档 51 · 未命中 308</div>
-    </a>
-    <a class="card c3" href="baseline_T0/report/baseline_T0_report.md">
-      <div class="card-icon">📄</div>
-      <div class="card-title">T0 基线报告</div>
-      <div class="card-desc">完整 Markdown 报告，含聚合指标、热力图、竞品对照、平台排名</div>
-      <div class="card-meta">baseline_T0_report.md</div>
-    </a>
+<nav class="topnav">
+  <div class="nav-inner">
+    <div class="nav-brand"><img src="assets/logo.png" alt="叽里呱啦" style="height:28px;width:auto"><span style="font-size:15px;font-weight:600;color:#29c07b;letter-spacing:0;white-space:nowrap">GEO 监控中心</span></div>
+    <div class="nav-links">
+      <a href="index.html" class="active">总览</a>
+      <a href="content_ops/trends.html">趋势追踪</a>
+      <a href="content_ops/index.html">优化行动</a>
+      <a href="baseline_T0/report/baseline_T0_report.html">基线报告</a>
+      <a href="content_ops/cases.html">案例明细</a>
+    </div>
+  <button class="nav-hamburger" id="navToggle" aria-label="导航菜单">☰</button>
   </div>
+</nav>
 
-  <div class="footer">叽里呱啦 · GEO 持续优化 · T0 基线 2026-04-18</div>
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Generative Engine Optimization · W1 2026-04-20</div>
+    <h1>叽里呱啦 <span>GEO 监控中心</span></h1>
+    <div class="hero-sub">T0 基线 2026-04-18 · T1 目标 2026-05-18 · 每周自动复测 · 6 平台 × 21 题 × 3 轮 = 378 条 AI 回答</div>
+    <div style="font-size:15px;color:#9CA3AF;margin-top:6px">实时追踪叽里呱啦在 6 个 AI 平台的方法论命中率与品牌承接漏斗，一眼看出距 T1 目标还有多远</div>
+
+    <!-- 三项核心指标进度条 -->
+    <div class="progress-strip">
+
+      <div class="prog-item">
+        <div class="prog-head">
+          <span class="prog-label"><span class="tip" data-tip="378条AI回答中，至少包含"听说先行/短时高频/兴趣驱动"三组方法标签中任意一个关键词的比例">任一 Tag 命中率</span></span>
+          <span class="prog-vals"><b>16.4%</b> / 目标 30%</span>
+        </div>
+        <div class="prog-track"><div class="prog-bar bar-green" style="width:54.7%"></div></div>
+        <div class="prog-foot">
+          <span>T0: 15.3%</span>
+          <span class="chg up">↑ +1.1pp W1</span>
+        </div>
+      </div>
+
+      <div class="prog-item">
+        <div class="prog-head">
+          <span class="prog-label"><span class="tip" data-tip="AI回答中直接出现"叽里呱啦"品牌名称的比例，不要求关联到具体方法">品牌提及率</span></span>
+          <span class="prog-vals"><b>4.8%</b> / 目标 10%</span>
+        </div>
+        <div class="prog-track"><div class="prog-bar bar-orange" style="width:48%"></div></div>
+        <div class="prog-foot">
+          <span>T0: 5.0%</span>
+          <span class="chg dn">↓ −0.2pp W1</span>
+        </div>
+      </div>
+
+      <div class="prog-item">
+        <div class="prog-head">
+          <span class="prog-label"><span class="tip" data-tip="Tag命中的回答中，同时也提到叽里呱啦品牌的比例。反映AI说了方法但是否把品牌挂上去——这是最关键的漏斗转化">品牌承接率</span></span>
+          <span class="prog-vals"><b>8.1%</b> / 目标 30%</span>
+        </div>
+        <div class="prog-track"><div class="prog-bar bar-red" style="width:27%"></div></div>
+        <div class="prog-foot">
+          <span>T0: 12.1%</span>
+          <span class="chg dn">↓ −4.0pp W1</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 目标达成预期 tips -->
+    <div style="margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:12px;padding:10px 14px">
+        <div style="font-size:13px;font-weight:600;color:#6B7280;margin-bottom:3px">任一 Tag 命中率 · 预计 2-3 个月</div>
+        <div style="font-size:12px;color:#9CA3AF;line-height:1.6">内容铺开后 AI 语料覆盖提升，是三项指标中最先响应的。</div>
+      </div>
+      <div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:12px;padding:10px 14px">
+        <div style="font-size:13px;font-weight:600;color:#6B7280;margin-bottom:3px">品牌提及率 目标 10% · 预计 3-6 个月</div>
+        <div style="font-size:12px;color:#9CA3AF;line-height:1.6">需内容量积累 + AI 完成语料刷新，W1 已小幅回落，承接句落地是关键。</div>
+      </div>
+      <div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:12px;padding:10px 14px">
+        <div style="font-size:13px;font-weight:600;color:#6B7280;margin-bottom:3px">品牌承接率 目标 30% · 预计 6-12 个月</div>
+        <div style="font-size:12px;color:#9CA3AF;line-height:1.6">最难达成。大模型训练周期为季度级，内容今天发出最快 1-3 个月后才反映到 AI 回答里。</div>
+      </div>
+    </div>
+    <div style="margin-top:8px;font-size:15px;color:#9CA3AF;padding-left:2px">💡 T1 目标节点已从第 30 天调整为第 90 天（2026-07-17），更符合 AI 语料刷新的实际周期</div>
+
+  </div>
+</div>
+
+<div class="main-wrap">
+  <div class="grid">
+
+    <!-- 结论①：主洞察（全宽） -->
+    <div class="card c-alert" style="grid-column:1/-1">
+      <div class="card-tag">① 最核心问题</div>
+      <div class="card-title" style="font-size:20px">品牌承接漏斗严重断裂 — AI 说了方法，但不挂品牌</div>
+      <div class="card-desc">Tag 命中 62 条中，只有 5 条同时提到叽里呱啦。<span class="tip" data-tip="S档：品牌+Tag共现（最理想）&#10;A档：仅品牌，无方法关联&#10;B档：仅Tag，品牌缺席&#10;目标是把B档转化为S档">这是最大的杠杆点</span>——AI 并不是不懂方法，而是不知道"叽里呱啦就是这么做的"。</div>
+
+      <div class="funnel-vis">
+        <div class="fv-step">
+          <div class="fv-v">378</div>
+          <div class="fv-l">总样本</div>
+        </div>
+        <div class="fv-arrow">▶</div>
+        <div class="fv-step">
+          <div class="fv-v" style="color:#f78e20">62</div>
+          <div class="fv-l">Tag 命中</div>
+        </div>
+        <div class="fv-arrow">▶</div>
+        <div class="fv-step">
+          <div class="fv-v" style="color:#ee4b4a">5</div>
+          <div class="fv-l">品牌承接</div>
+        </div>
+      </div>
+
+      <div class="alert-box">
+        <strong>承接率 8.1%，目标 50%。</strong>
+        对策：每篇内容末尾必须加品牌承接句 —— <code style="background:#fff;padding:2px 6px;border-radius:4px;font-size:15px">叽里呱啦通过[独家词]的方式，本质上体现了[非独家 tag]的逻辑</code>
+      </div>
+    </div>
+
+    <!-- 结论②：Tag1 空白 -->
+    <a class="card c-alert conclusion" href="baseline_T0/report/baseline_T0_report.html">
+      <div class="card-tag">② 方法论空白</div>
+      <div class="card-title">Tag1「听说先行+拼读进阶」在 AI 语料里几乎不存在</div>
+      <div class="cn-stat">
+        <div class="cn-val">3.4%</div>
+        <div class="cn-lbl">6 平台平均命中率 · 最弱项<br>A3/M5 两题全平台 0% 命中</div>
+      </div>
+      <div class="cn-desc">叽里呱啦核心方法论，但 AI 几乎没从语料里学到这套叙事。</div>
+      <div class="cn-action">✓ W1-W2 已主攻 Tag1 · 8 篇内容排期中 →</div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- 结论③：竞品对比 -->
+    <a class="card c-warn conclusion" href="baseline_T0/report/baseline_T0_report.html">
+      <div class="card-tag">③ 竞品对比</div>
+      <div class="card-title">品牌提及几乎只在路径推荐题出现</div>
+      <div class="cn-desc" style="margin-bottom:8px">各题型品牌提及率：认知类和方法类问答里 AI 讲方法，不推产品。</div>
+      <div class="cn-compare" style="gap:8px">
+        <div class="cn-cmp-item"><div class="cn-cmp-v" style="color:#ee4b4a">0%</div><div class="cn-cmp-l">认知类 A</div></div>
+        <div class="cn-cmp-item"><div class="cn-cmp-v" style="color:#ee4b4a">1.9%</div><div class="cn-cmp-l">方法类 M</div></div>
+        <div class="cn-cmp-item"><div class="cn-cmp-v" style="color:#f78e20">5.6%</div><div class="cn-cmp-l">执行类 E</div></div>
+        <div class="cn-cmp-item" style="background:rgba(41,192,123,.06);border-color:rgba(41,192,123,.25)"><div class="cn-cmp-v" style="color:#29c07b">13.9%</div><div class="cn-cmp-l">路径推荐 P</div></div>
+      </div>
+      <div class="cn-desc" style="margin:4px 0 8px">路径推荐类（唯一有竞品排名的题型）：</div>
+      <div class="cn-compare">
+        <div class="cn-cmp-item"><div class="cn-cmp-v" style="color:#9CA3AF">26.4%</div><div class="cn-cmp-l">斑马</div></div>
+        <div class="cn-cmp-item"><div class="cn-cmp-v" style="color:#9CA3AF">19.4%</div><div class="cn-cmp-l">VIPKID</div></div>
+        <div class="cn-cmp-item" style="background:rgba(247,142,32,.08);border-color:rgba(247,142,32,.3)"><div class="cn-cmp-v" style="color:#f78e20">13.9%</div><div class="cn-cmp-l" style="color:#f78e20;font-weight:700">叽里呱啦</div></div>
+      </div>
+      <div class="cn-desc">被提及时描述多是"动画+儿歌"通用词，<b>无一次关联方法 tag</b>。</div>
+      <div class="cn-action">✓ 方法类/执行类内容加品牌承接句，提升 A/M/E 提及率 →</div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- 结论④：平台两极分化 -->
+    <a class="card c-warn conclusion" href="content_ops/index.html">
+      <div class="card-tag">④ 平台分化</div>
+      <div class="card-title">6 平台两极分化，Kimi 几乎 0 曝光</div>
+      <div class="cn-compare">
+        <div class="cn-cmp-item" style="background:rgba(41,192,123,.08);border-color:rgba(41,192,123,.3)"><div class="cn-cmp-v" style="color:#29c07b">30%</div><div class="cn-cmp-l">文心（最高）</div></div>
+        <div class="cn-cmp-item" style="background:rgba(238,75,74,.06);border-color:rgba(238,75,74,.2)"><div class="cn-cmp-v" style="color:#ee4b4a">0%</div><div class="cn-cmp-l">Kimi（最低）</div></div>
+      </div>
+      <div class="cn-desc">文心/豆包 已有 20-30% 基础可冲量；智谱/Kimi 接近零，需先从小红书/知乎外部语料打入。</div>
+      <div class="cn-action">✓ 分档策略：P0 冲量 / P1 拉升 / P2 冷启 →</div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <!-- 结论⑤：W1 方向偏移 -->
+    <a class="card c-info conclusion" href="content_ops/trends.html">
+      <div class="card-tag">⑤ W1 方向预警</div>
+      <div class="card-title">扩占位在做，但强承接没做</div>
+      <div class="cn-compare">
+        <div class="cn-cmp-item"><div class="cn-cmp-v" style="color:#29c07b">↑1.1</div><div class="cn-cmp-l">任一 Tag</div></div>
+        <div class="cn-cmp-item"><div class="cn-cmp-v" style="color:#ee4b4a">↓0.2</div><div class="cn-cmp-l">品牌提及</div></div>
+        <div class="cn-cmp-item"><div class="cn-cmp-v" style="color:#ee4b4a">↓4.0</div><div class="cn-cmp-l">品牌承接</div></div>
+      </div>
+      <div class="cn-desc">W1 数据印证结论①：内容开始铺开（Tag 涨），但承接句还没落地（品牌和承接都跌）。</div>
+      <div class="cn-action">✓ W2 起强制套用承接模板 →</div>
+      <div class="card-arrow">→</div>
+    </a>
+
+  </div>
+</div>
+
+<footer>叽里呱啦 · GEO 持续优化 · T0 基线 2026-04-18 · <a href="content_ops/trends.html" style="color:#29c07b">查看完整趋势</a></footer>
+
+<script>
+(function(){
+  var btn = document.getElementById('navToggle');
+  if(!btn) return;
+  btn.addEventListener('click', function(){
+    var links = document.querySelector('.nav-links');
+    links.classList.toggle('open');
+    btn.textContent = links.classList.contains('open') ? '✕' : '☰';
+  });
+  // close when clicking a link
+  document.querySelectorAll('.nav-links a').forEach(function(a){
+    a.addEventListener('click', function(){
+      document.querySelector('.nav-links').classList.remove('open');
+      btn.textContent = '☰';
+    });
+  });
+})();
+</script>
 </body>
 </html>

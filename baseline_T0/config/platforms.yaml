@@ -57,11 +57,19 @@ platforms:
     model: "ernie-4.0-turbo-8k"
     api_key_env: QIANFAN_API_KEY
 
+  - id: hunyuan
+    name: 腾讯元宝（混元）
+    tier: A
+    provider: openai_compatible
+    endpoint: "https://api.hunyuan.cloud.tencent.com/v1"
+    model: "hunyuan-turbo"
+    api_key_env: HUNYUAN_API_KEY
+
   - id: yuanbao
-    name: 腾讯元宝
+    name: 腾讯元宝（网页备用）
     tier: B
     web_url: "https://yuanbao.tencent.com/"
-    notes: "无公开 API（仅企业版 HunyuanAPI），网页端需登录；走 Playwright"
+    notes: "无公开 API，网页端需登录；走 Playwright；已被 hunyuan A档替代"
 
   # ========= B 档：搜索叠加 AI =========
   - id: baidu_ai
