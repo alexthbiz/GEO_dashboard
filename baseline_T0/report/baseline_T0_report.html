@@ -58,9 +58,9 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 .heatmap-wrap h3{font-size:16px;font-weight:700;margin-bottom:16px;color:#1A1A2E}
 table.heatmap{border-collapse:collapse;font-size:14px;width:100%;min-width:560px}
 table.heatmap th{padding:9px 10px;text-align:center;font-weight:700;color:#6B7280;background:#F7F8FC;white-space:nowrap;border-bottom:2px solid #E8ECF4}
-table.heatmap th.q{text-align:left;min-width:60px}
+table.heatmap th.q{text-align:left;min-width:160px}
 table.heatmap td{padding:8px 10px;text-align:center;border-bottom:1px solid #F7F8FC}
-table.heatmap td.q{text-align:left;font-weight:600;color:#1A1A2E}
+table.heatmap td.q{text-align:left;font-weight:600;color:#1A1A2E;white-space:nowrap;font-size:13px}
 table.heatmap td.avg{font-weight:700;background:#F7F8FC}
 table.heatmap tr.avg-row td{font-weight:700;background:#FFF7E6;border-top:2px solid #E8ECF4;color:#f78e20}
 
@@ -687,12 +687,46 @@ function cellClass(v) {
   return 'cell-max';
 }
 
+const qLabels = {
+  "M-listen-moerduo":  "英语磨耳朵怎么做？",
+  "M-phonics":         "自然拼读什么时候开始学？",
+  "M-animation":       "英语启蒙动画片推荐有哪些？",
+  "M-song-erge":       "英语启蒙儿歌有哪些？",
+  "M-content-ip-sss":  "SSS英文儿歌怎么用？",
+  "M-picturebook":     "英语启蒙绘本/分级阅读怎么选？",
+  "M-teach-age-g2":    "二年级/三年级英语启蒙怎么教？",
+  "M-teach-age-pre":   "幼儿园阶段英语启蒙怎么做？",
+  "M-content-ip-oxford":"牛津树阅读怎么用？",
+  "M-content-ip-raz":  "RAZ分级阅读怎么选级别？",
+  "M-teach-home":      "英语启蒙在家自己怎么教？",
+  "M-teach-age-baby":  "0-2岁宝宝英语启蒙怎么做？",
+  "M-teach-age-34":    "3-4岁英语启蒙怎么教？",
+  "M-games":           "英语启蒙游戏有哪些？",
+  "M-env-daily":       "怎么在日常生活中融入英语？",
+  "P-app-select":      "英语启蒙app哪个好？",
+  "P-online-offline":  "线上课和线下课哪个好？",
+  "P-no-class":        "孩子英语启蒙需要报班吗？",
+  "M-pronunciation":   "孩子英语发音不准怎么纠正？",
+  "BR-zebra":          "斑马英语怎么样？",
+  "BR-banyu":          "伴鱼英语怎么样？",
+  "BR-hongen":         "洪恩英语怎么样？",
+  "BR-ef-efkids":      "英孚少儿英语怎么样？",
+  "BR-vipkid":         "VIPKID怎么样？",
+  "B-jlgl-brand":      "叽里呱啦怎么样？",
+  "A-start-age":       "孩子几岁开始学英语最合适？",
+  "A-bilingual":       "英语启蒙会不会和中文冲突？",
+  "M-speaking":        "孩子英语开口说怎么练？",
+  "E-resistance":      "孩子不愿意学英语抗拒怎么办？",
+  "E-time-plan":       "英语启蒙每天学多长时间合适？"
+};
+
 function renderHeatmap(tbodyId, data) {
   const tbody = document.getElementById(tbodyId);
   const colSums = [0,0,0,0,0,0,0,0];
   let rows = '';
   Object.entries(data).forEach(([q, vals]) => {
-    rows += `<tr><td class="q">${q}</td>`;
+    const label = qLabels[q] || q;
+    rows += `<tr><td class="q" title="${q}">${label}</td>`;
     vals.forEach((v, i) => {
       if (i === 7) {
         rows += `<td class="avg ${cellClass(v)}">${v > 0 ? v + '%' : '·'}</td>`;
