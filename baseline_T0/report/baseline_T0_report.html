@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="../../assets/favicon.ico">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>叽里呱啦 GEO 基线报告 T0</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#F7F8FC;color:#1A1A2E}
+
+/* 导航栏 */
+.topnav{background:#fff;border-bottom:1px solid #E8ECF4;position:sticky;top:0;z-index:100;padding-top:env(safe-area-inset-top)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;flex-direction:row;align-items:center;gap:8px;line-height:1}
+.nav-brand span{color:#29c07b}
+.nav-hamburger{display:none;align-items:center;justify-content:center;width:36px;height:36px;border:none;background:none;cursor:pointer;color:#1A1A2E;font-size:22px;flex-shrink:0;padding:0}
+.nav-links{display:flex;gap:32px}
+.nav-links a{font-size:15px;color:#6B7280;text-decoration:none;font-weight:500;transition:.2s}
+.nav-links a:hover{color:#29c07b}
+.nav-links a.active{color:#29c07b;font-weight:700}
+
+/* Hero */
+.page-hero{background:linear-gradient(135deg,#f0faf4 0%,#fff 60%);border-bottom:1px solid #E8ECF4;padding:40px 0 36px}
+.page-hero-inner{max-width:1200px;margin:0 auto;padding:0 40px}
+.page-hero h1{font-size:28px;font-weight:800;color:#1A1A2E}
+.page-hero .meta{font-size:15px;color:#6B7280;margin-top:8px}
+
+/* 页面主体 */
+.page-body{max-width:1200px;margin:0 auto;padding:32px 40px 60px}
+
+/* Section 标题 */
+.section-title{font-size:20px;font-weight:700;color:#1A1A2E;margin-bottom:16px;padding-left:14px;border-left:4px solid #29c07b}
+.section{margin-bottom:40px}
+
+/* KPI cards */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+.kpi-card{background:#fff;border-radius:20px;padding:24px 20px;box-shadow:0 2px 16px rgba(41,192,123,.08);border:1px solid #E8ECF4;text-align:center;transition:.2s}
+.kpi-card:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(41,192,123,.14)}
+.kpi-card .val{font-size:36px;font-weight:800;line-height:1}
+.kpi-card .label{font-size:15px;color:#6B7280;margin-top:8px;line-height:1.4}
+.kpi-card .t1{font-size:13px;margin-top:8px;color:#29c07b;font-weight:600}
+.kpi-card.red .val{color:#ee4b4a}
+.kpi-card.orange .val{color:#f78e20}
+.kpi-card.green .val{color:#29c07b}
+.kpi-card.blue .val{color:#29c07b}
+
+/* Chart containers */
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:700px){.chart-row{grid-template-columns:1fr}}
+.chart-box{background:#fff;border-radius:20px;padding:24px;box-shadow:0 2px 16px rgba(41,192,123,.08);border:1px solid #E8ECF4}
+.chart-box h3{font-size:16px;font-weight:700;margin-bottom:16px;color:#1A1A2E}
+.chart-box canvas{max-height:260px}
+
+/* Heatmap */
+.heatmap-wrap{background:#fff;border-radius:20px;padding:24px;box-shadow:0 2px 16px rgba(41,192,123,.08);border:1px solid #E8ECF4;overflow-x:auto}
+.heatmap-wrap h3{font-size:16px;font-weight:700;margin-bottom:16px;color:#1A1A2E}
+table.heatmap{border-collapse:collapse;font-size:14px;width:100%;min-width:560px}
+table.heatmap th{padding:9px 10px;text-align:center;font-weight:700;color:#6B7280;background:#F7F8FC;white-space:nowrap;border-bottom:2px solid #E8ECF4}
+table.heatmap th.q{text-align:left;min-width:60px}
+table.heatmap td{padding:8px 10px;text-align:center;border-bottom:1px solid #F7F8FC}
+table.heatmap td.q{text-align:left;font-weight:600;color:#1A1A2E}
+table.heatmap td.avg{font-weight:700;background:#F7F8FC}
+table.heatmap tr.avg-row td{font-weight:700;background:#FFF7E6;border-top:2px solid #E8ECF4;color:#f78e20}
+
+/* 热力图：品牌橙色色相，浅→深 */
+.cell-0{color:#B0B7C3}
+.cell-low{background:#FEF0DC;color:#a05f00}
+.cell-mid{background:#FDC97A;color:#6b3a00}
+.cell-high{background:#f78e20;color:#fff;font-weight:600}
+.cell-max{background:#c46800;color:#fff;font-weight:700}
+
+/* 数据评级 */
+.verdict{margin-top:16px;background:#FFF7E6;border:1px solid #FDC97A;border-radius:12px;padding:12px 16px;font-size:16px;color:#6b3a00;line-height:1.7;display:flex;align-items:baseline;gap:10px}
+.verdict-tag{background:#f78e20;color:#fff;font-size:13px;font-weight:700;padding:2px 8px;border-radius:6px;white-space:nowrap;flex-shrink:0}
+
+/* 题目分类说明表 */
+.qref-wrap{background:#fff;border-radius:20px;padding:24px;box-shadow:0 2px 16px rgba(41,192,123,.08);border:1px solid #E8ECF4;margin-bottom:20px}
+.qref-wrap h3{font-size:16px;font-weight:700;margin-bottom:16px;color:#1A1A2E}
+.qref-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:760px){.qref-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.qref-grid{grid-template-columns:1fr}}
+.qref-col{}
+.qref-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid #E8ECF4}
+.qref-badge{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;font-size:15px;font-weight:800;color:#fff;flex-shrink:0}
+.qref-badge.a{background:#6366f1}
+.qref-badge.m{background:#10b981}
+.qref-badge.p{background:#f78e20}
+.qref-badge.e{background:#ee4b4a}
+.qref-cat{font-size:14px;font-weight:700;color:#1A1A2E}
+.qref-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px}
+.qref-list li{display:flex;gap:6px;font-size:13px;line-height:1.5;color:#374151}
+.qref-list li .qid{font-weight:700;flex-shrink:0;width:22px;color:#1A1A2E}
+.qref-list li .qtxt{color:#6B7280}
+
+/* Competitor table */
+.comp-table{width:100%;border-collapse:collapse;font-size:15px}
+.comp-table th{padding:10px 14px;text-align:left;background:#F7F8FC;font-weight:700;color:#6B7280;border-bottom:2px solid #E8ECF4}
+.comp-table td{padding:10px 14px;border-bottom:1px solid #F7F8FC}
+.comp-table tr.highlight td{background:#FFFBE6;font-weight:700}
+.bar-bg{background:#F7F8FC;border-radius:6px;height:8px;width:100%;min-width:80px}
+.bar-fill{height:8px;border-radius:6px;background:#29c07b;transition:width .3s}
+.bar-fill.us{background:#ee4b4a}
+
+/* Platform table */
+.plat-table{width:100%;border-collapse:collapse;font-size:14px}
+.plat-table th{padding:10px 14px;text-align:center;background:#F7F8FC;font-weight:700;color:#6B7280;border-bottom:2px solid #E8ECF4}
+.plat-table th:first-child{text-align:left}
+.plat-table td{padding:10px 14px;text-align:center;border-bottom:1px solid #F7F8FC}
+.plat-table td:first-child{text-align:left;font-weight:600;color:#1A1A2E}
+.plat-table tr:hover td{background:#F7F8FC}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:13px;font-weight:700}
+.badge.p0{background:#F0FAF4;color:#29c07b}
+.badge.p1{background:#FFF7E6;color:#f78e20}
+.badge.p2{background:#FFF1F0;color:#ee4b4a}
+
+/* Case summary */
+.case-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:600px){.case-grid{grid-template-columns:repeat(2,1fr)}}
+.case-card{background:#fff;border-radius:20px;padding:24px;box-shadow:0 2px 16px rgba(41,192,123,.08);border:1px solid #E8ECF4;text-align:center;text-decoration:none;color:inherit;transition:.2s;border-top:4px solid transparent}
+.case-card:hover{transform:translateY(-4px);box-shadow:0 8px 28px rgba(41,192,123,.16)}
+.case-card.s{border-top-color:#f78e20}
+.case-card.a{border-top-color:#ee4b4a}
+.case-card.b{border-top-color:#6366f1}
+.case-card.none{border-top-color:#D1D5DB}
+.case-card .num{font-size:40px;font-weight:800;line-height:1}
+.case-card.s .num{color:#f78e20}
+.case-card.a .num{color:#ee4b4a}
+.case-card.b .num{color:#6366f1}
+.case-card.none .num{color:#B0B7C3}
+.case-card .lbl{font-size:14px;color:#6B7280;margin-top:8px;font-weight:600}
+.case-card .desc{font-size:13px;color:#B0B7C3;margin-top:4px;line-height:1.4}
+
+.funnel-box{background:#fff;border-radius:20px;padding:28px;box-shadow:0 2px 16px rgba(41,192,123,.08);border:1px solid #E8ECF4}
+
+/* 四象限矩阵 */
+.matrix-grid{display:grid;grid-template-columns:80px 1fr 1fr;gap:8px;margin-top:12px}
+.matrix-col-hdr{background:#F7F8FC;border-radius:10px;padding:8px 12px;font-size:14px;font-weight:700;color:#6B7280;text-align:center}
+.matrix-row-hdr{background:#F7F8FC;border-radius:10px;padding:10px 12px;font-size:14px;font-weight:700;color:#6B7280;display:flex;align-items:center;line-height:1.4}
+.matrix-cell{border-radius:16px;padding:18px 14px;text-align:center}
+.mc-tier{font-size:14px;font-weight:700;margin-bottom:4px}
+.mc-num{font-size:32px;font-weight:800;line-height:1}
+.mc-pct{font-size:13px;margin-top:4px;opacity:.75}
+.mc-desc{font-size:12px;margin-top:6px;line-height:1.4;opacity:.7}
+@media(max-width:760px){.matrix-grid{grid-template-columns:56px 1fr 1fr}.mc-num{font-size:24px}}
+
+.insight{background:#FFFBE6;border-left:4px solid #f78e20;padding:14px 18px;border-radius:0 12px 12px 0;font-size:15px;line-height:1.7;margin-top:14px;color:#6B7280}
+.insight strong{color:#1A1A2E}
+
+.table-wrap{background:#fff;border-radius:20px;padding:24px;box-shadow:0 2px 16px rgba(41,192,123,.08);border:1px solid #E8ECF4;overflow-x:auto}
+
+footer{text-align:center;font-size:14px;color:#6B7280;margin-top:48px;padding:24px;padding-bottom:calc(24px + env(safe-area-inset-bottom));border-top:1px solid #E8ECF4;background:#fff}
+
+@media(max-width:760px){
+  /* 导航 */
+  .nav-hamburger{display:flex!important}
+  .nav-inner{padding:0 16px;height:52px}
+  .nav-links{display:none;position:absolute;top:calc(52px + env(safe-area-inset-top));left:0;width:100%;background:#fff;border-bottom:1px solid #E8ECF4;flex-direction:column;padding:8px 20px 14px;gap:0;z-index:200;box-shadow:0 6px 20px rgba(0,0,0,.08)}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:11px 0;font-size:16px;border-bottom:1px solid #F7F8FC;white-space:nowrap}
+  /* Hero */
+  .page-hero{padding:24px 0 20px}
+  .page-hero-inner{padding:0 16px}
+  .page-hero h1{font-size:22px}
+  /* 内容 */
+  .page-body{padding:16px 16px 40px}
+  /* KPI */
+  .kpi-card .val{font-size:28px}
+  /* 竞品/平台表格横滑 */
+  .table-wrap{padding:16px}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-inner">
+    <div class="nav-brand"><img src="../../assets/logo.png" alt="叽里呱啦" style="height:28px;width:auto"><span style="font-size:15px;font-weight:600;color:#29c07b;letter-spacing:0;white-space:nowrap">GEO 监控中心</span></div>
+    <div class="nav-links">
+      <a href="../../index.html">总览</a>
+      <a href="../../content_ops/trends.html">趋势追踪</a>
+      <a href="../../content_ops/index.html">优化行动</a>
+      <a href="baseline_T0_report.html" class="active">基线报告</a>
+      <a href="../../content_ops/cases.html">案例明细</a>
+    </div>
+  <button class="nav-hamburger" id="navToggle" aria-label="导航菜单">☰</button>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <h1>叽里呱啦 GEO 基线报告 · T0</h1>
+    <div class="meta">生成时间：2026-04-27 &nbsp;|&nbsp; 630 条样本 &nbsp;|&nbsp; 7 平台 &nbsp;|&nbsp; 30 题</div>
+    <div class="meta" style="margin-top:4px;color:#9CA3AF">T0 基线完整数据报告，所有后续周测与 T1 优化目标的数据原点与对比参照</div>
+  </div>
+</div>
+
+<div class="page-body">
+
+<!-- ① KPI -->
+<div class="section">
+  <div class="section-title">① 核心指标总览</div>
+  <div class="kpi-grid">
+    <div class="kpi-card orange">
+      <div class="val">9.5%</div>
+      <div class="label">任一 Tag 命中率</div>
+      <div class="t1">T1 目标 ≥ 30%</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="val">2.7%</div>
+      <div class="label">Tag1 命中率<br>听说先行+拼读进阶</div>
+      <div class="t1">T1 目标 ≥ 15%</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="val">4.0%</div>
+      <div class="label">Tag2 命中率<br>短时高频+螺旋上升</div>
+      <div class="t1">T1 目标 ≥ 15%</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="val">3.8%</div>
+      <div class="label">Tag3 命中率<br>兴趣驱动+学以致用</div>
+      <div class="t1">T1 目标 ≥ 15%</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="val">13.0%</div>
+      <div class="label">品牌提及率</div>
+      <div class="t1">T1 目标 ≥ 25%</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="val">16.7%</div>
+      <div class="label">Tag命中→品牌承接率<br>（漏斗转化）</div>
+      <div class="t1">T1 目标 ≥ 40%</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="val">44%</div>
+      <div class="label">路径解释率</div>
+      <div class="t1">启发式评分</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="val">630</div>
+      <div class="label">样本总量<br>7平台 × 30题 × 3次</div>
+      <div class="t1">T0 基线</div>
+    </div>
+  </div>
+  <div class="verdict">
+    <span class="verdict-tag">新基线起点</span>
+    问题池扩至 30 题（含竞品截胡 BR 类和品牌防御 B 类），品牌提及率 13% 已含品牌直问题的自然高命中。方法类（M）品牌提及仅 7.3%，是最大内容空白。Tag 命中率 9.5%，方法论在 AI 语料中覆盖极低，内容投放后有明显上行空间。
+  </div>
+</div>
+
+<!-- ② Tag命中 × 品牌提及 四象限矩阵 -->
+<div class="section">
+  <div class="section-title">② Tag命中 × 品牌提及 · 四象限分布</div>
+  <div class="funnel-box">
+    <div style="font-size:15px;color:#6B7280;margin-bottom:12px">630 条回答按「是否命中Tag」×「是否提及品牌」分入四个象限，揭示两个独立维度的真实现状</div>
+    <div class="matrix-grid">
+      <!-- 顶部列标题 -->
+      <div></div>
+      <div class="matrix-col-hdr">✅ 有品牌提及</div>
+      <div class="matrix-col-hdr">❌ 无品牌提及</div>
+      <!-- 行1：有Tag命中 -->
+      <div class="matrix-row-hdr">有 Tag<br>命中</div>
+      <div class="matrix-cell" style="background:#FFF7E6">
+        <div class="mc-tier" style="color:#f78e20">S 档</div>
+        <div class="mc-num" style="color:#f78e20">10</div>
+        <div class="mc-pct" style="color:#f78e20">占总量 1.6%</div>
+        <div class="mc-desc" style="color:#6B7280">Tag + 品牌共现<br>✅ 最优结果</div>
+      </div>
+      <div class="matrix-cell" style="background:#EEF2FF">
+        <div class="mc-tier" style="color:#6366f1">B 档</div>
+        <div class="mc-num" style="color:#6366f1">50</div>
+        <div class="mc-pct" style="color:#6366f1">占总量 7.9%</div>
+        <div class="mc-desc" style="color:#6B7280">Tag命中 · 品牌缺席<br>⚠️ 最大漏斗损失</div>
+      </div>
+      <!-- 行2：无Tag命中 -->
+      <div class="matrix-row-hdr">无 Tag<br>命中</div>
+      <div class="matrix-cell" style="background:#FFF1F0">
+        <div class="mc-tier" style="color:#ee4b4a">A 档</div>
+        <div class="mc-num" style="color:#ee4b4a">72</div>
+        <div class="mc-pct" style="color:#ee4b4a">占总量 11.4%</div>
+        <div class="mc-desc" style="color:#6B7280">品牌提及 · Tag缺席<br>💡 仅作为APP推荐</div>
+      </div>
+      <div class="matrix-cell" style="background:#F7F8FC">
+        <div class="mc-tier" style="color:#B0B7C3">未命中</div>
+        <div class="mc-num" style="color:#B0B7C3">498</div>
+        <div class="mc-pct" style="color:#B0B7C3">占总量 79.0%</div>
+        <div class="mc-desc" style="color:#B0B7C3">无Tag · 无品牌<br>— 完全缺失</div>
+      </div>
+    </div>
+    <div class="insight">
+      <strong>核心洞察：</strong>60次Tag命中中仅 10 次同时提及品牌（<strong style="color:#ee4b4a">承接率 16.7%</strong>）；72条A档是品牌被当作普通APP推荐但无任何方法论挂钩（主要来自 B/BR/P 类题目）。<strong>AI 知道叽里呱啦，但不知道它的方法</strong>——需同时解决「占位」和「承接」两个问题。
+    </div>
+  </div>
+</div>
+
+<!-- ③ Tag 命中对比 + 竞品 -->
+<div class="section">
+  <div class="section-title">③ Tag 组命中详情 & 竞品对比</div>
+  <div class="chart-row">
+    <div class="chart-box">
+      <h3>Tag 组命中率（T0 实测 vs T1 目标）</h3>
+      <canvas id="tagChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>路径/竞品类问题竞品提及率（168 条样本）</h3>
+      <canvas id="compChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- ④ 平台排名 -->
+<div class="section">
+  <div class="section-title">④ 平台综合排名</div>
+  <div class="table-wrap">
+    <table class="plat-table">
+      <thead>
+        <tr>
+          <th>平台</th>
+          <th>优先级</th>
+          <th>任一Tag</th>
+          <th>Tag1</th>
+          <th>Tag2</th>
+          <th>Tag3</th>
+          <th>品牌提及</th>
+          <th>路径解释</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>DeepSeek</td>
+          <td><span class="badge p0">P0 冲量</span></td>
+          <td><strong>17%</strong></td>
+          <td>6%</td>
+          <td>8%</td>
+          <td>6%</td>
+          <td>23%</td>
+          <td>68%</td>
+        </tr>
+        <tr>
+          <td>文心一言</td>
+          <td><span class="badge p0">P0 冲量</span></td>
+          <td><strong>17%</strong></td>
+          <td>1%</td>
+          <td>11%</td>
+          <td>8%</td>
+          <td>18%</td>
+          <td>39%</td>
+        </tr>
+        <tr>
+          <td>智谱清言</td>
+          <td><span class="badge p1">P1 拉升</span></td>
+          <td>13%</td>
+          <td>6%</td>
+          <td>2%</td>
+          <td>7%</td>
+          <td>6%</td>
+          <td>62%</td>
+        </tr>
+        <tr>
+          <td>通义千问</td>
+          <td><span class="badge p1">P1 拉升</span></td>
+          <td>10%</td>
+          <td><strong>6%</strong></td>
+          <td>3%</td>
+          <td>1%</td>
+          <td>8%</td>
+          <td>78%</td>
+        </tr>
+        <tr>
+          <td>豆包</td>
+          <td><span class="badge p1">P1 拉升</span></td>
+          <td>8%</td>
+          <td>1%</td>
+          <td>3%</td>
+          <td>3%</td>
+          <td>8%</td>
+          <td>59%</td>
+        </tr>
+        <tr>
+          <td>混元</td>
+          <td><span class="badge p2">P2 冷启</span></td>
+          <td style="color:#ee4b4a">2%</td>
+          <td style="color:#ee4b4a">0%</td>
+          <td style="color:#ee4b4a">0%</td>
+          <td>2%</td>
+          <td><strong>26%</strong></td>
+          <td style="color:#ee4b4a">0%</td>
+        </tr>
+        <tr>
+          <td>Kimi</td>
+          <td><span class="badge p2">P2 冷启</span></td>
+          <td style="color:#ee4b4a">0%</td>
+          <td style="color:#ee4b4a">0%</td>
+          <td style="color:#ee4b4a">0%</td>
+          <td style="color:#ee4b4a">0%</td>
+          <td>3%</td>
+          <td style="color:#ee4b4a">0%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 题目分类说明 -->
+<div class="section">
+  <div class="section-title">⑤ 题目分类说明</div>
+  <div class="qref-wrap">
+    <h3>30 道测评题分为 6 类</h3>
+    <div class="qref-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="qref-col">
+        <div class="qref-hd"><span class="qref-badge m">M</span><span class="qref-cat">方法类 · 17 题</span></div>
+        <ul class="qref-list">
+          <li><span class="qid" style="width:auto;margin-right:4px">M-listen</span><span class="qtxt">英语磨耳朵怎么做？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">M-phonics</span><span class="qtxt">自然拼读什么时候开始学？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">M-anim</span><span class="qtxt">英语启蒙动画片推荐有哪些？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">M-song</span><span class="qtxt">英语启蒙儿歌有哪些？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">M-sss</span><span class="qtxt">SSS英文儿歌怎么用？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">M-book</span><span class="qtxt">英语启蒙绘本/分级阅读怎么选？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">M-g2</span><span class="qtxt">二年级/三年级英语启蒙怎么教？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">M-pre</span><span class="qtxt">幼儿园阶段英语启蒙怎么做？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">M-oxford</span><span class="qtxt">牛津树阅读怎么用？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">M-raz</span><span class="qtxt">RAZ分级阅读怎么选级别？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">M-home</span><span class="qtxt">英语启蒙在家自己怎么教？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">M-baby</span><span class="qtxt">0-2岁宝宝英语启蒙怎么做？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">M-34</span><span class="qtxt">3-4岁英语启蒙怎么教？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">M-games</span><span class="qtxt">英语启蒙游戏有哪些？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">M-daily</span><span class="qtxt">怎么在日常生活中融入英语？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">M-pron</span><span class="qtxt">孩子英语发音不准怎么纠正？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">M-speak</span><span class="qtxt">孩子英语开口说怎么练？</span></li>
+        </ul>
+      </div>
+      <div class="qref-col">
+        <div class="qref-hd"><span class="qref-badge p">P</span><span class="qref-cat">路径类 · 3 题</span></div>
+        <ul class="qref-list">
+          <li><span class="qid" style="width:auto;margin-right:4px">P-app</span><span class="qtxt">英语启蒙app哪个好？推荐排行榜</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">P-ol</span><span class="qtxt">英语启蒙线上课和线下课哪个好？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">P-class</span><span class="qtxt">孩子英语启蒙需要报班吗？</span></li>
+        </ul>
+        <div class="qref-hd" style="margin-top:16px"><span class="qref-badge" style="background:#8b5cf6">BR</span><span class="qref-cat">竞品截胡 · 5 题</span></div>
+        <ul class="qref-list">
+          <li><span class="qid" style="width:auto;margin-right:4px">BR-zebra</span><span class="qtxt">斑马英语怎么样？值得买吗？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">BR-banyu</span><span class="qtxt">伴鱼英语怎么样？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">BR-hongen</span><span class="qtxt">洪恩英语怎么样？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">BR-ef</span><span class="qtxt">英孚少儿英语怎么样？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">BR-vip</span><span class="qtxt">VIPKID怎么样？还值得报吗？</span></li>
+        </ul>
+      </div>
+      <div class="qref-col">
+        <div class="qref-hd"><span class="qref-badge" style="background:#f59e0b">B</span><span class="qref-cat">品牌防御 · 1 题</span></div>
+        <ul class="qref-list">
+          <li><span class="qid" style="width:auto;margin-right:4px">B-jlgl</span><span class="qtxt">叽里呱啦怎么样？值得买吗？</span></li>
+        </ul>
+        <div class="qref-hd" style="margin-top:16px"><span class="qref-badge a">A</span><span class="qref-cat">认知类 · 2 题</span></div>
+        <ul class="qref-list">
+          <li><span class="qid" style="width:auto;margin-right:4px">A-age</span><span class="qtxt">孩子几岁开始学英语最合适？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">A-bili</span><span class="qtxt">英语启蒙会不会和中文冲突？</span></li>
+        </ul>
+        <div class="qref-hd" style="margin-top:16px"><span class="qref-badge e">E</span><span class="qref-cat">执行类 · 2 题</span></div>
+        <ul class="qref-list">
+          <li><span class="qid" style="width:auto;margin-right:4px">E-resist</span><span class="qtxt">孩子不愿意学英语抗拒怎么办？</span></li>
+          <li><span class="qid" style="width:auto;margin-right:4px">E-time</span><span class="qtxt">英语启蒙每天学多长时间合适？</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑥ 热力图 Tag命中 -->
+<div class="section">
+  <div class="section-title">⑥ 任一 Tag 命中热力图（问题 × 平台）</div>
+  <div class="heatmap-wrap">
+    <h3>颜色越深 = 命中率越高 &nbsp;|&nbsp; · = 0%</h3>
+    <table class="heatmap">
+      <thead>
+        <tr>
+          <th class="q">题目</th>
+          <th>deepseek</th>
+          <th>doubao</th>
+          <th>hunyuan</th>
+          <th>kimi</th>
+          <th>qwen</th>
+          <th>wenxin</th>
+          <th>zhipu</th>
+          <th>行均值</th>
+        </tr>
+      </thead>
+      <tbody id="hmBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ⑦ 品牌提及热力图 -->
+<div class="section">
+  <div class="section-title">⑦ 品牌提及热力图（问题 × 平台）</div>
+  <div class="heatmap-wrap">
+    <h3>叽里呱啦在哪些题目/平台被提到</h3>
+    <table class="heatmap">
+      <thead>
+        <tr>
+          <th class="q">题目</th>
+          <th>deepseek</th>
+          <th>doubao</th>
+          <th>hunyuan</th>
+          <th>kimi</th>
+          <th>qwen</th>
+          <th>wenxin</th>
+          <th>zhipu</th>
+          <th>行均值</th>
+        </tr>
+      </thead>
+      <tbody id="hmBodyBrand"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ⑦ 曝光案例 -->
+<div class="section">
+  <div class="section-title">⑧ 曝光案例分档（共 630 条）</div>
+  <div class="case-grid">
+    <a class="case-card s" href="../../content_ops/cases.html?tier=S">
+      <div class="num">10</div>
+      <div class="lbl">S 档 · 最优</div>
+      <div class="desc">品牌 + Tag 共现<br>GEO 最有价值成果</div>
+    </a>
+    <a class="case-card a" href="../../content_ops/cases.html?tier=A">
+      <div class="num">72</div>
+      <div class="lbl">A 档 · 待改善</div>
+      <div class="desc">仅品牌提及<br>方法论承接缺失</div>
+    </a>
+    <a class="case-card b" href="../../content_ops/cases.html?tier=B">
+      <div class="num">50</div>
+      <div class="lbl">B 档 · 占位</div>
+      <div class="desc">仅 Tag 命中<br>品牌未承接</div>
+    </a>
+    <a class="case-card none" href="../../content_ops/cases.html">
+      <div class="num">498</div>
+      <div class="lbl">未命中</div>
+      <div class="desc">品牌和 Tag<br>均未出现</div>
+    </a>
+  </div>
+  <div style="text-align:center;margin-top:20px">
+    <a href="../../content_ops/cases.html" style="font-size:15px;color:#29c07b;text-decoration:none;font-weight:600">查看全部案例原文片段 →</a>
+  </div>
+</div>
+
+</div><!-- page-body -->
+
+<footer>叽里呱啦 · GEO 基线报告 T0 · 2026-04-27 · 7平台×30题×630条 &nbsp;|&nbsp; <a href="../../index.html" style="color:#29c07b">返回监控中心</a></footer>
+
+<script>
+// ===== Tag Chart =====
+new Chart(document.getElementById('tagChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Tag1\n听说先行+拼读进阶', 'Tag2\n短时高频+螺旋上升', 'Tag3\n兴趣驱动+学以致用', '任一Tag命中'],
+    datasets: [
+      {
+        label: 'T0 实测',
+        data: [2.7, 4.0, 3.8, 9.5],
+        backgroundColor: ['#ee4b4a','#f78e20','#29c07b','#29c07b'],
+        borderRadius: 8
+      },
+      {
+        label: 'T1 目标',
+        data: [15, 15, 15, 30],
+        backgroundColor: 'rgba(41,192,123,0.15)',
+        borderColor: '#29c07b',
+        borderWidth: 2,
+        borderRadius: 8
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    scales: {
+      y: { beginAtZero: true, max: 35, ticks: { callback: v => v + '%' }, grid: { color: '#F7F8FC' } },
+      x: { grid: { display: false } }
+    },
+    plugins: {
+      legend: { position: 'bottom' },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y + '%' } }
+    }
+  }
+});
+
+// ===== Competitor Chart =====
+new Chart(document.getElementById('compChart'), {
+  type: 'bar',
+  data: {
+    labels: ['英孚', '斑马', 'VIPKID', '伴鱼', '叽里呱啦', '洪恩', '51Talk', '励步'],
+    datasets: [{
+      label: '提及率',
+      data: [38, 36, 32, 28, 19, 18, 12, 8],
+      backgroundColor: ['#D1D5DB','#D1D5DB','#D1D5DB','#D1D5DB','#ee4b4a','#D1D5DB','#D1D5DB','#D1D5DB'],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: true,
+    scales: {
+      x: { beginAtZero: true, max: 35, ticks: { callback: v => v + '%' }, grid: { color: '#F7F8FC' } },
+      y: { grid: { display: false } }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.parsed.x + '%' } }
+    }
+  }
+});
+
+// ===== Heatmap =====
+const tagData = {
+  "M-listen-moerduo":[67,0,0,0,67,0,0,19],
+  "M-phonics":[0,0,0,0,0,0,0,0],
+  "M-animation":[0,33,0,0,0,0,0,5],
+  "M-song-erge":[0,0,0,0,33,0,0,5],
+  "M-content-ip-sss":[0,0,0,0,0,0,0,0],
+  "M-picturebook":[33,0,0,0,0,33,33,14],
+  "M-teach-age-g2":[33,0,0,0,100,67,67,38],
+  "M-teach-age-pre":[67,0,0,0,0,0,0,10],
+  "M-content-ip-oxford":[33,0,0,0,0,0,0,5],
+  "M-content-ip-raz":[33,0,0,0,0,33,0,9],
+  "M-teach-home":[33,33,0,0,0,33,0,14],
+  "M-teach-age-baby":[0,0,0,0,0,0,0,0],
+  "M-teach-age-34":[0,0,0,0,33,33,67,19],
+  "M-games":[0,0,0,0,0,0,67,10],
+  "M-env-daily":[0,0,0,0,33,33,0,9],
+  "P-app-select":[33,0,0,0,0,67,0,14],
+  "P-online-offline":[0,33,0,0,0,0,0,5],
+  "P-no-class":[33,0,0,0,0,33,67,19],
+  "M-pronunciation":[0,0,0,0,0,0,0,0],
+  "BR-zebra":[0,0,0,0,0,33,0,5],
+  "BR-banyu":[67,0,0,0,0,0,0,10],
+  "BR-hongen":[0,33,0,0,0,0,0,5],
+  "BR-ef-efkids":[0,0,0,0,0,0,33,5],
+  "BR-vipkid":[0,0,0,0,0,0,0,0],
+  "B-jlgl-brand":[33,0,0,0,0,0,0,5],
+  "A-start-age":[0,33,67,0,0,0,33,19],
+  "A-bilingual":[33,33,0,0,0,0,0,9],
+  "M-speaking":[0,33,0,0,0,0,0,5],
+  "E-resistance":[0,0,0,0,33,33,33,14],
+  "E-time-plan":[0,0,0,0,0,100,0,14]
+};
+
+const brandData = {
+  "M-listen-moerduo":[0,0,0,0,0,0,0,0],
+  "M-phonics":[33,0,67,0,0,0,0,14],
+  "M-animation":[0,0,0,0,0,0,0,0],
+  "M-song-erge":[0,0,0,0,0,0,0,0],
+  "M-content-ip-sss":[0,0,0,0,0,0,0,0],
+  "M-picturebook":[0,0,0,0,0,0,0,0],
+  "M-teach-age-g2":[0,0,67,0,0,0,0,10],
+  "M-teach-age-pre":[67,0,100,0,0,0,0,24],
+  "M-content-ip-oxford":[0,0,0,0,0,0,0,0],
+  "M-content-ip-raz":[0,0,0,0,0,0,0,0],
+  "M-teach-home":[100,33,67,0,0,0,0,29],
+  "M-teach-age-baby":[0,0,100,0,0,0,0,14],
+  "M-teach-age-34":[0,0,67,0,0,0,0,10],
+  "M-games":[0,0,33,0,0,0,0,5],
+  "M-env-daily":[0,0,33,0,0,0,0,5],
+  "P-app-select":[100,67,100,0,67,100,33,67],
+  "P-online-offline":[67,0,0,0,0,33,0,14],
+  "P-no-class":[33,0,0,0,0,33,0,9],
+  "M-pronunciation":[33,0,0,0,0,0,33,9],
+  "BR-zebra":[33,0,0,0,33,100,0,24],
+  "BR-banyu":[0,0,0,0,33,0,0,5],
+  "BR-hongen":[67,0,0,0,0,100,0,24],
+  "BR-ef-efkids":[0,0,0,0,0,33,0,5],
+  "BR-vipkid":[0,0,0,0,0,33,0,5],
+  "B-jlgl-brand":[100,100,100,100,100,100,100,100],
+  "A-start-age":[33,33,0,0,0,0,0,9],
+  "A-bilingual":[0,0,0,0,0,0,0,0],
+  "M-speaking":[33,0,0,0,0,0,0,5],
+  "E-resistance":[0,0,33,0,0,0,0,5],
+  "E-time-plan":[0,0,0,0,0,0,0,0]
+};
+
+function cellClass(v) {
+  if (v === 0) return 'cell-0';
+  if (v <= 33) return 'cell-low';
+  if (v <= 67) return 'cell-mid';
+  if (v < 100) return 'cell-high';
+  return 'cell-max';
+}
+
+function renderHeatmap(tbodyId, data) {
+  const tbody = document.getElementById(tbodyId);
+  const colSums = [0,0,0,0,0,0,0,0];
+  let rows = '';
+  Object.entries(data).forEach(([q, vals]) => {
+    rows += `<tr><td class="q">${q}</td>`;
+    vals.forEach((v, i) => {
+      if (i === 7) {
+        rows += `<td class="avg ${cellClass(v)}">${v > 0 ? v + '%' : '·'}</td>`;
+      } else {
+        rows += `<td class="${cellClass(v)}">${v > 0 ? v + '%' : '·'}</td>`;
+        colSums[i] += v;
+      }
+    });
+    rows += '</tr>';
+  });
+  const n = Object.keys(data).length;
+  rows += '<tr class="avg-row"><td class="q">列均值</td>';
+  [0,1,2,3,4,5,6].forEach(i => {
+    const avg = Math.round(colSums[i] / n);
+    rows += `<td class="${cellClass(avg)}">${avg > 0 ? avg + '%' : '·'}</td>`;
+  });
+  const totalAvg = Math.round([0,1,2,3,4,5,6].reduce((s,i)=>s+colSums[i],0) / (n * 7));
+  rows += `<td class="avg ${cellClass(totalAvg)}">${totalAvg > 0 ? totalAvg + '%' : '·'}</td></tr>`;
+  tbody.innerHTML = rows;
+}
+
+renderHeatmap('hmBody', tagData);
+renderHeatmap('hmBodyBrand', brandData);
+</script>
+<script>
+(function(){
+  var btn = document.getElementById('navToggle');
+  if(!btn) return;
+  btn.addEventListener('click', function(){
+    var links = document.querySelector('.nav-links');
+    links.classList.toggle('open');
+    btn.textContent = links.classList.contains('open') ? '✕' : '☰';
+  });
+  // close when clicking a link
+  document.querySelectorAll('.nav-links a').forEach(function(a){
+    a.addEventListener('click', function(){
+      document.querySelector('.nav-links').classList.remove('open');
+      btn.textContent = '☰';
+    });
+  });
+})();
+</script>
+</body>
+</html>
