@@ -1,0 +1,46 @@
+# T0 SERP 手动采集数据（2026-05-21）
+# 数据源：百度浏览器实测 + 搜狗/360/必应/夸克 WebFetch
+# 复测时改这个 yaml 即可让 health_score.py 重新算 D + F 维度
+
+# ─── site:jiliguala.com 总收录 ───
+baidu_site_count: 2990          # 百度
+sogou_site_count: 60            # 搜狗
+so360_site_count: 76            # 360
+shenma_site_count: 0            # 神马（0 条收录 = 重大缺口）
+bing_site_count: 50             # 必应（site: 操作符不准，仅参考）
+
+# ─── 子域索引污染（百度数据为准）───
+baidu_site_dev_count: 0
+baidu_site_rc_count: 1
+baidu_site_prod_count: 3
+baidu_site_spa_count: 75        # 严重 — 移动 H5 app 子页面深度泄露
+baidu_site_j_count: 4
+# 总污染：83 条
+
+# ─── 品牌词"叽里呱啦"是否官网 #1 ───
+baidu_brand_rank1: true         # 自然结果 #1 ✅（但 AI 摘要不引用官网）
+sogou_brand_rank1: true
+so360_brand_rank1: true
+shenma_brand_rank1: false       # 无收录无排名
+
+# ─── 8 个核心长尾词进百度前 10 的数量 ───
+longtail_in_top10_count: 0      # 全部缺位
+# 测过的 8 题：
+#  - 0-8 岁英语启蒙        ❌
+#  - 听说先行              ❌
+#  - 自然拼读启蒙          ❌
+#  - 叽里呱啦 vs 斑马      ❌
+#  - 英语启蒙 app 哪个好   ❌（AI 摘要推洪恩/多邻国/斑马/咕噜）
+#  - 自然拼读什么时候开始学 ❌
+#  - 儿童英语启蒙每天学多长时间 ❌
+#  - 3-8 岁英语启蒙怎么开始 ❌
+
+# ─── 后台安全 ───
+niuwa_public: false             # niuwa 后台未在百度索引（但本身公网可达，需 SEC 处理）
+
+# ─── 备注（不参与算分，但留存上下文）───
+notes:
+  - "百度搜'叽里呱啦官网'前 10 出现 4 个不同 URL 入口（jiliguala.com / spa.jiliguala.com / t24.jilgl.cn / 应用宝）—— 实体识别混乱"
+  - "百度 AI 摘要回答'叽里呱啦'识别为 APP 但未引用官网 URL；二级位置同时识别为'拟声词'"
+  - "搜狗+360 品牌词前 10 完全没有小红书/知乎/百家号/抖音种草内容"
+  - "整个中文互联网搜'叽里呱啦+听说先行' 0 关联（搜狗+百度双重验证）"
