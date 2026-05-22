@@ -369,13 +369,28 @@ def main():
         f"# 叽里呱啦 GEO 基线测评 {args.label} 报告",
         "",
         f"- 生成时间：{datetime.now().strftime('%Y-%m-%d %H:%M')}",
-        f"- 数据源：`{Path(args.input).name}`（{len(df)} 条样本）",
-        f"- 平台范围：{df['platform'].nunique()} 个（A 档 API）+ B 档 / C 档待补",
-        f"- 问题范围：{df['question_id'].nunique()} 题",
+        f"- 数据源：`{Path(args.input).name}`（{len(df)} 条 LLM 答题）+ `../baseline_T0_web/raw/`（官网体检）",
+        f"- 平台范围：{df['platform'].nunique()} 个 LLM（A 档 API）+ 7 个国内爬虫 UA + 5 个 SERP 引擎 + 4 个 AI 搜索",
+        f"- 问题范围：{df['question_id'].nunique()} 题 LLM 直问 + 10 题官网 AI 探测 + 8 个百度长尾排名",
+        "",
+        "> **本报告分两个频道**：",
+        "> - 📡 **频道 A | LLM 答题表现** — 见 §① ~ §⑧（站外 GEO 主战场）",
+        "> - 🌐 **频道 B | 官网自身 SEO/GEO 体检** — 见 §⓪（新增专栏）",
         "",
         "---",
         "",
     ]
+
+    # 注入官网专栏（频道 B）—— 独立维护在 report/web_channel_section.md
+    web_section_path = ROOT / "report" / "web_channel_section.md"
+    if web_section_path.exists():
+        web_section = web_section_path.read_text(encoding="utf-8").rstrip() + "\n\n"
+    else:
+        web_section = (
+            "## ⓪ 官网 SEO/GEO 基线专栏 🌐 (Web Channel)\n\n"
+            f"> ⚠️ 未找到 {web_section_path}。请先生成官网专栏数据。\n\n"
+            "---\n\n"
+        )
 
     body = [
         section_overview(df, rules),
@@ -388,7 +403,7 @@ def main():
         section_content_grid(questions),
     ]
 
-    out = "\n".join(header) + "\n\n".join(b for b in body if b)
+    out = "\n".join(header) + web_section + "\n\n".join(b for b in body if b)
     Path(args.output).write_text(out, encoding="utf-8")
     print(f"[ok] 报告已生成: {args.output}")
     print(f"     样本 {len(df)} 条 / 平台 {df['platform'].nunique()} 个 / 题目 {df['question_id'].nunique()} 题")

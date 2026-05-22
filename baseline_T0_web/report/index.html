@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="../../assets/favicon.ico">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>叽里呱啦 官网 SEO/GEO 体检 · T0</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#F7F8FC;color:#1A1A2E}
+
+/* 导航栏 */
+.topnav{background:#fff;border-bottom:1px solid #E8ECF4;position:sticky;top:0;z-index:100;padding-top:env(safe-area-inset-top)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;flex-direction:row;align-items:center;gap:8px;line-height:1}
+.nav-brand span{color:#29c07b}
+.nav-hamburger{display:none;align-items:center;justify-content:center;width:36px;height:36px;border:none;background:none;cursor:pointer;color:#1A1A2E;font-size:22px;flex-shrink:0;padding:0}
+.nav-links{display:flex;gap:32px}
+.nav-links a{font-size:15px;color:#6B7280;text-decoration:none;font-weight:500;transition:.2s}
+.nav-links a:hover{color:#29c07b}
+.nav-links a.active{color:#29c07b;font-weight:700}
+
+/* Hero */
+.page-hero{background:linear-gradient(135deg,#fef0f0 0%,#fff 60%);border-bottom:1px solid #E8ECF4;padding:40px 0 36px}
+.page-hero-inner{max-width:1200px;margin:0 auto;padding:0 40px}
+.page-hero .eyebrow{font-size:13px;font-weight:700;letter-spacing:2px;color:#ee4b4a;text-transform:uppercase;margin-bottom:10px}
+.page-hero h1{font-size:30px;font-weight:800;color:#1A1A2E;line-height:1.2}
+.page-hero h1 span{color:#ee4b4a}
+.page-hero .meta{font-size:15px;color:#6B7280;margin-top:10px}
+
+/* 页面主体 */
+.page-body{max-width:1200px;margin:0 auto;padding:32px 40px 60px}
+
+/* Section 标题 */
+.section-title{font-size:20px;font-weight:700;color:#1A1A2E;margin-bottom:16px;padding-left:14px;border-left:4px solid #29c07b}
+.section{margin-bottom:40px}
+
+/* 总分大卡片 */
+.score-hero{background:#fff;border-radius:24px;padding:36px 40px;box-shadow:0 4px 24px rgba(238,75,74,.12);border:2px solid #FCE4E4;display:grid;grid-template-columns:auto 1fr;gap:36px;align-items:center;margin-bottom:24px}
+.score-num-wrap{text-align:center}
+.score-num{font-size:96px;font-weight:900;line-height:1;color:#ee4b4a;letter-spacing:-3px}
+.score-max{font-size:24px;color:#9CA3AF;font-weight:700;margin-left:4px}
+.score-grade{margin-top:8px;display:inline-block;background:#ee4b4a;color:#fff;font-size:14px;font-weight:700;padding:4px 14px;border-radius:20px}
+.score-bar-wrap{flex:1}
+.score-desc{font-size:18px;font-weight:600;color:#1A1A2E;margin-bottom:10px;line-height:1.5}
+.score-detail{font-size:14px;color:#6B7280;line-height:1.7}
+.score-track{margin-top:18px;background:#F7F8FC;border-radius:10px;height:12px;overflow:hidden;position:relative}
+.score-fill{height:100%;background:linear-gradient(90deg,#ee4b4a 0%,#f78e20 70%,#29c07b 100%);border-radius:10px;transition:width .8s ease}
+.score-ticks{display:flex;justify-content:space-between;font-size:11px;color:#9CA3AF;margin-top:6px}
+.score-ticks span{display:flex;flex-direction:column;align-items:center;gap:2px}
+.score-ticks .tick-now{color:#ee4b4a;font-weight:700}
+.score-ticks .tick-target{color:#29c07b;font-weight:700}
+
+/* 6 维度评分 */
+.dim-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.dim-card{background:#fff;border-radius:18px;padding:22px;box-shadow:0 2px 16px rgba(41,192,123,.08);border:1px solid #E8ECF4;transition:.2s}
+.dim-card:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(41,192,123,.14)}
+.dim-card-hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.dim-letter{font-size:24px;font-weight:900;color:#29c07b}
+.dim-weight{font-size:12px;color:#9CA3AF;font-weight:600}
+.dim-name{font-size:14px;font-weight:600;color:#6B7280;margin-bottom:14px;line-height:1.4;min-height:38px}
+.dim-score{display:flex;align-items:baseline;gap:4px}
+.dim-now{font-size:30px;font-weight:800}
+.dim-target{font-size:14px;color:#9CA3AF;font-weight:600}
+.dim-bar{margin-top:10px;background:#F7F8FC;height:6px;border-radius:6px;overflow:hidden}
+.dim-bar-fill{height:100%;border-radius:6px;transition:width .6s ease}
+.dim-card.red .dim-now{color:#ee4b4a}
+.dim-card.red .dim-bar-fill{background:#ee4b4a}
+.dim-card.orange .dim-now{color:#f78e20}
+.dim-card.orange .dim-bar-fill{background:#f78e20}
+.dim-card.gray .dim-now{color:#9CA3AF}
+.dim-card.gray .dim-bar-fill{background:#9CA3AF}
+
+/* 跟踪曲线 */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tl-card{background:#fff;border-radius:16px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.04);border:1px solid #E8ECF4;text-align:center;position:relative}
+.tl-card .tl-when{font-size:13px;color:#9CA3AF;font-weight:600;margin-bottom:4px}
+.tl-card .tl-score{font-size:34px;font-weight:800;line-height:1}
+.tl-card .tl-grade{font-size:12px;font-weight:600;margin-top:6px;padding:2px 10px;border-radius:20px;display:inline-block}
+.tl-card .tl-action{font-size:12px;color:#6B7280;line-height:1.5;margin-top:10px}
+.tl-card.t0 .tl-score{color:#ee4b4a}.tl-card.t0 .tl-grade{background:#FEF0F0;color:#ee4b4a}
+.tl-card.t1 .tl-score{color:#f78e20}.tl-card.t1 .tl-grade{background:#FFF7E6;color:#f78e20}
+.tl-card.t2 .tl-score{color:#29c07b}.tl-card.t2 .tl-grade{background:#F0FAF4;color:#29c07b}
+.tl-card.t3 .tl-score{color:#16a34a}.tl-card.t3 .tl-grade{background:#dcfce7;color:#16a34a}
+@media(max-width:760px){.timeline{grid-template-columns:repeat(2,1fr)}}
+
+/* KPI 三栏 */
+.kpi-3col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px}
+@media(max-width:760px){.kpi-3col{grid-template-columns:1fr}}
+.kpi-mini{background:#fff;border-radius:14px;padding:18px;box-shadow:0 1px 8px rgba(0,0,0,.03);border:1px solid #E8ECF4}
+.kpi-mini-label{font-size:13px;color:#6B7280;font-weight:600;margin-bottom:8px;line-height:1.5;min-height:38px}
+.kpi-mini-val{font-size:28px;font-weight:800;line-height:1}
+.kpi-mini-val .small{font-size:14px;color:#9CA3AF;font-weight:600;margin-left:2px}
+.kpi-mini-tgt{font-size:12px;color:#29c07b;margin-top:6px;font-weight:600}
+.kpi-mini.red .kpi-mini-val{color:#ee4b4a}
+.kpi-mini.orange .kpi-mini-val{color:#f78e20}
+.kpi-mini.green .kpi-mini-val{color:#29c07b}
+
+/* 发现卡片 */
+.finding-list{display:flex;flex-direction:column;gap:12px}
+.finding{background:#fff;border-radius:14px;padding:18px 22px;border:1px solid #E8ECF4;border-left:4px solid #ee4b4a;display:flex;gap:18px;align-items:flex-start}
+.finding-num{font-size:24px;font-weight:900;color:#ee4b4a;line-height:1;min-width:32px}
+.finding-body{flex:1}
+.finding-title{font-size:15px;font-weight:700;color:#1A1A2E;line-height:1.5;margin-bottom:4px}
+.finding-desc{font-size:13px;color:#6B7280;line-height:1.6}
+.finding code{background:#F7F8FC;color:#ee4b4a;padding:1px 6px;border-radius:4px;font-size:12px;font-family:"SF Mono",Menlo,monospace}
+
+/* 联动逻辑 */
+.linkage{background:#fff;border-radius:18px;padding:24px;border:1px solid #E8ECF4;box-shadow:0 2px 16px rgba(41,192,123,.06)}
+.linkage-flow{font-family:"SF Mono",Menlo,monospace;font-size:14px;line-height:2;color:#374151;background:#F7F8FC;padding:18px;border-radius:12px;white-space:pre;overflow-x:auto}
+
+footer{text-align:center;font-size:14px;color:#6B7280;margin-top:48px;padding:24px;padding-bottom:calc(24px + env(safe-area-inset-bottom));border-top:1px solid #E8ECF4;background:#fff}
+
+@media(max-width:760px){
+  .nav-hamburger{display:flex!important}
+  .nav-inner{padding:0 16px;height:52px}
+  .nav-links{display:none;position:absolute;top:calc(52px + env(safe-area-inset-top));left:0;width:100%;background:#fff;border-bottom:1px solid #E8ECF4;flex-direction:column;padding:8px 20px 14px;gap:0;z-index:200;box-shadow:0 6px 20px rgba(0,0,0,.08)}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:11px 0;font-size:16px;border-bottom:1px solid #F7F8FC;white-space:nowrap}
+  .page-hero{padding:24px 0 20px}
+  .page-hero-inner{padding:0 16px}
+  .page-hero h1{font-size:22px}
+  .page-body{padding:16px 16px 40px}
+  .score-hero{grid-template-columns:1fr;padding:24px 20px;gap:16px;text-align:center}
+  .score-num{font-size:72px}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-inner">
+    <div class="nav-brand"><img src="../../assets/logo.png" alt="叽里呱啦" style="height:28px;width:auto"><span style="font-size:15px;font-weight:600;color:#29c07b;letter-spacing:0;white-space:nowrap">GEO 监控中心</span></div>
+    <div class="nav-links">
+      <a href="../../index.html">总览</a>
+      <a href="../../content_ops/trends.html">趋势追踪</a>
+      <a href="../../content_ops/index.html">优化行动</a>
+      <a href="../../baseline_T0/report/baseline_T0_report.html">基线报告</a>
+      <a href="index.html" class="active">官网体检</a>
+      <a href="../../content_ops/cases.html">案例明细</a>
+    </div>
+  <button class="nav-hamburger" id="navToggle" aria-label="导航菜单">☰</button>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="eyebrow">WEB CHANNEL · T0 = 2026-05-21</div>
+    <h1>叽里呱啦官网 <span>SEO / GEO 体检</span></h1>
+    <div class="meta">T0 基线 · 7 爬虫 UA × 6 公开页 + 7 LLM × 10 题 + 5 SERP 引擎 + 4 Lighthouse 页面</div>
+    <div class="meta" style="margin-top:4px;color:#9CA3AF">www.jiliguala.com 自身的可见度体检——给"官网作为品牌权威锚点"打个分，作为改造前后对比的原点</div>
+  </div>
+</div>
+
+<div class="page-body">
+
+<!-- ① 健康总分 -->
+<div class="section">
+  <div class="section-title">① 综合健康度评分</div>
+
+  <div class="score-hero">
+    <div class="score-num-wrap">
+      <div><span class="score-num">32.0</span><span class="score-max">/100</span></div>
+      <div class="score-grade">🔴 严重不足</div>
+    </div>
+    <div class="score-bar-wrap">
+      <div class="score-desc">官网当前对国内 AI/搜索几乎零贡献</div>
+      <div class="score-detail">12 个 GEO 核心词在全站 body 命中 <b>0 次</b>；0 条 JSON-LD；2/6 页是 SPA 空壳；robots/sitemap/llms.txt 全 404；5 个子域公网可达（spa 子域在百度被索引 75 条 URL）；7 个国内 LLM 中 1 个给错官网 URL，1 个把品牌识别为"拟声词"。</div>
+      <div class="score-track">
+        <div class="score-fill" style="width:32%"></div>
+      </div>
+      <div class="score-ticks">
+        <span>0</span>
+        <span class="tick-now" style="position:absolute;left:32%;transform:translateX(-50%);margin-top:0">▲ 32 当前</span>
+        <span>45</span>
+        <span class="tick-target" style="position:absolute;left:62%;transform:translateX(-50%);margin-top:0">▲ 62 T1 目标</span>
+        <span>75</span>
+        <span>85+ 行业标杆</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:14px;background:#FFF7E6;border:1px solid #FDC97A;border-radius:12px;padding:12px 16px;font-size:14px;color:#6b3a00;line-height:1.7">
+    <strong>等级标尺</strong>：90+ 行业标杆 ｜ 75-89 良好 ｜ 60-74 合格 ｜ 45-59 不及格 ｜ <b style="color:#ee4b4a">30-44 严重不足 ← 当前</b> ｜ &lt;30 未启动
+  </div>
+</div>
+
+<!-- ② 6 维度评分 -->
+<div class="section">
+  <div class="section-title">② 6 大维度评分明细</div>
+
+  <div class="dim-grid">
+    <div class="dim-card orange">
+      <div class="dim-card-hd"><span class="dim-letter">A</span><span class="dim-weight">权重 15</span></div>
+      <div class="dim-name">基础工程<br>robots/sitemap/canonical/llms.txt</div>
+      <div class="dim-score"><span class="dim-now">4.0</span><span class="dim-target">/ 15 → T1 ≥13</span></div>
+      <div class="dim-bar"><div class="dim-bar-fill" style="width:27%"></div></div>
+    </div>
+
+    <div class="dim-card orange">
+      <div class="dim-card-hd"><span class="dim-letter">B</span><span class="dim-weight">权重 15</span></div>
+      <div class="dim-name">内容可见性<br>SPA 空壳 / H1 / img alt</div>
+      <div class="dim-score"><span class="dim-now">7.4</span><span class="dim-target">/ 15 → T1 ≥12</span></div>
+      <div class="dim-bar"><div class="dim-bar-fill" style="width:49%"></div></div>
+    </div>
+
+    <div class="dim-card gray">
+      <div class="dim-card-hd"><span class="dim-letter">C</span><span class="dim-weight">权重 15</span></div>
+      <div class="dim-name">结构化数据<br>JSON-LD / Open Graph</div>
+      <div class="dim-score"><span class="dim-now">0.0</span><span class="dim-target">/ 15 → T1 ≥12</span></div>
+      <div class="dim-bar"><div class="dim-bar-fill" style="width:0%"></div></div>
+    </div>
+
+    <div class="dim-card orange">
+      <div class="dim-card-hd"><span class="dim-letter">D</span><span class="dim-weight">权重 20</span></div>
+      <div class="dim-name">收录与排名<br>百度/搜狗/360/神马 + 8 长尾词</div>
+      <div class="dim-score"><span class="dim-now">9.5</span><span class="dim-target">/ 20 → T1 ≥12</span></div>
+      <div class="dim-bar"><div class="dim-bar-fill" style="width:48%"></div></div>
+    </div>
+
+    <div class="dim-card orange">
+      <div class="dim-card-hd"><span class="dim-letter">E</span><span class="dim-weight">权重 25</span></div>
+      <div class="dim-name">AI 知识层 GEO<br>7 LLM × 10 题 = 70 次直问</div>
+      <div class="dim-score"><span class="dim-now">10.1</span><span class="dim-target">/ 25 → T1 ≥12</span></div>
+      <div class="dim-bar"><div class="dim-bar-fill" style="width:40%"></div></div>
+    </div>
+
+    <div class="dim-card red">
+      <div class="dim-card-hd"><span class="dim-letter">F</span><span class="dim-weight">权重 10</span></div>
+      <div class="dim-name">安全与权重<br>子域污染 / 后台公网 / canonical</div>
+      <div class="dim-score"><span class="dim-now">1.0</span><span class="dim-target">/ 10 → T1 ≥6</span></div>
+      <div class="dim-bar"><div class="dim-bar-fill" style="width:10%"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ③ T0 → T3 跟踪曲线 -->
+<div class="section">
+  <div class="section-title">③ T0 → T3 跟踪曲线（持续复测）</div>
+
+  <div class="timeline">
+    <div class="tl-card t0">
+      <div class="tl-when">T0 · 2026-05-21（当前）</div>
+      <div class="tl-score">32</div>
+      <span class="tl-grade">🔴 严重不足</span>
+      <div class="tl-action">基线已固化</div>
+    </div>
+    <div class="tl-card t1">
+      <div class="tl-when">T1 · 第一波上线 +4 周</div>
+      <div class="tl-score">62</div>
+      <span class="tl-grade">🟡 合格</span>
+      <div class="tl-action">robots/JSON-LD/预渲染/子域 noindex</div>
+    </div>
+    <div class="tl-card t2">
+      <div class="tl-when">T2 · +半年</div>
+      <div class="tl-score">75</div>
+      <span class="tl-grade">🟢 良好</span>
+      <div class="tl-action">站外内容矩阵铺开，长尾排名进前 10</div>
+    </div>
+    <div class="tl-card t3">
+      <div class="tl-when">T3 · +一年</div>
+      <div class="tl-score">85</div>
+      <span class="tl-grade">🟢 标杆</span>
+      <div class="tl-action">AI 引用率破 30%，方法词稳定占位</div>
+    </div>
+  </div>
+</div>
+
+<!-- ④ 技术层五大量化基线 -->
+<div class="section">
+  <div class="section-title">④ 技术层五大量化基线</div>
+  <div class="kpi-3col">
+    <div class="kpi-mini red">
+      <div class="kpi-mini-label">SPA 空壳页数 / 总公开页</div>
+      <div class="kpi-mini-val">2 / 6<span class="small">（mabout, download）</span></div>
+      <div class="kpi-mini-tgt">T1 目标 → 0 / 14</div>
+    </div>
+    <div class="kpi-mini red">
+      <div class="kpi-mini-label">全站 JSON-LD 实体总数</div>
+      <div class="kpi-mini-val">0</div>
+      <div class="kpi-mini-tgt">T1 目标 → ≥12</div>
+    </div>
+    <div class="kpi-mini red">
+      <div class="kpi-mini-label">全站 body 文本 GEO 方法词总命中</div>
+      <div class="kpi-mini-val">0</div>
+      <div class="kpi-mini-tgt">T1 目标 → ≥50</div>
+    </div>
+    <div class="kpi-mini red">
+      <div class="kpi-mini-label">暴露的内部子域数</div>
+      <div class="kpi-mini-val">5<span class="small">（dev/rc/prod/spa/j）</span></div>
+      <div class="kpi-mini-tgt">T1 目标 → 0</div>
+    </div>
+    <div class="kpi-mini red">
+      <div class="kpi-mini-label">robots.txt + sitemap.xml + llms.txt 可达</div>
+      <div class="kpi-mini-val">0 / 3</div>
+      <div class="kpi-mini-tgt">T1 目标 → 3 / 3</div>
+    </div>
+    <div class="kpi-mini orange">
+      <div class="kpi-mini-label">Lighthouse 首页 SEO 评分</div>
+      <div class="kpi-mini-val">91<span class="small"> / 100</span></div>
+      <div class="kpi-mini-tgt">T1 目标 → ≥95</div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑤ AI 知识层基线 -->
+<div class="section">
+  <div class="section-title">⑤ AI 知识层基线（7 LLM × 10 题 = 70 次直问）</div>
+  <div class="kpi-3col">
+    <div class="kpi-mini orange">
+      <div class="kpi-mini-label">"叽里呱啦"品牌识别率</div>
+      <div class="kpi-mini-val">56.7%<span class="small">（38/67）</span></div>
+      <div class="kpi-mini-tgt">T1 目标 → ≥80%</div>
+    </div>
+    <div class="kpi-mini red">
+      <div class="kpi-mini-label">官网 URL 引用率</div>
+      <div class="kpi-mini-val">6.0%<span class="small">（4/67）</span></div>
+      <div class="kpi-mini-tgt">T1 目标 → ≥30%</div>
+    </div>
+    <div class="kpi-mini red">
+      <div class="kpi-mini-label">GEO 方法词总命中</div>
+      <div class="kpi-mini-val">16<span class="small"> 次 / 67 答</span></div>
+      <div class="kpi-mini-tgt">T1 目标 → ≥80</div>
+    </div>
+    <div class="kpi-mini green">
+      <div class="kpi-mini-label">错挂竞品率</div>
+      <div class="kpi-mini-val">0%</div>
+      <div class="kpi-mini-tgt">T1 目标 → 维持 &lt;5%</div>
+    </div>
+    <div class="kpi-mini red">
+      <div class="kpi-mini-label">错 URL 数（如混元给 jiligua.com）</div>
+      <div class="kpi-mini-val">1<span class="small"> 个 AI</span></div>
+      <div class="kpi-mini-tgt">T1 目标 → 0</div>
+    </div>
+    <div class="kpi-mini orange">
+      <div class="kpi-mini-label">直接拒答"叽里呱啦官网"</div>
+      <div class="kpi-mini-val">2<span class="small"> 个 AI（DS+豆包）</span></div>
+      <div class="kpi-mini-tgt">T1 目标 → 0</div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑥ SERP 收录层基线 -->
+<div class="section">
+  <div class="section-title">⑥ SERP 收录层基线（百度浏览器 + WebFetch 实测）</div>
+  <div class="kpi-3col">
+    <div class="kpi-mini orange">
+      <div class="kpi-mini-label">百度 site:jiliguala.com 总收录</div>
+      <div class="kpi-mini-val">2,990</div>
+      <div class="kpi-mini-tgt">T1 目标 → ≥3,500</div>
+    </div>
+    <div class="kpi-mini red">
+      <div class="kpi-mini-label">神马搜索 jiliguala.com 收录</div>
+      <div class="kpi-mini-val">0</div>
+      <div class="kpi-mini-tgt">T1 目标 → ≥30</div>
+    </div>
+    <div class="kpi-mini red">
+      <div class="kpi-mini-label">百度子域索引污染</div>
+      <div class="kpi-mini-val">83<span class="small"> 条（spa 占 75）</span></div>
+      <div class="kpi-mini-tgt">T1 目标 → 0</div>
+    </div>
+    <div class="kpi-mini red">
+      <div class="kpi-mini-label">8 核心长尾词官网进百度前 10</div>
+      <div class="kpi-mini-val">0 / 8</div>
+      <div class="kpi-mini-tgt">T1 目标 → ≥4 / 8</div>
+    </div>
+    <div class="kpi-mini green">
+      <div class="kpi-mini-label">"叽里呱啦"品牌词百度自然结果</div>
+      <div class="kpi-mini-val">#1<span class="small"> 官网</span></div>
+      <div class="kpi-mini-tgt">T1 目标 → 维持 #1</div>
+    </div>
+    <div class="kpi-mini red">
+      <div class="kpi-mini-label">百度 AI 摘要回答"启蒙 app 哪个好"提到品牌</div>
+      <div class="kpi-mini-val">❌</div>
+      <div class="kpi-mini-tgt">T1 目标 → ✅ 进前 3 推荐</div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑦ T0 十大震撼发现 -->
+<div class="section">
+  <div class="section-title">⑦ T0 十大震撼发现（给老板汇报）</div>
+  <div class="finding-list">
+    <div class="finding"><div class="finding-num">01</div><div class="finding-body"><div class="finding-title">腾讯混元给出错误官网 URL <code>jiligua.com</code>（缺 la）</div><div class="finding-desc">混元 hunyuan-turbo 被问"叽里呱啦官网是哪个"时，自信地给出错的 URL。GEO 改造 head 模板的 sameAs + JSON-LD url 字段必须修复这个实体识别错误。</div></div></div>
+
+    <div class="finding"><div class="finding-num">02</div><div class="finding-body"><div class="finding-title">DeepSeek + 豆包直接拒答"叽里呱啦官网是哪个"</div><div class="finding-desc">两个国内大模型对最基础品牌问题选择"不回答"，建议用户去搜索引擎找——意味着对叽里呱啦完全无可靠语料，必须用官网权威页 + 站外内容矩阵补这个空白。</div></div></div>
+
+    <div class="finding"><div class="finding-num">03</div><div class="finding-body"><div class="finding-title">通义/文心/混元被问"叽里呱啦是什么"全部回答"拟声词"</div><div class="finding-desc">3 个主流国内 LLM 完全不识别为儿童英语启蒙品牌，把品牌当成形容说话声音的形容词。这是 GEO 改造最核心要解决的命题。</div></div></div>
+
+    <div class="finding"><div class="finding-num">04</div><div class="finding-body"><div class="finding-title">百度 AI 摘要回答"启蒙 app 哪个好"完全漏掉叽里呱啦</div><div class="finding-desc">推荐了洪恩、多邻国、斑马 AI 学、咕噜口语——百度自家 AI 没把叽里呱啦放进启蒙 APP 类目。</div></div></div>
+
+    <div class="finding"><div class="finding-num">05</div><div class="finding-body"><div class="finding-title">百度索引 spa.jiliguala.com 子域 75 条 URL</div><div class="finding-desc">移动 H5 app 的隐私政策、用户协议、注销协议、视频预览、Sound Game 蒙氏小游戏等子页面被百度深度抓取，整个移动 app 的内部页面副本暴露给百度，严重稀释主域权重。</div></div></div>
+
+    <div class="finding"><div class="finding-num">06</div><div class="finding-body"><div class="finding-title">神马搜索 0 条收录 jiliguala.com</div><div class="finding-desc">百度+神马垄断 80% 国内移动搜索流量，神马这一半完全没占。必须接入神马站长平台做收录冲击。</div></div></div>
+
+    <div class="finding"><div class="finding-num">07</div><div class="finding-body"><div class="finding-title">8 个核心长尾问题词官网在百度前 10 全部 0 命中</div><div class="finding-desc">0-8 岁英语启蒙、听说先行、自然拼读启蒙、叽里呱啦 vs 斑马、英语启蒙 app 哪个好、自然拼读何时学、每天学多久、3-8 岁怎么开始——除品牌词外所有流量入口全部缺失。</div></div></div>
+
+    <div class="finding"><div class="finding-num">08</div><div class="finding-body"><div class="finding-title">百度搜"叽里呱啦官网"前 10 出现 4 个不同 URL 入口</div><div class="finding-desc"><code>jiliguala.com</code> / <code>spa.jiliguala.com</code> / <code>t24.jilgl.cn</code>（baseline 配置没列入的别名域名）/ 应用宝——实体识别混乱，必须用 canonical + sameAs JSON-LD 收敛。</div></div></div>
+
+    <div class="finding"><div class="finding-num">09</div><div class="finding-body"><div class="finding-title">全中文互联网搜"叽里呱啦 听说先行" 0 关联</div><div class="finding-desc">搜狗 + 百度双重验证——整个中文互联网没有任何一个页面把"叽里呱啦"和"听说先行"两个词关联起来。方法语义和品牌完全脱钩。</div></div></div>
+
+    <div class="finding"><div class="finding-num">10</div><div class="finding-body"><div class="finding-title">全站 body 文本 12 个 GEO 核心词命中 0 次</div><div class="finding-desc">听说先行、拼读进阶、短时高频、螺旋上升、兴趣驱动、学以致用、情景输入、场景开口、拼读识词、叽里呱啦、呱呱阅读、主修课——12 个核心词在官网正文里全部为 0。官网作为权威锚点 = 0。</div></div></div>
+  </div>
+</div>
+
+<!-- ⑧ 双频道联动逻辑 -->
+<div class="section">
+  <div class="section-title">⑧ 与频道 A（LLM 答题）的联动逻辑</div>
+  <div class="linkage">
+    <div class="linkage-flow">官网（频道 B）= AI 引用的"权威锚点"
+    ↓
+当前锚点 = 空白（GEO 词 0 命中 + JSON-LD 0 + 子域污染 83）
+    ↓
+导致频道 A 看到的"LLM 答题"质量低（任一 Tag 命中率 9.5%、品牌承接率 16.7%）
+    ↓
+GEO 改造策略 = 同时改两端：
+    · 频道 B（官网）做权威锚点 → 第一波 P0+SEC 上线
+    · 频道 A（站外）持续生产内容矩阵 → content_ops/ 排期
+    ↓
+两个频道分数同时上扬 = "GEO 改造投入 → 品牌资产产出" 因果链成立</div>
+    <div style="margin-top:18px;font-size:14px;color:#6B7280;line-height:1.7">
+      跨频道指标关联：
+      <ul style="margin-top:8px;padding-left:22px;line-height:1.8">
+        <li>频道 B 的 <b>"全站 GEO 词命中数 0→50"</b> ↔ 频道 A 的 <b>"任一 Tag 命中率 9.5%→30%"</b></li>
+        <li>频道 B 的 <b>"官网 URL 引用率 6%→30%"</b> ↔ 频道 A 的 <b>"品牌提及率 13%→25%"</b></li>
+        <li>频道 B 的 <b>"JSON-LD 0→12"</b> ↔ 频道 A 的 <b>"品牌承接率 16.7%→40%"</b>（结构化实体让 AI 知道"品牌就是这个方法"）</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ⑨ 数据归档与复测命令 -->
+<div class="section">
+  <div class="section-title">⑨ 数据归档与复测命令</div>
+  <div style="background:#fff;border-radius:18px;padding:24px;border:1px solid #E8ECF4;box-shadow:0 2px 16px rgba(41,192,123,.06)">
+    <div style="font-size:14px;color:#6B7280;line-height:1.8;margin-bottom:12px">
+      原始数据归档：<code style="background:#F7F8FC;color:#374151;padding:2px 8px;border-radius:4px">baseline_T0_web/raw/{crawlability,structured_data,ai_probe,lighthouse,serp}/</code><br>
+      完整跟踪表（含 T1/T2/T3 待填列）：<a href="tracking_dashboard.md" style="color:#29c07b">tracking_dashboard.md</a><br>
+      详细 T0 报告：<a href="baseline_T0_web_report.md" style="color:#29c07b">baseline_T0_web_report.md</a>
+    </div>
+    <div style="background:#0d1117;border-radius:10px;padding:18px;color:#c9d1d9;font-family:'SF Mono',Menlo,monospace;font-size:13px;line-height:1.8;overflow-x:auto">
+<span style="color:#7c8a96"># 频道 B 完整复测（T1/T2/T3 时直接跑）</span>
+PY=/Library/Frameworks/Python.framework/Versions/3.11/bin/python3
+cd /Users/alex/Projects/GEO_Claude/baseline_T0_web
+$PY collectors/crawlability.py --label T1_$(date +%Y-%m-%d)
+$PY collectors/structured_data.py --label T1_$(date +%Y-%m-%d)
+exec zsh -i -c "$PY collectors/ai_products_probe.py --label T1_$(date +%Y-%m-%d)"
+<span style="color:#7c8a96"># Lighthouse + 浏览器 SERP（用 Claude in Chrome）参考 tracking_dashboard.md</span></div>
+  </div>
+</div>
+
+</div>
+
+<footer>叽里呱啦 · GEO 监控中心 · 官网体检 T0 = 2026-05-21 · <a href="../../index.html" style="color:#29c07b">返回总览</a></footer>
+
+<script>
+(function(){
+  var btn = document.getElementById('navToggle');
+  if(!btn) return;
+  btn.addEventListener('click', function(){
+    var links = document.querySelector('.nav-links');
+    links.classList.toggle('open');
+    btn.textContent = links.classList.contains('open') ? '✕' : '☰';
+  });
+  document.querySelectorAll('.nav-links a').forEach(function(a){
+    a.addEventListener('click', function(){
+      document.querySelector('.nav-links').classList.remove('open');
+      btn.textContent = '☰';
+    });
+  });
+})();
+</script>
+</body>
+</html>
