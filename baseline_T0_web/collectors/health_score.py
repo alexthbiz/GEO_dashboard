@@ -1,13 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-health_score.py — 官网 SEO/GEO 综合健康度自动算分
+health_score.py — 官网 SEO/GEO 综合健康度【唯一权威算分脚本】
+
+⚠️ 本脚本是健康度评分的【唯一口径】
+- 任何地方（dashboard / 周报 / 老板汇报）出现的健康分数必须由本脚本输出
+- 禁止任何形式的手算估算 —— 算错或不严谨的数字会被这套脚本一票否决
+- 如果脚本算法本身不合理需要调整，改这个文件，不要手算"修正"
+- 修改算法时同步更新 report/tracking_dashboard.md §6.0 评分基准表
+
+T0 基线（2026-05-21）= 36.5 / 100 🔴 严重不足
+T1 目标（4 周后）    = 62 / 100  🟡 合格
 
 输入：raw/{crawlability,structured_data,ai_probe,lighthouse}/ 下 --label 对应的数据
      + 可选 raw/serp/{label}.yaml（手动 SERP 数据）
 输出：report/scores_{label}.json + scores_{label}.md（含 6 维度子项明细 + 总分 + 与 T0 diff）
 
-打分基准（共 100 分，详见 report/tracking_dashboard.md §6.0）：
+打分基准（共 100 分）：
 - A. 基础工程 15 分    robots(3)+sitemap(3)+llms.txt(2)+canonical(3)+HTTPS&备案(2)+HTTP200率(2)
 - B. 内容可见性 15 分  非SPA空壳率(5)+title覆盖(2)+description覆盖(2)+H1合规(3)+img alt覆盖(3)
 - C. 结构化数据 15 分  Organization(3)+EduOrg(2)+FAQPage(2)+Course(3)+Breadcrumb(1)+OG(4)
