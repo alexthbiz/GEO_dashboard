@@ -52,24 +52,37 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 .score-ticks .tick-target{color:#29c07b;font-weight:700}
 
 /* 6 维度评分 */
-.dim-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.dim-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
 .dim-card{background:#fff;border-radius:18px;padding:22px;box-shadow:0 2px 16px rgba(41,192,123,.08);border:1px solid #E8ECF4;transition:.2s}
 .dim-card:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(41,192,123,.14)}
-.dim-card-hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
-.dim-letter{font-size:24px;font-weight:900;color:#29c07b}
-.dim-weight{font-size:12px;color:#9CA3AF;font-weight:600}
-.dim-name{font-size:14px;font-weight:600;color:#6B7280;margin-bottom:14px;line-height:1.4;min-height:38px}
-.dim-score{display:flex;align-items:baseline;gap:4px}
-.dim-now{font-size:30px;font-weight:800}
-.dim-target{font-size:14px;color:#9CA3AF;font-weight:600}
-.dim-bar{margin-top:10px;background:#F7F8FC;height:6px;border-radius:6px;overflow:hidden}
+.dim-card-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #F7F8FC}
+.dim-name-wrap{flex:1}
+.dim-letter-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.dim-letter{font-size:16px;font-weight:900;color:#fff;background:#29c07b;width:26px;height:26px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.dim-name{font-size:15px;font-weight:700;color:#1A1A2E;line-height:1.3}
+.dim-sub{font-size:12px;color:#9CA3AF;line-height:1.5;margin-top:2px}
+.dim-grade-badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;white-space:nowrap}
+.dim-explain{font-size:13px;color:#6B7280;line-height:1.6;margin:8px 0 14px;background:#F7F8FC;padding:10px 12px;border-radius:8px;border-left:3px solid #29c07b}
+.dim-score{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.dim-score-now{display:flex;align-items:baseline;gap:2px}
+.dim-now{font-size:32px;font-weight:800;line-height:1}
+.dim-max{font-size:14px;color:#9CA3AF;font-weight:600;margin-left:2px}
+.dim-tgt{font-size:12px;color:#29c07b;font-weight:700;background:#F0FAF4;padding:3px 8px;border-radius:6px}
+.dim-bar{margin-top:12px;background:#F7F8FC;height:8px;border-radius:6px;overflow:hidden;position:relative}
 .dim-bar-fill{height:100%;border-radius:6px;transition:width .6s ease}
+.dim-bar-tgt{position:absolute;top:-2px;height:12px;width:2px;background:#29c07b}
+.dim-card.red .dim-letter{background:#ee4b4a}
 .dim-card.red .dim-now{color:#ee4b4a}
 .dim-card.red .dim-bar-fill{background:#ee4b4a}
+.dim-card.red .dim-grade-badge{background:#FEF0F0;color:#ee4b4a}
+.dim-card.orange .dim-letter{background:#f78e20}
 .dim-card.orange .dim-now{color:#f78e20}
 .dim-card.orange .dim-bar-fill{background:#f78e20}
+.dim-card.orange .dim-grade-badge{background:#FFF7E6;color:#f78e20}
+.dim-card.gray .dim-letter{background:#9CA3AF}
 .dim-card.gray .dim-now{color:#9CA3AF}
 .dim-card.gray .dim-bar-fill{background:#9CA3AF}
+.dim-card.gray .dim-grade-badge{background:#F3F4F6;color:#6B7280}
 
 /* 跟踪曲线 */
 .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
@@ -189,48 +202,113 @@ footer{text-align:center;font-size:14px;color:#6B7280;margin-top:48px;padding:24
 <div class="section">
   <div class="section-title">② 6 大维度评分明细</div>
 
+  <div style="font-size:13px;color:#6B7280;line-height:1.7;margin-bottom:16px;background:#F7F8FC;padding:12px 16px;border-radius:10px;border-left:3px solid #29c07b">
+    💡 <b>怎么看每张卡片</b>：左侧数字是<b>当前得分</b>，灰色"/ 15"表示这个维度<b>满分多少</b>（6 个维度满分加起来 = 100）。右侧绿色"目标 ≥13"是 T1 复测时希望达到的分数。绿色刻度线在进度条上标出 T1 目标位置。
+  </div>
+
   <div class="dim-grid">
     <div class="dim-card orange">
-      <div class="dim-card-hd"><span class="dim-letter">A</span><span class="dim-weight">权重 15</span></div>
-      <div class="dim-name">基础工程<br>robots/sitemap/canonical/llms.txt</div>
-      <div class="dim-score"><span class="dim-now">4.0</span><span class="dim-target">/ 15 → T1 ≥13</span></div>
-      <div class="dim-bar"><div class="dim-bar-fill" style="width:27%"></div></div>
+      <div class="dim-card-hd">
+        <div class="dim-name-wrap">
+          <div class="dim-letter-row"><span class="dim-letter">A</span><span class="dim-name">基础工程</span></div>
+          <div class="dim-sub">robots.txt / sitemap.xml / canonical / llms.txt</div>
+        </div>
+        <span class="dim-grade-badge">🟠 偏低</span>
+      </div>
+      <div class="dim-explain">爬虫"能不能找到你"的入口配置——这些都是技术规范文件，搜索引擎和 AI 通过它们知道你有哪些页面、哪些可以抓</div>
+      <div class="dim-score">
+        <div class="dim-score-now"><span class="dim-now">4.0</span><span class="dim-max">分 / 满分 15</span></div>
+        <span class="dim-tgt">目标 ≥13</span>
+      </div>
+      <div class="dim-bar"><div class="dim-bar-fill" style="width:27%"></div><div class="dim-bar-tgt" style="left:87%"></div></div>
     </div>
 
     <div class="dim-card orange">
-      <div class="dim-card-hd"><span class="dim-letter">B</span><span class="dim-weight">权重 15</span></div>
-      <div class="dim-name">内容可见性<br>SPA 空壳 / H1 / img alt</div>
-      <div class="dim-score"><span class="dim-now">7.4</span><span class="dim-target">/ 15 → T1 ≥12</span></div>
-      <div class="dim-bar"><div class="dim-bar-fill" style="width:49%"></div></div>
+      <div class="dim-card-hd">
+        <div class="dim-name-wrap">
+          <div class="dim-letter-row"><span class="dim-letter">B</span><span class="dim-name">内容可见性</span></div>
+          <div class="dim-sub">SPA 空壳页 / H1 标题 / 图片 alt 描述</div>
+        </div>
+        <span class="dim-grade-badge">🟠 偏低</span>
+      </div>
+      <div class="dim-explain">爬虫"看不看得到正文"——你的页面打开有内容，但爬虫拿到的可能是空白（SPA 空壳）；H1 和图片 alt 是搜索引擎理解内容的关键信号</div>
+      <div class="dim-score">
+        <div class="dim-score-now"><span class="dim-now">7.4</span><span class="dim-max">分 / 满分 15</span></div>
+        <span class="dim-tgt">目标 ≥12</span>
+      </div>
+      <div class="dim-bar"><div class="dim-bar-fill" style="width:49%"></div><div class="dim-bar-tgt" style="left:80%"></div></div>
     </div>
 
     <div class="dim-card gray">
-      <div class="dim-card-hd"><span class="dim-letter">C</span><span class="dim-weight">权重 15</span></div>
-      <div class="dim-name">结构化数据<br>JSON-LD / Open Graph</div>
-      <div class="dim-score"><span class="dim-now">0.0</span><span class="dim-target">/ 15 → T1 ≥12</span></div>
-      <div class="dim-bar"><div class="dim-bar-fill" style="width:0%"></div></div>
+      <div class="dim-card-hd">
+        <div class="dim-name-wrap">
+          <div class="dim-letter-row"><span class="dim-letter">C</span><span class="dim-name">结构化数据</span></div>
+          <div class="dim-sub">JSON-LD 结构化标签 / Open Graph 微信分享卡</div>
+        </div>
+        <span class="dim-grade-badge">⛔ 零分</span>
+      </div>
+      <div class="dim-explain">告诉 AI "你是什么"——结构化数据让搜索引擎/AI 直接读懂"叽里呱啦是一家儿童英语启蒙公司、2014 年成立、有这些课程"，而不是从乱七八糟的网页文字里猜</div>
+      <div class="dim-score">
+        <div class="dim-score-now"><span class="dim-now">0.0</span><span class="dim-max">分 / 满分 15</span></div>
+        <span class="dim-tgt">目标 ≥12</span>
+      </div>
+      <div class="dim-bar"><div class="dim-bar-fill" style="width:0%"></div><div class="dim-bar-tgt" style="left:80%"></div></div>
     </div>
 
     <div class="dim-card orange">
-      <div class="dim-card-hd"><span class="dim-letter">D</span><span class="dim-weight">权重 20</span></div>
-      <div class="dim-name">收录与排名<br>百度/搜狗/360/神马 + 8 长尾词</div>
-      <div class="dim-score"><span class="dim-now">9.5</span><span class="dim-target">/ 20 → T1 ≥12</span></div>
-      <div class="dim-bar"><div class="dim-bar-fill" style="width:48%"></div></div>
+      <div class="dim-card-hd">
+        <div class="dim-name-wrap">
+          <div class="dim-letter-row"><span class="dim-letter">D</span><span class="dim-name">收录与排名</span></div>
+          <div class="dim-sub">百度/搜狗/360/神马 收录 + 8 个长尾词排名</div>
+        </div>
+        <span class="dim-grade-badge">🟠 偏低</span>
+      </div>
+      <div class="dim-explain">搜索引擎里"用户搜什么能看到你"——除了搜品牌名能找到首页外，搜"0-8 岁英语启蒙""自然拼读怎么学"这些用户常搜的问题，你目前完全看不到</div>
+      <div class="dim-score">
+        <div class="dim-score-now"><span class="dim-now">9.5</span><span class="dim-max">分 / 满分 20</span></div>
+        <span class="dim-tgt">目标 ≥12</span>
+      </div>
+      <div class="dim-bar"><div class="dim-bar-fill" style="width:48%"></div><div class="dim-bar-tgt" style="left:60%"></div></div>
     </div>
 
     <div class="dim-card orange">
-      <div class="dim-card-hd"><span class="dim-letter">E</span><span class="dim-weight">权重 25</span></div>
-      <div class="dim-name">AI 知识层 GEO<br>7 LLM × 10 题 = 70 次直问</div>
-      <div class="dim-score"><span class="dim-now">10.1</span><span class="dim-target">/ 25 → T1 ≥12</span></div>
-      <div class="dim-bar"><div class="dim-bar-fill" style="width:40%"></div></div>
+      <div class="dim-card-hd">
+        <div class="dim-name-wrap">
+          <div class="dim-letter-row"><span class="dim-letter">E</span><span class="dim-name">AI 知识层 (GEO)</span></div>
+          <div class="dim-sub">豆包/Kimi/通义/文心/DeepSeek/智谱/混元 × 10 题</div>
+        </div>
+        <span class="dim-grade-badge">🟠 偏低</span>
+      </div>
+      <div class="dim-explain">AI 答品牌问题时"提不提到你 + 引不引用你官网"——我们问了 7 个国内 AI 共 70 次。当前只有 6% 的回答会给出官网链接，1 个 AI 把品牌识别成"拟声词"</div>
+      <div class="dim-score">
+        <div class="dim-score-now"><span class="dim-now">10.1</span><span class="dim-max">分 / 满分 25</span></div>
+        <span class="dim-tgt">目标 ≥12</span>
+      </div>
+      <div class="dim-bar"><div class="dim-bar-fill" style="width:40%"></div><div class="dim-bar-tgt" style="left:48%"></div></div>
     </div>
 
     <div class="dim-card red">
-      <div class="dim-card-hd"><span class="dim-letter">F</span><span class="dim-weight">权重 10</span></div>
-      <div class="dim-name">安全与权重<br>子域污染 / 后台公网 / canonical</div>
-      <div class="dim-score"><span class="dim-now">1.0</span><span class="dim-target">/ 10 → T1 ≥6</span></div>
-      <div class="dim-bar"><div class="dim-bar-fill" style="width:10%"></div></div>
+      <div class="dim-card-hd">
+        <div class="dim-name-wrap">
+          <div class="dim-letter-row"><span class="dim-letter">F</span><span class="dim-name">安全与权重</span></div>
+          <div class="dim-sub">内部子域是否暴露 / 后台是否公网可达</div>
+        </div>
+        <span class="dim-grade-badge">🔴 危险</span>
+      </div>
+      <div class="dim-explain">"内部页面有没有被错误暴露"——dev/rc/prod 这些内部环境本来应该屏蔽爬虫，但目前全公网可达；spa 子域被百度索引了 75 条 URL，稀释主域权重</div>
+      <div class="dim-score">
+        <div class="dim-score-now"><span class="dim-now">1.0</span><span class="dim-max">分 / 满分 10</span></div>
+        <span class="dim-tgt">目标 ≥6</span>
+      </div>
+      <div class="dim-bar"><div class="dim-bar-fill" style="width:10%"></div><div class="dim-bar-tgt" style="left:60%"></div></div>
     </div>
+  </div>
+
+  <div style="margin-top:16px;background:#F0FAF4;border:1px solid #BBE5C9;border-radius:12px;padding:14px 18px;font-size:14px;color:#1A1A2E;line-height:1.7">
+    <b style="color:#29c07b">📊 怎么看这 6 个维度的优先级？</b><br>
+    <b style="color:#ee4b4a">最该先动</b>：C 结构化数据（0 分，做了立刻提 12 分）+ F 安全与权重（spa 子域 75 条索引必须屏蔽）<br>
+    <b style="color:#f78e20">其次</b>：A 基础工程（4 个静态文件上线最快）+ B 内容可见性（mabout/download 改预渲染）<br>
+    <b style="color:#29c07b">慢变量</b>：D 收录排名（要等搜索引擎重新爬几周）+ E AI 知识层（要等 AI 重新训练，半年到一年）
   </div>
 </div>
 
